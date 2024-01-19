@@ -1,8 +1,8 @@
 # eveseat-calendar
 
-[![Latest Stable Version](https://img.shields.io/packagist/v/kassie/calendar.svg?style=for-the-badge)](https://packagist.org/packages/kassie/calendar)
-[![Next Version](https://img.shields.io/packagist/vpre/kassie/calendar.svg?style=for-the-badge)](https://packagist.org/packages/kassie/calendar)
-[![Downloads](https://img.shields.io/packagist/dt/kassie/calendar?style=for-the-badge)](https://packagist.org/packages/BenHUET/eveseat-calendar)
+[![Latest Stable Version](https://img.shields.io/packagist/v/hermesdj/seat-calendar.svg?style=for-the-badge)](https://packagist.org/packages/hermesdj/seat-calendar)
+[![Next Version](https://img.shields.io/packagist/vpre/hermesdj/seat-calendar.svg?style=for-the-badge)](https://packagist.org/packages/hermesdj/seat-calendar)
+[![Downloads](https://img.shields.io/packagist/dt/hermesdj/seat-calendar?style=for-the-badge)](https://packagist.org/packages/BenHUET/eveseat-calendar)
 [![Core Version](https://img.shields.io/badge/SeAT-4.0.x-blueviolet?style=for-the-badge)](https://github.com/eveseat/seat)
 [![License](https://img.shields.io/github/license/BenHUET/eveseat-calendar?style=for-the-badge)](https://github.com/BenHUET/eveseat-calendar/blob/master/LICENCE)
 
@@ -17,7 +17,7 @@ Calendar plugin for EVE SeAT
 
 # Release
 
-https://packagist.org/packages/kassie/calendar
+https://packagist.org/packages/hermesdj/seat-calendar
 
 # Compatibility
 
@@ -29,7 +29,7 @@ https://packagist.org/packages/kassie/calendar
 
 # Installation
 
-* `composer require kassie/calendar` in the SeAT root directory
+* `composer require hermesdj/seat-calendar` in the SeAT root directory
 * `php artisan vendor:publish --force`
 * `php artisan migrate`
 * `php artisan db:seed --class=Seat\\Kassie\\Calendar\\database\\seeds\\CalendarSettingsTableSeeder`

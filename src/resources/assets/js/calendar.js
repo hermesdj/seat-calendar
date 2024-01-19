@@ -1,15 +1,15 @@
-var op_modals = {
+const op_modals = {
     create: $('#modalCreateOperation'),
     update: $('#modalUpdateOperation'),
     subscribe: $('#modalSubscribe')
 };
 
 op_modals.create.on('show.bs.modal', function (e) {
-    var ROUNDING = 15 * 60 * 1000;
-    nowRounded = moment.utc();
+    const ROUNDING = 15 * 60 * 1000;
+    let nowRounded = moment.utc();
     nowRounded = moment.utc(Math.ceil((+nowRounded) / ROUNDING) * ROUNDING);
 
-    var options = {
+    const options = {
         timePicker: true,
         timePickerIncrement: 15,
         timePicker24Hour: true,
@@ -24,7 +24,7 @@ op_modals.create.on('show.bs.modal', function (e) {
     options.singleDatePicker = true;
     op_modals.create.find('input[name="time_start"]').daterangepicker(options);
     options.singleDatePicker = false;
-    options.endDate = nowRounded.clone().add('2', 'h');
+    options.endDate = nowRounded.clone().add('3', 'h');
     op_modals.create.find('input[name="time_start_end"]').daterangepicker(options);
 
     if ($('#sliderImportance').length <= 0)
@@ -90,18 +90,18 @@ $('#formCreateOperation').submit(function (e) {
 });
 
 op_modals.update.on('show.bs.modal', function (e) {
-    var ROUNDING = 15 * 60 * 1000;
-    var operation_id = $(e.relatedTarget).data('op-id');
+    const ROUNDING = 15 * 60 * 1000;
+    const operation_id = $(e.relatedTarget).data('op-id');
 
     op_modals.update.find('.overlay').removeClass('d-none').addClass('d-flex');
 
     $(e.currentTarget).find('input[name="operation_id"]').val(operation_id);
 
-    nowRounded = moment.utc();
+    let nowRounded = moment.utc();
     nowRounded = moment.utc(Math.ceil((+nowRounded) / ROUNDING) * ROUNDING);
 
-    op_modals.update.find('input[name="known_duration"][value="yes"]').prop('checked', false);
-    op_modals.update.find('input[name="known_duration"][value="no"]').prop('checked', true);
+    op_modals.update.find('input[name="known_duration"][value="yes"]').prop('checked', true);
+    op_modals.update.find('input[name="known_duration"][value="no"]').prop('checked', false);
     op_modals.update.find('input[name="time_start"]').closest('div.form-group').removeClass('d-none');
     op_modals.update.find('input[name="time_start_end"]').closest('div.form-group').addClass('d-none');
 
@@ -130,7 +130,7 @@ op_modals.update.on('show.bs.modal', function (e) {
             $('#checkbox-update-' + tag.id).prop('checked', true);
         });
 
-        var options = {
+        const options = {
             timePicker: true,
             timePickerIncrement: 15,
             timePicker24Hour: true,
@@ -152,7 +152,7 @@ op_modals.update.on('show.bs.modal', function (e) {
             op_modals.update.find('input[name="time_start"]').closest('div.form-group').addClass('hidden');
             op_modals.update.find('input[name="time_start_end"]').closest('div.form-group').removeClass('hidden');
         } else {
-            options.endDate = moment.utc(op.start_at).clone().add('2', 'h');
+            options.endDate = moment.utc(op.start_at).clone().add('3', 'h');
             op_modals.update.find('input[name="time_start"]').closest('div.form-group').removeClass('hidden');
             op_modals.update.find('input[name="time_start_end"]').closest('div.form-group').addClass('hidden');
         }
@@ -215,9 +215,9 @@ $('#formUpdateOperation').submit(function (e) {
 
 op_modals.subscribe
     .on('show.bs.modal', function (e) {
-        var operation_id = $(e.relatedTarget).data('op-id');
-        var character_id = $(e.relatedTarget).data('character-id');
-        var status = $(e.relatedTarget).data('status');
+        const operation_id = $(e.relatedTarget).data('op-id');
+        const character_id = $(e.relatedTarget).data('character-id');
+        const status = $(e.relatedTarget).data('status');
 
         $(e.currentTarget).find('input[name="operation_id"]').val(operation_id);
 
@@ -251,7 +251,7 @@ $("#status").change(function () {
 });
 
 $('#modalConfirmDelete, #modalConfirmClose, #modalConfirmCancel, #modalConfirmActivate').on('show.bs.modal', function (e) {
-    var operation_id = $(e.relatedTarget).data('op-id');
+    const operation_id = $(e.relatedTarget).data('op-id');
 
     $(e.currentTarget).find('input[name="operation_id"]').val(operation_id);
 });

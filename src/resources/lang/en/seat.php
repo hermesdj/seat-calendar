@@ -14,7 +14,6 @@ return [
     'faded_operations' => 'Faded',
 
     'add_operation' => 'Create a new operation',
-    'update_operation' => 'Update',
     'known_duration' => 'Duration is known',
 
     'close' => 'Close',
@@ -152,6 +151,9 @@ return [
     'delete_tag_confirm_button_yes' => 'Yes, I am sure I want to delete this tag',
 
     'direct_link' => 'Direct link',
+
+    'add_to_calendar' => 'Add To Calendar',
+    'google_calendar' => 'Google Calendar',
 
     'paps' => 'Paps',
 
