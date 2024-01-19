@@ -1,8 +1,7 @@
 <?php
 
 use Illuminate\Database\Migrations\Migration;
-use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Support\Facades\Schema;
+use Seat\Services\Exceptions\SettingException;
 use Seat\Services\Models\GlobalSetting;
 
 class DefaultNotificationSettings extends Migration
@@ -20,8 +19,9 @@ class DefaultNotificationSettings extends Migration
      * Run the migrations.
      *
      * @return void
+     * @throws SettingException
      */
-    public function up()
+    public function up(): void
     {
         foreach (self::DEFAULT_SETTINGS as $name => $value) {
             setting([$name, $value], true);
@@ -33,7 +33,7 @@ class DefaultNotificationSettings extends Migration
      *
      * @return void
      */
-    public function down()
+    public function down(): void
     {
         GlobalSetting::whereIn('name', array_keys(self::DEFAULT_SETTINGS))->delete();
     }

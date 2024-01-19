@@ -7,7 +7,7 @@
 
 return [
     [
-        'name'  => 'paps',
+        'name' => 'paps',
         'label' => 'calendar::seat.paps',
         'permission' => 'character.kassie_calendar_paps',
         'highlight_view' => 'paps',

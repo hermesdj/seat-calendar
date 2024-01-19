@@ -21,11 +21,11 @@ https://packagist.org/packages/kassie/calendar
 
 # Compatibility
 
-| SeAT Core | Calendar | Branch                                                           |
-| --------- | -------- | ---------------------------------------------------------------- |
-| 2.x       | 1.x      | [2.0.x](https://github.com/BenHUET/eveseat-calendar/tree/2.0.x)  |
-| 3.x       | 3.x      | [3.0.x](https://github.com/BenHUET/eveseat-calendar/tree/3.0.x)  |
-| 4.x       | 4.x      | [master](https://github.com/BenHUET/eveseat-calendar)            |
+| SeAT Core | Calendar | Branch                                                          |
+|-----------|----------|-----------------------------------------------------------------|
+| 2.x       | 1.x      | [2.0.x](https://github.com/BenHUET/eveseat-calendar/tree/2.0.x) |
+| 3.x       | 3.x      | [3.0.x](https://github.com/BenHUET/eveseat-calendar/tree/3.0.x) |
+| 4.x       | 4.x      | [master](https://github.com/BenHUET/eveseat-calendar)           |
 
 # Installation
 
@@ -38,19 +38,20 @@ https://packagist.org/packages/kassie/calendar
 
 ## Since 1.3.2
 
-Since 1.3.2, the PAP mechanism has been implemented. You need `esi-fleets.read_fleet.v1` into your requested scopes list.
+Since 1.3.2, the PAP mechanism has been implemented. You need `esi-fleets.read_fleet.v1` into your requested scopes
+list.
 
 # Feedbacks or support
 
 @kassie_yvo on eve-seat.slack.com  
 kassie.yvo@gmail.com  
-Kassie Yvo in-game  
+Kassie Yvo in-game
 
 If you like this module, consider giving some ISK, I'm space poor.
 
 # Screenshots
 
-## Main display  
+## Main display
 
 ![Main display](./img/main_display.png "Main display")
 

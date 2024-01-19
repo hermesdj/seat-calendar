@@ -3,6 +3,7 @@
 namespace Seat\Kassie\Calendar\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 /**
  * Class Tag.
@@ -34,9 +35,9 @@ class Tag extends Model
     ];
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     * @return BelongsToMany
      */
-    public function operations()
+    public function operations(): BelongsToMany
     {
         return $this->belongsToMany(Operation::class, 'calendar_tag_operation');
     }

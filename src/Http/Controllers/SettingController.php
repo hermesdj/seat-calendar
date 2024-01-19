@@ -2,11 +2,14 @@
 
 namespace Seat\Kassie\Calendar\Http\Controllers;
 
-use Illuminate\Http\Request;
-use Seat\Web\Http\Controllers\Controller;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\View\View;
+use Seat\Kassie\Calendar\Http\Validation\SettingsValidation;
 use Seat\Kassie\Calendar\Models\Tag;
 use Seat\Notifications\Models\Integration;
-use Seat\Kassie\Calendar\Http\Validation\SettingsValidation;
+use Seat\Services\Exceptions\SettingException;
+use Seat\Web\Http\Controllers\Controller;
 
 /**
  * Class SettingController.
@@ -16,9 +19,10 @@ use Seat\Kassie\Calendar\Http\Validation\SettingsValidation;
 class SettingController extends Controller
 {
     /**
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @return Factory|View
      */
-    public function index() {
+    public function index(): Factory|View
+    {
         $tags = Tag::all();
         $notification_channels = Integration::where('type', 'slack')->get();
 
@@ -29,10 +33,11 @@ class SettingController extends Controller
     }
 
     /**
-     * @param \Illuminate\Http\Request $request
-     * @return \Illuminate\Http\RedirectResponse
+     * @param SettingsValidation $request
+     * @return RedirectResponse
+     * @throws SettingException
      */
-    public function updateSlack(SettingsValidation $request)
+    public function updateSlack(SettingsValidation $request): RedirectResponse
     {
         setting(['kassie.calendar.slack_integration', (bool)$request->slack_integration], true);
         setting(['kassie.calendar.slack_integration_default_channel', $request['slack_integration_default_channel']], true);

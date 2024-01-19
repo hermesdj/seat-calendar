@@ -14,6 +14,7 @@ use Exception;
  *
  * @package Seat\Kassie\Calendar\Exceptions
  */
-class MissingCharacterException extends Exception {
+class MissingCharacterException extends Exception
+{
 
 }

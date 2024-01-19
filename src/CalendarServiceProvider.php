@@ -3,9 +3,9 @@
 namespace Seat\Kassie\Calendar;
 
 use Illuminate\Console\Scheduling\Schedule;
-use Seat\Kassie\Calendar\Observers\OperationObserver;
-use Seat\Kassie\Calendar\Models\Operation;
 use Seat\Kassie\Calendar\Commands\RemindOperation;
+use Seat\Kassie\Calendar\Models\Operation;
+use Seat\Kassie\Calendar\Observers\OperationObserver;
 use Seat\Services\AbstractSeatPlugin;
 
 /**
@@ -14,7 +14,7 @@ use Seat\Services\AbstractSeatPlugin;
  */
 class CalendarServiceProvider extends AbstractSeatPlugin
 {
-    public function boot()
+    public function boot(): void
     {
         $this->addCommands();
         $this->addRoutes();
@@ -24,13 +24,55 @@ class CalendarServiceProvider extends AbstractSeatPlugin
         $this->addPublications();
         $this->addObservers();
 
-        $this->app->booted(function () {
+        $this->app->booted(function (): void {
             $schedule = $this->app->make(Schedule::class);
             $schedule->command('calendar:remind')->everyMinute();
         });
     }
 
-    public function register()
+    private function addCommands(): void
+    {
+        $this->commands([
+            RemindOperation::class,
+        ]);
+    }
+
+    private function addRoutes(): void
+    {
+        $this->loadRoutesFrom(__DIR__ . '/Http/routes.php');
+    }
+
+    private function addViews(): void
+    {
+        $this->loadViewsFrom(__DIR__ . '/resources/views', 'calendar');
+    }
+
+    private function addTranslations(): void
+    {
+        $this->loadTranslationsFrom(__DIR__ . '/resources/lang', 'calendar');
+    }
+
+    private function addMigrations(): void
+    {
+        $this->loadMigrationsFrom(__DIR__ . '/database/migrations');
+    }
+
+    private function addPublications(): void
+    {
+        $this->publishes([
+            __DIR__ . '/resources/assets/css' => public_path('web/css'),
+            __DIR__ . '/resources/assets/vendors/css' => public_path('web/css'),
+            __DIR__ . '/resources/assets/js' => public_path('web/js'),
+            __DIR__ . '/resources/assets/vendors/js' => public_path('web/js'),
+        ]);
+    }
+
+    private function addObservers(): void
+    {
+        Operation::observe(OperationObserver::class);
+    }
+
+    public function register(): void
     {
         $this->mergeConfigFrom(__DIR__ . '/Config/package.sidebar.php', 'package.sidebar');
         $this->mergeConfigFrom(__DIR__ . '/Config/calendar.character.menu.php', 'package.character.menu');
@@ -41,54 +83,12 @@ class CalendarServiceProvider extends AbstractSeatPlugin
         $this->registerPermissions(__DIR__ . '/Config/Permissions/corporation.php', 'corporation');
     }
 
-    private function addRoutes()
-    {
-        $this->loadRoutesFrom(__DIR__ . '/Http/routes.php');
-    }
-
-    private function addViews()
-    {
-        $this->loadViewsFrom(__DIR__ . '/resources/views', 'calendar');
-    }
-
-    private function addTranslations()
-    {
-        $this->loadTranslationsFrom(__DIR__ . '/resources/lang', 'calendar');
-    }
-
-    private function addMigrations()
-    {
-        $this->loadMigrationsFrom(__DIR__ . '/database/migrations');
-    }
-
-    private function addPublications() 
-    {
-        $this->publishes([
-            __DIR__ . '/resources/assets/css' => public_path('web/css'),
-            __DIR__ . '/resources/assets/vendors/css' => public_path('web/css'),
-            __DIR__ . '/resources/assets/js' => public_path('web/js'),
-            __DIR__ . '/resources/assets/vendors/js' => public_path('web/js'),
-        ]);
-    }
-
-    private function addObservers() 
-    {
-        Operation::observe(OperationObserver::class);
-    }
-
-    private function addCommands() 
-    {
-        $this->commands([
-            RemindOperation::class,
-        ]);
-    }
-
     /**
      * Return the plugin public name as it should be displayed into settings.
      *
+     * @return string
      * @example SeAT Web
      *
-     * @return string
      */
     public function getName(): string
     {
@@ -104,30 +104,30 @@ class CalendarServiceProvider extends AbstractSeatPlugin
      */
     public function getPackageRepositoryUrl(): string
     {
-        return 'https://github.com/BenHUET/eveseat-calendar';
+        return 'https://github.com/hermesdj/seat-calendar';
     }
 
     /**
      * Return the plugin technical name as published on package manager.
      *
+     * @return string
      * @example web
      *
-     * @return string
      */
     public function getPackagistPackageName(): string
     {
-        return 'calendar';
+        return 'seat-calendar';
     }
 
     /**
      * Return the plugin vendor tag as published on package manager.
      *
+     * @return string
      * @example eveseat
      *
-     * @return string
      */
     public function getPackagistVendorName(): string
     {
-        return 'kassie';
+        return 'hermesdj';
     }
 }

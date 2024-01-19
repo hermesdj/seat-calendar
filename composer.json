@@ -1,36 +1,47 @@
 {
-    "name": "kassie/calendar",
-    "description": "Calendar plugin for SeAT.",
-    "type": "seat-plugin",
-    "autoload": {
-        "psr-4": {
-            "Seat\\Kassie\\Calendar\\": "src/",
-            "Seat\\Kassie\\Calendar\\database\\seeds\\": "src/database/seeds/"
-        }
-    },
-    "require": {
-        "eveseat/web": "^4.0",
-        "eveseat/eveapi": "^4.0",
-        "eveseat/notifications": "^4.0",
-        "eveseat/services": "^4.0",
-        "eveseat/eseye": "^2.1",
-        "s9e/text-formatter": "^2.4"
-    },
-    "authors": [{
-        "name": "Kassie Yvo",
-        "email": "kassie.yvo@gmail.com"
-    }, {
-        "name": "Warlof Tutsimo",
-        "email": "loic.leuilliot@gmail.com"
-    }],
-    "license": "GPL-3.0-or-later",
-    "minimum-stability": "alpha",
-    "prefer-stable": true,
-    "extra": {
-        "laravel": {
-            "providers": [
-                "Seat\\Kassie\\Calendar\\CalendarServiceProvider"
-            ]
-        }
+  "name": "hermesdj/seat-calendar",
+  "description": "Calendar plugin for SeAT.",
+  "type": "seat-plugin",
+  "autoload": {
+    "psr-4": {
+      "Seat\\Kassie\\Calendar\\": "src/",
+      "Seat\\Kassie\\Calendar\\database\\seeds\\": "src/database/seeds/"
     }
+  },
+  "require": {
+    "eveseat/web": "^5",
+    "eveseat/eveapi": "^5",
+    "eveseat/notifications": "^5",
+    "eveseat/services": "^5",
+    "eveseat/eseye": "^3",
+    "s9e/text-formatter": "^2.4"
+  },
+  "authors": [
+    {
+      "name": "Kassie Yvo",
+      "email": "kassie.yvo@gmail.com"
+    },
+    {
+      "name": "Warlof Tutsimo",
+      "email": "loic.leuilliot@gmail.com"
+    },
+    {
+      "name": "Jay's",
+      "email": "jays.gaming.contact@gmail.com"
+    }
+  ],
+  "license": "GPL-3.0-or-later",
+  "minimum-stability": "dev",
+  "prefer-stable": true,
+  "extra": {
+    "laravel": {
+      "providers": [
+        "Seat\\Kassie\\Calendar\\CalendarServiceProvider"
+      ]
+    }
+  },
+  "require-dev": {
+    "rector/rector": "^0.18.3",
+    "driftingly/rector-laravel": "^0.24.1"
+  }
 }

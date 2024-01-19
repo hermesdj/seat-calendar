@@ -3,9 +3,10 @@
 namespace Seat\Kassie\Calendar\Notifications;
 
 use Illuminate\Bus\Queueable;
-use Illuminate\Notifications\Notification;
 use Illuminate\Notifications\Messages\SlackMessage;
+use Illuminate\Notifications\Notification;
 use Seat\Kassie\Calendar\Helpers\Helper;
+use Seat\Services\Exceptions\SettingException;
 
 /**
  * Class OperationCancelled.
@@ -20,16 +21,17 @@ class OperationCancelled extends Notification
      * @param $notifiable
      * @return array
      */
-    public function via($notifiable)
+    public function via($notifiable): array
     {
         return ['slack'];
     }
 
     /**
      * @param $notifiable
-     * @return mixed
+     * @return SlackMessage
+     * @throws SettingException
      */
-    public function toSlack($notifiable)
+    public function toSlack($notifiable): SlackMessage
     {
         $attachment = Helper::BuildSlackNotificationAttachment($notifiable);
 

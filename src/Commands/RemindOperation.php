@@ -2,11 +2,12 @@
 
 namespace Seat\Kassie\Calendar\Commands;
 
+use Carbon\Carbon;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Notification;
-use Carbon\Carbon;
 use Seat\Kassie\Calendar\Models\Operation;
 use Seat\Kassie\Calendar\Notifications\OperationPinged;
+use Seat\Services\Exceptions\SettingException;
 
 /**
  * Class RemindOperation.
@@ -27,8 +28,9 @@ class RemindOperation extends Command
 
     /**
      * Process the command.
+     * @throws SettingException
      */
-    public function handle()
+    public function handle(): void
     {
         # Ensure we send reminders starting with furthest in the future. That way
         # when more than one event is being reminded, the last reminder in chat
@@ -38,14 +40,12 @@ class RemindOperation extends Command
         $marks = explode(',', $configured_marks);
         rsort($marks);
 
-        foreach ($marks as $mark)
-        {
+        foreach ($marks as $mark) {
             $when = Carbon::now('UTC')->floorMinute()->addMinutes($mark);
             $ops = Operation::where('is_cancelled', false)
                 ->where('start_at', $when)
                 ->get();
-            foreach($ops as $op)
-            {
+            foreach ($ops as $op) {
                 Notification::send($op, new OperationPinged());
             }
         }

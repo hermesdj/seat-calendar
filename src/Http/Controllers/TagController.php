@@ -2,9 +2,12 @@
 
 namespace Seat\Kassie\Calendar\Http\Controllers;
 
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Seat\Web\Http\Controllers\Controller;
+use Illuminate\Validation\ValidationException;
 use Seat\Kassie\Calendar\Models\Tag;
+use Seat\Web\Http\Controllers\Controller;
 
 /**
  * Class TagController.
@@ -14,11 +17,11 @@ use Seat\Kassie\Calendar\Models\Tag;
 class TagController extends Controller
 {
     /**
-     * @param \Illuminate\Http\Request $request
-     * @return \Illuminate\Http\RedirectResponse
-     * @throws \Illuminate\Validation\ValidationException
+     * @param Request $request
+     * @return RedirectResponse
+     * @throws ValidationException
      */
-    public function store(Request $request)
+    public function store(Request $request): RedirectResponse
     {
         $this->validate($request, [
             'name' => 'required|max:7',
@@ -39,7 +42,7 @@ class TagController extends Controller
         $tag = new Tag($request->all());
 
         if (!is_null($request->input('tag_id'))) {
-            $tag = Tag::find( $request->input('tag_id'));
+            $tag = Tag::find($request->input('tag_id'));
             $tag->fill($request->all());
         }
 
@@ -51,10 +54,10 @@ class TagController extends Controller
     }
 
     /**
-     * @param \Illuminate\Http\Request $request
-     * @return \Illuminate\Http\RedirectResponse
+     * @param Request $request
+     * @return RedirectResponse
      */
-    public function delete(Request $request)
+    public function delete(Request $request): RedirectResponse
     {
         $tag = Tag::find($request->tag_id);
         if ($tag != null) {
@@ -67,9 +70,9 @@ class TagController extends Controller
 
     /**
      * @param int $tag_id
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
-    public function get(int $tag_id)
+    public function get(int $tag_id): JsonResponse
     {
         $tag = Tag::find($tag_id);
 

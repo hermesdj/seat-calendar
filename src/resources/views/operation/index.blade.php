@@ -6,16 +6,17 @@
 @section('full')
 
     @if(auth()->user()->can('calendar.create'))
-    <div class="row margin-bottom">
-        <div class="col-md-offset-8 col-md-4">
-            <div class="pull-right">
-                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalCreateOperation">
-                    <i class="fas fa-plus"></i>&nbsp;&nbsp;
-                    {{ trans('calendar::seat.add_operation') }}
-                </button>
+        <div class="row margin-bottom">
+            <div class="col-md-offset-8 col-md-4">
+                <div class="pull-right">
+                    <button type="button" class="btn btn-primary" data-toggle="modal"
+                            data-target="#modalCreateOperation">
+                        <i class="fas fa-plus"></i>&nbsp;&nbsp;
+                        {{ trans('calendar::seat.add_operation') }}
+                    </button>
+                </div>
             </div>
         </div>
-    </div>
     @endif
 
     @include('calendar::operation.modals.create_operation')
@@ -46,9 +47,9 @@
 @stop
 
 @push('head')
-    <link rel="stylesheet" href="{{ asset('web/css/daterangepicker.css') }}" />
-    <link rel="stylesheet" href="{{ asset('web/css/bootstrap-slider.min.css') }}" />
-    <link rel="stylesheet" href="{{ asset('web/css/calendar.css') }}" />
+    <link rel="stylesheet" href="{{ asset('web/css/daterangepicker.css') }}"/>
+    <link rel="stylesheet" href="{{ asset('web/css/bootstrap-slider.min.css') }}"/>
+    <link rel="stylesheet" href="{{ asset('web/css/calendar.css') }}"/>
 @endpush
 
 @push('javascript')
@@ -161,51 +162,51 @@
         });
 
         $('#modalDetails')
-            .on('show.bs.modal', function(e){
+            .on('show.bs.modal', function (e) {
                 var link = '{{ route('operation.detail', 0) }}';
 
                 // load detail content dynamically
                 $(this).find('.modal-body')
                     .html('<div class="overlay dark d-flex justify-content-center align-items-center"><i class="fas fa-2x fa-sync-alt fa-spin"></i></div> Loading...')
-                    .load(link.replace(/0$/gi, $(e.relatedTarget).attr('data-op-id')), "", function() {
+                    .load(link.replace(/0$/gi, $(e.relatedTarget).attr('data-op-id')), "", function () {
                         // attach the datatable to the loaded modal
                         var attendees_table = $('#attendees');
                         var confirmed_table = $('#confirmed');
 
-                        if (! $.fn.DataTable.isDataTable(attendees_table)) {
+                        if (!$.fn.DataTable.isDataTable(attendees_table)) {
                             attendees_table.DataTable({
                                 "ajax": "/calendar/lookup/attendees?id=" + $(e.relatedTarget).attr('data-op-id'),
                                 "ordering": true,
                                 "info": false,
                                 "paging": true,
                                 "processing": true,
-                                "order": [[ 1, "asc" ]],
+                                "order": [[1, "asc"]],
                                 "aoColumnDefs": [
-                                    { orderable: false, targets: "no-sort" }
+                                    {orderable: false, targets: "no-sort"}
                                 ],
                                 "columns": [
-                                    { data: '_character' },
-                                    { data: '_status' },
-                                    { data: '_comment' },
-                                    { data: '_timestamps' }
+                                    {data: '_character'},
+                                    {data: '_status'},
+                                    {data: '_comment'},
+                                    {data: '_timestamps'}
                                 ],
-                                createdRow: function(row, data, dataIndex) {
+                                createdRow: function (row, data, dataIndex) {
                                     $(row).find('td:eq(0)').attr('data-order', data._character_name);
                                     $(row).find('td:eq(0)').attr('data-search', data._character_name);
                                 }
                             });
                         }
 
-                        if (! $.fn.DataTable.isDataTable(confirmed_table)) {
+                        if (!$.fn.DataTable.isDataTable(confirmed_table)) {
                             confirmed_table.DataTable({
                                 "ajax": "/calendar/lookup/confirmed?id=" + $(e.relatedTarget).attr('data-op-id'),
                                 "ordering": true,
                                 "info": false,
                                 "paging": true,
                                 "processing": true,
-                                "order": [[ 1, "asc" ]],
+                                "order": [[1, "asc"]],
                                 "aoColumnsDefs": [
-                                    { orderable: false, targets: "no-sort" }
+                                    {orderable: false, targets: "no-sort"}
                                 ],
                                 'fnDrawCallback': function () {
                                     $(document).ready(function () {
@@ -213,12 +214,12 @@
                                     });
                                 },
                                 "columns": [
-                                    { data: 'character.character_id'},
-                                    { data: 'character.corporation_id'},
-                                    { data: 'type.typeID'},
-                                    { data: 'type.group.groupName'}
+                                    {data: 'character.character_id'},
+                                    {data: 'character.corporation_id'},
+                                    {data: 'type.typeID'},
+                                    {data: 'type.group.groupName'}
                                 ],
-                                createdRow: function(row, data, dataIndex) {
+                                createdRow: function (row, data, dataIndex) {
                                     $(row).find('td:eq(0)').attr('data-order', data.character.character_id);
                                     $(row).find('td:eq(0)').attr('data-search', data.character.character_id);
                                 }
@@ -226,7 +227,7 @@
                         }
                     });
             })
-            .on('hidden.bs.modal', function(e) {
+            .on('hidden.bs.modal', function (e) {
                 var table = $(this).find('#attendees').DataTable();
                 table.destroy();
 
@@ -236,16 +237,16 @@
 
         // direct link
         @if(request()->route()->hasParameter('id'))
-            var dl = $('<i>');
-            dl.attr('data-op-id', {{ request()->route()->parameter('id') }});
-            dl.attr('data-toggle', 'modal');
-            dl.attr('data-target', '#modalDetails');
+        var dl = $('<i>');
+        dl.attr('data-op-id', {{ request()->route()->parameter('id') }});
+        dl.attr('data-toggle', 'modal');
+        dl.attr('data-target', '#modalDetails');
 
-            $('body').find('.wrapper').append(dl);
+        $('body').find('.wrapper').append(dl);
 
-            dl.click();
+        dl.click();
 
-            dl.remove();
+        dl.remove();
         @endif
     </script>
 @endpush

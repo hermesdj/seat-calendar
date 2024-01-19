@@ -7,7 +7,9 @@
 
 namespace Seat\Kassie\Calendar\Http\Controllers;
 
+use Illuminate\Contracts\View\Factory;
 use Illuminate\Support\Facades\DB;
+use Illuminate\View\View;
 use Seat\Eveapi\Models\Character\CharacterInfo;
 use Seat\Eveapi\Models\Sde\InvType;
 use Seat\Kassie\Calendar\Models\Pap;
@@ -21,11 +23,11 @@ use Seat\Web\Http\Controllers\Controller;
 class CharacterController extends Controller
 {
     /**
-     * @param \Seat\Eveapi\Models\Character\CharacterInfo $character
+     * @param CharacterInfo $character
      *
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @return Factory|View
      */
-    public function paps(CharacterInfo $character)
+    public function paps(CharacterInfo $character): Factory|View
     {
         $today = carbon();
 
@@ -37,7 +39,7 @@ class CharacterController extends Controller
         $shipTypePaps = InvType::rightJoin('invGroups', 'invGroups.groupID', '=', 'invTypes.groupID')
             ->leftJoin('kassie_calendar_paps', 'ship_type_id', '=', 'typeID')
             ->where('categoryID', 6)
-            ->where(function($query) use ($character) {
+            ->where(function ($query) use ($character): void {
                 $query->where('character_id', $character->character_id)
                     ->orWhere('character_id', null);
             })
@@ -47,27 +49,33 @@ class CharacterController extends Controller
             ->get();
 
         $weeklyRanking = Pap::where('week', $today->weekOfMonth)
-                         ->where('month', $today->month)
-                         ->where('year', $today->year)
-                         ->select('character_id', DB::raw('sum(value) as qty'))
-                         ->groupBy('character_id')
-                         ->orderBy('qty', 'desc')
-                         ->get();
+            ->where('month', $today->month)
+            ->where('year', $today->year)
+            ->select('character_id', DB::raw('sum(value) as qty'))
+            ->groupBy('character_id')
+            ->orderBy('qty', 'desc')
+            ->get();
 
         $monthlyRanking = Pap::where('month', $today->month)
-                          ->where('year', $today->year)
-                          ->select('character_id', DB::raw('sum(value) as qty'))
-                          ->groupBy('character_id')
-                          ->orderBy('qty', 'desc')
-                          ->get();
+            ->where('year', $today->year)
+            ->select('character_id', DB::raw('sum(value) as qty'))
+            ->groupBy('character_id')
+            ->orderBy('qty', 'desc')
+            ->get();
 
         $yearlyRanking = Pap::where('year', $today->year)
-                         ->select('character_id', DB::raw('sum(value) as qty'))
-                         ->groupBy('character_id')
-                         ->orderBy('qty', 'desc')
-                         ->get();
+            ->select('character_id', DB::raw('sum(value) as qty'))
+            ->groupBy('character_id')
+            ->orderBy('qty', 'desc')
+            ->get();
 
-        return view('calendar::character.paps', compact('monthlyPaps', 'shipTypePaps',
-            'weeklyRanking', 'monthlyRanking', 'yearlyRanking', 'character'));
+        return view('calendar::character.paps', [
+            'monthlyPaps' => $monthlyPaps,
+            'shipTypePaps' => $shipTypePaps,
+            'weeklyRanking' => $weeklyRanking,
+            'monthlyRanking' => $monthlyRanking,
+            'yearlyRanking' => $yearlyRanking,
+            'character' => $character
+        ]);
     }
 }

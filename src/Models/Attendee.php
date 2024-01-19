@@ -2,8 +2,9 @@
 
 namespace Seat\Kassie\Calendar\Models;
 
-use Seat\Eveapi\Models\Character\CharacterInfo;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Seat\Eveapi\Models\Character\CharacterInfo;
 use Seat\Web\Models\User;
 
 /**
@@ -29,22 +30,21 @@ class Attendee extends Model
         'comment'
     ];
 
-    /**
-     * @var array
-     */
-    protected $dates = ['created_at', 'updated_at'];
+    protected $casts = ['created_at' => 'datetime', 'updated_at' => 'datetime'];
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * @return BelongsTo
      */
-    public function character() {
+    public function character(): BelongsTo
+    {
         return $this->belongsTo(CharacterInfo::class, 'character_id', 'character_id');
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * @return BelongsTo
      */
-    public function user() {
+    public function user(): BelongsTo
+    {
         return $this->belongsTo(User::class);
     }
 }

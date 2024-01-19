@@ -8,6 +8,9 @@
 namespace Seat\Kassie\Calendar\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\Relations\HasOneThrough;
 use Seat\Eveapi\Models\Character\CharacterInfo;
 use Seat\Eveapi\Models\RefreshToken;
 use Seat\Eveapi\Models\Sde\InvType;
@@ -18,7 +21,8 @@ use Seat\Web\Models\User;
  *
  * @package Seat\Kassie\Calendar\Models
  */
-class Pap extends Model {
+class Pap extends Model
+{
 
     /**
      * @var bool
@@ -53,14 +57,15 @@ class Pap extends Model {
      * @param array $options
      * @return bool
      */
-    public function save( array $options = [] ) {
+    public function save(array $options = []): bool
+    {
 
         $operation = Operation::find($this->getAttributeValue('operation_id'));
 
         if (is_null($this->getAttributeValue('value')))
             $this->setAttribute('value', 0);
 
-        if (! is_null($operation) && $operation->tags->count() > 0)
+        if (!is_null($operation) && $operation->tags->count() > 0)
             $this->setAttribute('value', $operation->tags->max('quantifier'));
 
         if (array_key_exists('join_time', $this->attributes)) {
@@ -74,9 +79,9 @@ class Pap extends Model {
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     * @return HasOne
      */
-    public function character()
+    public function character(): HasOne
     {
         return $this->hasOne(CharacterInfo::class, 'character_id', 'character_id')
             ->withDefault([
@@ -85,21 +90,21 @@ class Pap extends Model {
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasOneThrough
+     * @return HasOneThrough
      */
-    public function user()
+    public function user(): HasOneThrough
     {
         return $this->hasOneThrough(User::class, RefreshToken::class,
-            'character_id', 'id','character_id', 'user_id')
+            'character_id', 'id', 'character_id', 'user_id')
             ->withDefault([
                 'name' => trans('web::seat.unknown'),
             ]);
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * @return BelongsTo
      */
-    public function operation()
+    public function operation(): BelongsTo
     {
         return $this->belongsTo(Operation::class, 'operation_id', 'id')
             ->withDefault([
@@ -108,9 +113,9 @@ class Pap extends Model {
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     * @return HasOne
      */
-    public function type()
+    public function type(): HasOne
     {
         return $this->hasOne(InvType::class, 'typeID', 'ship_type_id')
             ->withDefault([

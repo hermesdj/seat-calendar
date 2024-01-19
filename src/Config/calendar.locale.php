@@ -21,16 +21,16 @@
  */
 
 return [
-    
+
     'languages' => [
         [
             'short' => 'zh-CN',
-            'full'  => 'Chinese (Simplified)',
+            'full' => 'Chinese (Simplified)',
         ],
         [
             'short' => 'en',
-            'full'  => 'English',
+            'full' => 'English',
         ],
     ],
-    
+
 ];

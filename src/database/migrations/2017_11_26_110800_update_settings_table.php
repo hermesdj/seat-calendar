@@ -1,9 +1,10 @@
 <?php
 
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Database\Migrations\Migration;
+use Seat\Services\Exceptions\SettingException;
 
 class UpdateSettingsTable extends Migration
 {
@@ -11,8 +12,9 @@ class UpdateSettingsTable extends Migration
      * Run the migrations.
      *
      * @return void
+     * @throws SettingException
      */
-    public function up()
+    public function up(): void
     {
         if (Schema::hasTable('calendar_settings')) {
 
@@ -66,8 +68,9 @@ class UpdateSettingsTable extends Migration
      * Reverse the migrations.
      *
      * @return void
+     * @throws SettingException
      */
-    public function down()
+    public function down(): void
     {
         if (!Schema::hasTable('calendar_settings')) {
 
@@ -83,31 +86,31 @@ class UpdateSettingsTable extends Migration
         }
 
         if (!Schema::hasColumn('calendar_settings', 'slack_integration')) {
-            Schema::table('calendar_settings', function(Blueprint $table) {
+            Schema::table('calendar_settings', function (Blueprint $table) {
                 $table->boolean('slack_integration')->first();
             });
         }
 
         if (!Schema::hasColumn('calendar_settings', 'slack_webhook')) {
-            Schema::table('calendar_settings', function(Blueprint $table) {
+            Schema::table('calendar_settings', function (Blueprint $table) {
                 $table->string('slack_webhook')->after('slack_integration');
             });
         }
 
         if (!Schema::hasColumn('calendar_settings', 'slack_emoji_importance_full')) {
-            Schema::table('calendar_settings', function(Blueprint $table) {
+            Schema::table('calendar_settings', function (Blueprint $table) {
                 $table->string('slack_emoji_importance_full')->after('slack_webhook');
             });
         }
 
         if (!Schema::hasColumn('calendar_settings', 'slack_emoji_importance_half')) {
-            Schema::table('calendar_settings', function(Blueprint $table) {
+            Schema::table('calendar_settings', function (Blueprint $table) {
                 $table->string('slack_emoji_importance_half')->after('slack_emoji_importance_full');
             });
         }
 
         if (!Schema::hasColumn('calendar_settings', 'slack_emoji_importance_empty')) {
-            Schema::table('calendar_settings', function(Blueprint $table) {
+            Schema::table('calendar_settings', function (Blueprint $table) {
                 $table->string('slack_emoji_importance_empty')->after('slack_emoji_importance_half');
             });
         }

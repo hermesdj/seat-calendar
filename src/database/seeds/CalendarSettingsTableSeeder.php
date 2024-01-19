@@ -3,11 +3,15 @@
 namespace Seat\Kassie\Calendar\database\seeds;
 
 use Illuminate\Database\Seeder;
+use Seat\Services\Exceptions\SettingException;
 
 
 class CalendarSettingsTableSeeder extends Seeder
 {
-    public function run()
+    /**
+     * @throws SettingException
+     */
+    public function run(): void
     {
         setting([
             'kassie.calendar.slack_integration',

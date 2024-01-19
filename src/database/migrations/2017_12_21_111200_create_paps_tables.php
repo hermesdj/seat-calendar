@@ -10,11 +10,12 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
 
-class CreatePapsTables extends Migration {
+class CreatePapsTables extends Migration
+{
 
-    public function up()
+    public function up(): void
     {
-        Schema::create('kassie_calendar_esi_tokens', function(Blueprint $table){
+        Schema::create('kassie_calendar_esi_tokens', function (Blueprint $table) {
 
             $table->bigInteger('character_id');
             $table->string('scopes');
@@ -27,7 +28,7 @@ class CreatePapsTables extends Migration {
 
         });
 
-        Schema::create('kassie_calendar_paps', function(Blueprint $table){
+        Schema::create('kassie_calendar_paps', function (Blueprint $table) {
 
             $table->integer('operation_id');
             $table->bigInteger('character_id');
@@ -46,7 +47,7 @@ class CreatePapsTables extends Migration {
         });
     }
 
-    public function down()
+    public function down(): void
     {
         Schema::dropIfExists('kassie_calendar_paps');
         Schema::dropIfExists('kassie_calendar_esi_tokens');

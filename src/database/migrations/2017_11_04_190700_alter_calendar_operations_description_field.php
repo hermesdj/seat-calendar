@@ -1,8 +1,8 @@
 <?php
 
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
 class AlterCalendarOperationsDescriptionField extends Migration
 {
@@ -11,7 +11,7 @@ class AlterCalendarOperationsDescriptionField extends Migration
      *
      * @return void
      */
-    public function up()
+    public function up(): void
     {
         Schema::table('calendar_operations', function (Blueprint $table) {
             $table->text('description_new')->nullable();
@@ -24,7 +24,7 @@ class AlterCalendarOperationsDescriptionField extends Migration
      *
      * @return void
      */
-    public function down()
+    public function down(): void
     {
         Schema::table('calendar_operations', function (Blueprint $table) {
             $table->dropColumn('description_new');

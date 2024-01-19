@@ -8,15 +8,15 @@ use Illuminate\Support\Facades\DB;
 
 class ScheduleSeeder extends Seeder
 {
-    public function run()
+    public function run(): void
     {
         $job = [
-            'command'           => 'calendar:remind',
-            'expression'        => '1 * * * *',
-            'allow_overlap'     => false,
+            'command' => 'calendar:remind',
+            'expression' => '1 * * * *',
+            'allow_overlap' => false,
             'allow_maintenance' => false,
-            'ping_before'       => null,
-            'ping_after'        => null
+            'ping_before' => null,
+            'ping_after' => null
         ];
 
         $existing = DB::table('schedules')

@@ -7,7 +7,10 @@
 
 namespace Seat\Kassie\Calendar\Http\Controllers;
 
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\DB;
+use Illuminate\View\View;
 use Seat\Eveapi\Models\Corporation\CorporationInfo;
 use Seat\Kassie\Calendar\Models\Pap;
 use Seat\Web\Http\Controllers\Controller;
@@ -20,16 +23,16 @@ use Seat\Web\Http\Controllers\Controller;
 class CorporationController extends Controller
 {
     /**
-     * @param \Seat\Eveapi\Models\Corporation\CorporationInfo $corporation
+     * @param CorporationInfo $corporation
      *
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @return Factory|View
      */
-    public function getPaps(CorporationInfo $corporation)
+    public function getPaps(CorporationInfo $corporation): Factory|View
     {
-	    $today = carbon();
+        $today = carbon();
 
-	    $weeklyRanking = Pap::with('character', 'character.affiliation')
-            ->whereHas('character.affiliation', function ($query) use ($corporation) {
+        $weeklyRanking = Pap::with('character', 'character.affiliation')
+            ->whereHas('character.affiliation', function ($query) use ($corporation): void {
                 $query->where('corporation_id', $corporation->corporation_id);
             })
             ->where('week', $today->weekOfMonth)
@@ -41,8 +44,8 @@ class CorporationController extends Controller
             ->orderBy('qty', 'desc')
             ->get();
 
-	    $monthlyRanking = Pap::with('character', 'character.affiliation')
-            ->whereHas('character.affiliation', function ($query) use ($corporation) {
+        $monthlyRanking = Pap::with('character', 'character.affiliation')
+            ->whereHas('character.affiliation', function ($query) use ($corporation): void {
                 $query->where('corporation_id', $corporation->corporation_id);
             })
             ->where('month', $today->month)
@@ -53,8 +56,8 @@ class CorporationController extends Controller
             ->orderBy('qty', 'desc')
             ->get();
 
-	    $yearlyRanking = Pap::with('character', 'character.affiliation')
-            ->whereHas('character.affiliation', function ($query) use ($corporation) {
+        $yearlyRanking = Pap::with('character', 'character.affiliation')
+            ->whereHas('character.affiliation', function ($query) use ($corporation): void {
                 $query->where('corporation_id', $corporation->corporation_id);
             })
             ->where('year', $today->year)
@@ -64,14 +67,19 @@ class CorporationController extends Controller
             ->orderBy('qty', 'desc')
             ->get();
 
-        return view('calendar::corporation.paps', compact('weeklyRanking', 'monthlyRanking', 'yearlyRanking', 'corporation'));
+        return view('calendar::corporation.paps', [
+            'weeklyRanking' => $weeklyRanking,
+            'monthlyRanking' => $monthlyRanking,
+            'yearlyRanking' => $yearlyRanking,
+            'corporation' => $corporation
+        ]);
     }
 
     /**
      * @param int $corporation_id
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
-    public function getYearPapsStats(int $corporation_id)
+    public function getYearPapsStats(int $corporation_id): JsonResponse
     {
         $year = request()->query('year');
         $grouped = request()->query('grouped');
@@ -82,10 +90,10 @@ class CorporationController extends Controller
         if (is_null($grouped))
             $grouped = false;
 
-        if (! $grouped)
+        if (!$grouped)
             return response()->json(
                 Pap::with('character', 'character.affiliation')
-                    ->whereHas('character.affiliation', function ($query) use ($corporation_id) {
+                    ->whereHas('character.affiliation', function ($query) use ($corporation_id): void {
                         $query->where('corporation_id', $corporation_id);
                     })
                     ->where('year', intval($year))
@@ -94,33 +102,31 @@ class CorporationController extends Controller
                     ->groupBy('character_id')
                     ->orderBy('qty', 'desc')
                     ->get()
-                    ->map(function ($pap) {
-                        return [
-                            'character_id' => $pap->character_id,
-                            'name'         => $pap->character->name,
-                            'qty'          => $pap->qty,
-                        ];
-                    })
+                    ->map(fn($pap): array => [
+                        'character_id' => $pap->character_id,
+                        'name' => $pap->character->name,
+                        'qty' => $pap->qty,
+                    ])
                     ->sortBy('name')
                     ->values());
 
         return response()->json(
             Pap::with('character', 'character.affiliation', 'character.user')
-                ->whereHas('character.affiliation', function ($query) use ($corporation_id) {
+                ->whereHas('character.affiliation', function ($query) use ($corporation_id): void {
                     $query->where('corporation_id', $corporation_id);
                 })
-                ->where('year', intval($year))
+                ->where('year', (int)$year)
                 ->select('character_id')
                 ->selectRaw(DB::raw('SUM(value) as qty'))
                 ->groupBy('character_id')
                 ->orderBy('qty', 'desc')
                 ->get()
                 ->groupBy('character.user.id')
-                ->map(function ($user) {
+                ->map(function ($user): array {
                     $pap = [
                         'character_id' => 0,
-                        'name'         => trans('web::seat.unknown'),
-                        'qty'          => 0,
+                        'name' => trans('web::seat.unknown'),
+                        'qty' => 0,
                     ];
 
                     foreach ($user as $character) {
@@ -137,22 +143,22 @@ class CorporationController extends Controller
 
     /**
      * @param int $corporation_id
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
-    public function getMonthlyStackedPapsStats(int $corporation_id)
+    public function getMonthlyStackedPapsStats(int $corporation_id): JsonResponse
     {
-        $year = is_null(request()->query('year')) ? carbon()->year : intval(request()->query('year'));
-        $month = is_null(request()->query('month')) ? carbon()->month : intval(request()->query('month'));
+        $year = is_null(request()->query('year')) ? carbon()->year : (int)(request()->query('year'));
+        $month = is_null(request()->query('month')) ? carbon()->month : (int)(request()->query('month'));
         $grouped = request()->query('grouped') ?: false;
 
         $paps = Pap::select('ci.character_id', 'cto.operation_id', 'analytics', 'value')
-                   ->join('character_infos as ci', 'kassie_calendar_paps.character_id', 'ci.character_id')
-                   ->join('character_affiliations as ca', 'ci.character_id', 'ca.character_id')
-                   ->join('calendar_tag_operation as cto', 'cto.operation_id', 'kassie_calendar_paps.operation_id')
-                   ->join('calendar_tags as ct', 'ct.id', 'cto.tag_id')
-                   ->where('year', $year)
-                   ->where('month', $month)
-                   ->where('corporation_id', $corporation_id);
+            ->join('character_infos as ci', 'kassie_calendar_paps.character_id', 'ci.character_id')
+            ->join('character_affiliations as ca', 'ci.character_id', 'ca.character_id')
+            ->join('calendar_tag_operation as cto', 'cto.operation_id', 'kassie_calendar_paps.operation_id')
+            ->join('calendar_tags as ct', 'ct.id', 'cto.tag_id')
+            ->where('year', $year)
+            ->where('month', $month)
+            ->where('corporation_id', $corporation_id);
 
         if ($grouped) {
             return response()->json(
@@ -170,11 +176,11 @@ class CorporationController extends Controller
         }
 
         return response()->json(
-        	DB::table(DB::raw("({$paps->addSelect('ci.name')->toSql()}) as paps"))
-		        ->mergeBindings($paps->getQuery())
-		        ->select('analytics', 'character_id', 'name')
+            DB::table(DB::raw("({$paps->addSelect('ci.name')->toSql()}) as paps"))
+                ->mergeBindings($paps->getQuery())
+                ->select('analytics', 'character_id', 'name')
                 ->selectRaw('SUM(value) as qty')
-		        ->groupBy('analytics', 'character_id', 'name')
+                ->groupBy('analytics', 'character_id', 'name')
                 ->orderBy('qty', 'desc')
                 ->orderBy('name', 'asc')
                 ->get());

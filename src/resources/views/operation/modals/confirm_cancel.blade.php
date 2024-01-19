@@ -25,7 +25,7 @@
                                 <select name="integration_id" id="cancel-operation-channel" style="width: 100%;">
                                     <option></option>
                                     @foreach($notification_channels as $channel)
-                                    <option value="{{ $channel->id }}">{{ $channel->name }}</option>
+                                        <option value="{{ $channel->id }}">{{ $channel->name }}</option>
                                     @endforeach
                                 </select>
                             </div>
@@ -47,10 +47,10 @@
 </div>
 
 @push('javascript')
-<script type="text/javascript">
-    $('#cancel-operation-channel').select2({
-        placeholder: "{{ trans('calendar::seat.integration_channel') }}",
-        allowClear: true
-    });
-</script>
+    <script type="text/javascript">
+        $('#cancel-operation-channel').select2({
+            placeholder: "{{ trans('calendar::seat.integration_channel') }}",
+            allowClear: true
+        });
+    </script>
 @endpush

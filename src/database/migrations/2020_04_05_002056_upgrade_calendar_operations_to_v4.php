@@ -6,9 +6,10 @@ use Illuminate\Support\Facades\DB;
 /**
  * Class UpgradeCalendarOperationsToV4.
  */
-class UpgradeCalendarOperationsToV4 extends Migration {
+class UpgradeCalendarOperationsToV4 extends Migration
+{
 
-    public function up()
+    public function up(): void
     {
         DB::table('calendar_operations')
             ->join('mig_groups', 'user_id', '=', 'old_user_id')
@@ -23,7 +24,7 @@ class UpgradeCalendarOperationsToV4 extends Migration {
 
     }
 
-    public function down()
+    public function down(): void
     {
         DB::table('calendar_operations')
             ->join('mig_groups', 'user_id', '=', 'new_user_id')

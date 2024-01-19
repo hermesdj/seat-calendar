@@ -16,8 +16,8 @@
 @stop
 
 @push('head')
-    <link rel="stylesheet" href="{{ asset('web/css/bootstrap-colorpicker.min.css') }}" />
-    <link rel="stylesheet" href="{{ asset('web/css/calendar.css') }}" />
+    <link rel="stylesheet" href="{{ asset('web/css/bootstrap-colorpicker.min.css') }}"/>
+    <link rel="stylesheet" href="{{ asset('web/css/calendar.css') }}"/>
 @endpush
 
 @push('javascript')
@@ -27,12 +27,12 @@
         var bgEditPicker = $('#edit_tag_bg_color').colorpicker();
         var fgEditPicker = $('#edit_tag_text_color').colorpicker();
 
-        $('#modalEdit').on('show.bs.modal', function(e){
+        $('#modalEdit').on('show.bs.modal', function (e) {
             var link = '{{ route('tags.show', 0) }}';
             var modal = $(this);
 
             modal.find('.overlay').removeClass('d-none').addClass('d-flex');
-            modal.find('input[type="text"]').each(function(index, input){
+            modal.find('input[type="text"]').each(function (index, input) {
                 $(input).val('');
             });
 
@@ -40,7 +40,7 @@
                 url: link.replace('/0', '/' + $(e.relatedTarget).attr('data-tag-id')),
                 dataType: 'json',
                 method: 'GET'
-            }).done(function(data){
+            }).done(function (data) {
                 bgEditPicker.colorpicker('setValue', data.bg_color);
                 fgEditPicker.colorpicker('setValue', data.text_color);
 

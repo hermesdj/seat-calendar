@@ -1,5 +1,5 @@
 .text-padding {
-    padding : 5px 10px;
+    padding: 5px 10px;
 }
 
 .text-middle {
@@ -18,7 +18,7 @@
     background-color: #dddddd;
 }
 
-.clickable { 
+.clickable {
     cursor: pointer;
 }
 
@@ -27,19 +27,42 @@
 }
 
 #sliderImportance {
-    width : 100% !important;
+    width: 100% !important;
 }
 
 .label-faded {
     background-color: #bbb !important;
 }
 
-.autocomplete-suggestions { border: 1px solid #999; background: #FFF; overflow: auto; }
-.autocomplete-suggestion { padding: 2px 5px; white-space: nowrap; overflow: hidden; }
-.autocomplete-selected { background: #F0F0F0; }
-.autocomplete-suggestions strong { font-weight: normal; color: #3399FF; }
-.autocomplete-group { padding: 2px 5px; }
-.autocomplete-group strong { display: block; border-bottom: 1px solid #000; }
+.autocomplete-suggestions {
+    border: 1px solid #999;
+    background: #FFF;
+    overflow: auto;
+}
+
+.autocomplete-suggestion {
+    padding: 2px 5px;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+.autocomplete-selected {
+    background: #F0F0F0;
+}
+
+.autocomplete-suggestions strong {
+    font-weight: normal;
+    color: #3399FF;
+}
+
+.autocomplete-group {
+    padding: 2px 5px;
+}
+
+.autocomplete-group strong {
+    display: block;
+    border-bottom: 1px solid #000;
+}
 
 .pre {
     white-space: pre-wrap;
@@ -69,6 +92,6 @@
 /* mobile device optimisation */
 @media (max-width: 767px) and (orientation: portrait) {
     .hidden-portrait-xs {
-        display: none!important;
+        display: none !important;
     }
 }

@@ -2,12 +2,15 @@
 
 namespace Seat\Kassie\Calendar\Models;
 
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Notifications\Notifiable;
-use s9e\TextFormatter\Bundles\Forum as TextFormatter;
 use Carbon\Carbon;
 use Carbon\CarbonInterface;
-use \DateTime;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Notifications\Notifiable;
+use s9e\TextFormatter\Bundles\Forum as TextFormatter;
 use Seat\Eveapi\Models\Character\CharacterInfo;
 use Seat\Eveapi\Models\Sde\MapDenormalize;
 use Seat\Notifications\Models\Integration;
@@ -49,58 +52,45 @@ class Operation extends Model
     /**
      * @var array
      */
-    protected $dates = ['start_at', 'end_at', 'created_at', 'updated_at'];
+    protected $casts = ['start_at' => 'datetime', 'end_at' => 'datetime', 'created_at' => 'datetime', 'updated_at' => 'datetime'];
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * @return HasOne
      */
-    public function user()
-    {
-        return $this->belongsTo(User::class);
-    }
-
-    /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasOne
-     */
-    public function fleet_commander()
+    public function fleet_commander(): HasOne
     {
         return $this->hasOne(CharacterInfo::class, 'character_id', 'fc_character_id');
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     * @return HasMany
      */
-    public function attendees()
+    public function attendees(): HasMany
     {
         return $this->hasMany(Attendee::class);
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     * @return BelongsToMany
      */
-    public function tags()
+    public function tags(): BelongsToMany
     {
         return $this->belongsToMany(Tag::class, 'calendar_tag_operation');
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * @return HasOne
      */
-    public function integration()
-    {
-        return $this->belongsTo(Integration::class, 'integration_id', 'id');
-    }
-
-    /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasOne
-     */
-    public function staging()
+    public function staging(): HasOne
     {
         return $this->hasOne(MapDenormalize::class, 'itemID', 'staging_sys_id')
             ->withDefault();
     }
 
-    public function getIsFleetCommanderAttribute()
+    /**
+     * @return bool
+     */
+    public function getIsFleetCommanderAttribute(): bool
     {
         if ($this->fc_character_id == null)
             return false;
@@ -109,24 +99,35 @@ class Operation extends Model
     }
 
     /**
+     * @return BelongsTo
+     */
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    /**
      * @param $value
      * @return mixed
      */
-    public function getDescriptionAttribute($value) {
+    public function getDescriptionAttribute($value): mixed
+    {
         return $value ?: $this->description_new;
     }
 
     /**
      * @param $value
      */
-    public function setDescriptionAttribute($value) {
+    public function setDescriptionAttribute($value): void
+    {
         $this->attributes['description_new'] = $value;
     }
 
     /**
-     * @return mixed
+     * @return string
      */
-    public function getParsedDescriptionAttribute() {
+    public function getParsedDescriptionAttribute(): string
+    {
         $parser = TextFormatter::getParser();
         $parser->disablePlugin('Emoji');
 
@@ -138,7 +139,8 @@ class Operation extends Model
     /**
      * @return string|null
      */
-    public function getDurationAttribute() {
+    public function getDurationAttribute(): ?string
+    {
         if ($this->end_at)
             return $this->end_at->diffForHumans($this->start_at,
                 [
@@ -153,7 +155,8 @@ class Operation extends Model
     /**
      * @return string
      */
-    public function getStatusAttribute() {
+    public function getStatusAttribute(): string
+    {
         if ($this->is_cancelled)
             return "cancelled";
 
@@ -169,7 +172,8 @@ class Operation extends Model
     /**
      * @return string
      */
-    public function getStartsInAttribute() {
+    public function getStartsInAttribute(): string
+    {
         return $this->start_at->diffForHumans(Carbon::now('UTC'),
             [
                 'syntax' => CarbonInterface::DIFF_RELATIVE_TO_NOW,
@@ -181,7 +185,8 @@ class Operation extends Model
     /**
      * @return string
      */
-    public function getEndsInAttribute() {
+    public function getEndsInAttribute(): string
+    {
         return $this->end_at->longRelativeToNowDiffForHumans(Carbon::now('UTC'),
             [
                 'syntax' => CarbonInterface::DIFF_RELATIVE_TO_NOW,
@@ -193,7 +198,8 @@ class Operation extends Model
     /**
      * @return string
      */
-    public function getStartedAttribute() {
+    public function getStartedAttribute(): string
+    {
         return $this->start_at->longRelativeToNowDiffForHumans(Carbon::now('UTC'),
             [
                 'syntax' => CarbonInterface::DIFF_RELATIVE_TO_NOW,
@@ -204,9 +210,10 @@ class Operation extends Model
 
     /**
      * @param $user_id
-     * @return |null
+     * @return string|null
      */
-    public function getAttendeeStatus($user_id) {
+    public function getAttendeeStatus($user_id): ?string
+    {
         $entry = $this->attendees->where('user_id', $user_id)->first();
 
         if ($entry != null)
@@ -218,13 +225,21 @@ class Operation extends Model
     /**
      * @return string
      */
-    public function routeNotificationForSlack()
+    public function routeNotificationForSlack(): string
     {
 
-        if (! is_null($this->integration()))
+        if (!is_null($this->integration()))
             return $this->integration->settings['url'];
 
         return '';
+    }
+
+    /**
+     * @return BelongsTo
+     */
+    public function integration(): BelongsTo
+    {
+        return $this->belongsTo(Integration::class, 'integration_id', 'id');
     }
 
     /**
@@ -233,7 +248,7 @@ class Operation extends Model
      * @param User $user
      * @return bool
      */
-    public function isUserGranted(User $user) : bool
+    public function isUserGranted(User $user): bool
     {
         if (is_null($this->role_name))
             return true;
