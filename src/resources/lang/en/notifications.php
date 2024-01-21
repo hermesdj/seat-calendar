@@ -10,4 +10,7 @@ return [
     'notification_enable' => 'Notify to Slack',
     'integration_channel' => 'Integration Channel',
     'notification_settings' => 'Notification Settings',
+
+    'notification_settings_updated' => 'Notification Settings have been updated successfully !',
+    'discord_settings_updated' => 'Discord settings have been updated successfully !'
 ];

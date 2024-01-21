@@ -7,44 +7,6 @@
     <form class="form-horizontal" method="POST" action="{{ route('setting.notifications.update') }}">
         {{ csrf_field() }}
         <div class="card-body">
-            <div class="form-group row">
-                <label class="col-sm-3 col-form-label">{{ trans('calendar::notifications.notifications_to_send') }}</label>
-                <div class="col-sm-9">
-                    <div class="form-check">
-                        <input type="checkbox"
-                               name="notify_create_operation"
-                               class="form-check-input"
-                               value="1"
-                               @if(setting('kassie.calendar.notify_create_operation', true)) checked @endif />
-                        {{ trans('calendar::seat.create_operation') }}<br>
-                        <input type="checkbox"
-                               name="notify_update_operation"
-                               class="form-check-input"
-                               value="1"
-                               @if(setting('kassie.calendar.notify_update_operation', true)) checked @endif />
-                        {{ trans('calendar::seat.update_operation') }}<br>
-                        <input type="checkbox"
-                               name="notify_cancel_operation"
-                               class="form-check-input"
-                               value="1"
-                               @if(setting('kassie.calendar.notify_cancel_operation', true)) checked @endif />
-                        {{ trans('calendar::seat.cancel_operation') }}<br>
-                        <input type="checkbox"
-                               name="notify_activate_operation"
-                               class="form-check-input"
-                               value="1"
-                               @if(setting('kassie.calendar.notify_activate_operation', true)) checked @endif />
-                        {{ trans('calendar::seat.activate_operation') }}<br>
-                        <input type="checkbox"
-                               name="notify_end_operation"
-                               class="form-check-input"
-                               value="1"
-                               @if(setting('kassie.calendar.notify_end_operation', true)) checked @endif />
-                        {{ trans('calendar::seat.end_operation') }}
-                    </div>
-                </div>
-            </div>
-
             <p class="callout callout-info text-justify">
                 {!! trans('calendar::seat.help_notify_operation_interval', ['default_interval' => '<code>15,30,60</code>']) !!}
             </p>

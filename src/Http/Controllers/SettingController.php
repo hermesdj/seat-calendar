@@ -52,17 +52,13 @@ class SettingController extends Controller
      */
     public function updateNotificationSettings(SettingsValidation $request): RedirectResponse
     {
-        setting(['kassie.calendar.notify_create_operation', (bool)$request->notify_create_operation], true);
-        setting(['kassie.calendar.notify_update_operation', (bool)$request->notify_update_operation], true);
-        setting(['kassie.calendar.notify_cancel_operation', (bool)$request->notify_cancel_operation], true);
-        setting(['kassie.calendar.notify_activate_operation', (bool)$request->notify_activate_operation], true);
-        setting(['kassie.calendar.notify_end_operation', (bool)$request->notify_end_operation], true);
         setting(['kassie.calendar.notify_operation_interval', $request['notify_operation_interval']], true);
         setting(['kassie.calendar.slack_emoji_importance_full', $request['slack_emoji_importance_full']], true);
         setting(['kassie.calendar.slack_emoji_importance_half', $request['slack_emoji_importance_half']], true);
         setting(['kassie.calendar.slack_emoji_importance_empty', $request['slack_emoji_importance_empty']], true);
 
-        return redirect()->back();
+        return redirect()->route('setting.index')
+            ->with('success', trans('calendar::notifications.notification_settings_updated'));
     }
 
     /**
@@ -88,8 +84,8 @@ class SettingController extends Controller
                 ->redirect();
         }
 
-        return redirect()->route('calendar::setting.index')
-            ->with('success', 'Discord settings has been successfully updated.');
+        return redirect()->route('setting.index')
+            ->with('success', trans('calendar::notifications.discord_settings_updated'));
     }
 
     /**
@@ -105,6 +101,6 @@ class SettingController extends Controller
         setting(['kassie.calendar.discord_owner_id', $socialite_user->accessTokenResponseBody['guild']['owner_id']], true);
 
         return redirect()->route('setting.index')
-            ->with('success', 'Discord settings has been successfully updated.');
+            ->with('success', trans('calendar::notifications.discord_settings_updated'));
     }
 }

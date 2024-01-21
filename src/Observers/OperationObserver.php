@@ -53,10 +53,10 @@ class OperationObserver
         logger()->debug("OperationObserver::updated $new_operation->id");
         $old_operation = Operation::find($new_operation->id);
 
-        logger()->debug("old_op=$old_operation->is_cancelled, new_op=$new_operation->is_cancelled, diff=" . ($old_operation->is_cancelled != $new_operation->is_cancelled));
-
         $oldOpCancelled = boolval($old_operation->is_cancelled);
         $newOpCancelled = boolval($new_operation->is_cancelled);
+
+        logger()->debug("old_op=$oldOpCancelled, new_op=$newOpCancelled, diff=" . ($oldOpCancelled != $newOpCancelled));
 
         if ($oldOpCancelled != $newOpCancelled) {
             if ($newOpCancelled) {
