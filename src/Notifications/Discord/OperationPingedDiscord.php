@@ -24,7 +24,7 @@ class OperationPingedDiscord extends AbstractDiscordNotification
         $ops = $this->operations;
 
         $message->success()
-            ->from('SeAT Calendar', ':calendar:');
+            ->from('SeAT Calendar', config('buyback.discord.webhook.logoUrl'));
 
         if (count($ops) == 1) {
             $attachment = Helper::BuildDiscordOperationEmbed($ops[0]);

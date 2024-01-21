@@ -22,7 +22,7 @@ class OperationEndedDiscord extends AbstractDiscordNotification
     {
         $message
             ->success()
-            ->from('SeAT Calendar', ':calendar:')
+            ->from('SeAT Calendar', config('buyback.discord.webhook.logoUrl'))
             ->content(trans('calendar::notifications.notification_end_operation'))
             ->embed(Helper::BuildDiscordOperationEmbed($this->operation));
     }
