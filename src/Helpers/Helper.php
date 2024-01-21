@@ -35,7 +35,6 @@ class Helper
         $fields[trans('calendar::seat.fleet_commander')] = $op->fc ?: trans('calendar::seat.unknown');
         $fields[trans('calendar::seat.staging_system')] = $op->staging_sys ?: trans('calendar::seat.unknown');
         $fields[trans('calendar::seat.staging_info')] = $op->staging_info ?: trans('calendar::seat.unknown');
-        $fields[trans('calendar::seat.description')] = $op->description ?: trans('calendar::seat.unknown');
 
         return $fields;
     }
@@ -74,7 +73,7 @@ class Helper
 
         return function (DiscordEmbed $embed) use ($op, $url): void {
             $calendarName = trans('calendar::seat.google_calendar');
-            $calendarUrl = urlencode(self::BuildAddToGoogleCalendarUrl($op));
+            $calendarUrl = self::BuildAddToGoogleCalendarUrl($op);
 
             $embed->title($op->title, $url)
                 ->description($op->description)
@@ -82,9 +81,9 @@ class Helper
                 ->field(function (DiscordEmbedField $field) use ($op, $calendarName, $calendarUrl): void {
                     $field
                         ->name(trans('calendar::seat.add_to_calendar'))
-                        ->value("[$calendarName]($calendarUrl)");
+                        ->value('[' . $calendarName . '](' . $calendarUrl . ')');
                 })
-                ->author($op->user->name, config('calendar.discord.eve.imageServerUrl') . $op->user->id . "/portrait")
+                ->author($op->user->name, config('calendar.discord.eve.imageServerUrl') . $op->user->main_character_id . "/portrait")
                 ->footer(trans('calendar::seat.created_by') . ' ' . $op->user->name);
         };
     }
@@ -128,7 +127,7 @@ class Helper
      */
     private static function BuildAddToGoogleCalendarUrl($op): string
     {
-        $base_uri = "https://calendar.google.com/calendar/render";
+        $base_uri = config('calendar.discord.google.url');
         $date_format = 'Ymd\THis\Z';
         if ($op->end_at) {
             $dates = $op->start_at->format($date_format) .
