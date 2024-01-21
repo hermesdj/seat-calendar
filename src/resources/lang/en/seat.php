@@ -98,14 +98,25 @@ return [
     'staging_system' => 'Staging System',
     'character' => 'Character',
 
+    'notification_settings' => 'Notification Settings',
+
     'notification_new_operation' => '<!channel> :rocket: A new operation has been posted !',
     'notification_edit_operation' => '<!channel> :pencil2: An operation has been edited !',
     'notification_cancel_operation' => '<!channel> :no_entry_sign: An operation has been cancelled !',
     'notification_activate_operation' => '<!channel> :white_check_mark: A cancelled operation has been reactivated !',
     'notification_ping_operation' => '<!channel> :bell: ',
+    'notification_ping_operation_multiple' => '<!channel> :bell: Multiple operations pings :',
     'notification_end_operation' => '<!here> :no_entry_sign: This operation has ended!',
     'notification_enable' => 'Notify to Slack',
     'integration_channel' => 'Integration Channel',
+
+    'notification_operation_posted_label' => 'New Operation',
+    'notification_operation_activated_label' => 'Operation Activated',
+    'notification_operation_cancelled_label' => 'Operation Cancelled',
+    'notification_operation_ended_label' => 'Operation Ended',
+    'notification_operation_pinged_label' => 'Operation Pinged',
+    'notification_operation_updated_label' => 'Operation Updated',
+
 
     'notifications_to_send' => 'Notifications to send',
 
@@ -113,6 +124,7 @@ return [
     'ping_intervals' => 'Ping intervals',
 
     'slack_integration' => 'Slack Integration',
+    'discord_integration' => 'Discord Integration',
     'enabled' => 'Enabled',
     'default_channel' => 'Default Channel',
     'create_operation' => 'Create Operation',
@@ -126,6 +138,10 @@ return [
     'emoji_empty' => 'Empty Emoji',
     'help_emoji' => 'Setup which emoji to use to display the "importance" of an operation when relaying to Slack.',
     'save' => 'Save',
+
+    'discord_client_id' => 'Discord Client Id',
+    'discord_client_secret' => 'Discord Client Secret',
+    'discord_bot_token' => 'Discord Bot Token',
 
     'warning_no_character' => "You can't subscribe to an operation without any character registered in SeAT. Please add an API Key and retry.",
 

@@ -4,7 +4,7 @@
 @section('page_header', trans('calendar::seat.settings'))
 
 @section('left')
-    @include('calendar::setting.includes.slack')
+    @include('calendar::setting.includes.notifications')
 @stop
 
 @section('center')
@@ -13,6 +13,10 @@
     @include('calendar::setting.includes.modals.confirm_delete_tag')
 
     @include('calendar::setting.includes.modals.edit_tag')
+@stop
+
+@section('right')
+    @include('calendar::setting.includes.discord')
 @stop
 
 @push('head')

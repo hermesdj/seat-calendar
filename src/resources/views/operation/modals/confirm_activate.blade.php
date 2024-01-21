@@ -14,23 +14,6 @@
                       class="form-horizontal">
                     {{ csrf_field() }}
                     <input type="hidden" name="operation_id">
-
-                    @if(setting('kassie.calendar.slack_integration', true) && setting('kassie.calendar.notify_activate_operation', true))
-                        <div class="form-group row">
-                            <label for="activate-operation-channel" class="col-sm-4 col-form-label">
-                                {{ trans('calendar::seat.notification_enable') }}
-                                &nbsp;<i class="fas fa-bell"></i>
-                            </label>
-                            <div class="col-sm-8">
-                                <select name="integration_id" id="activate-operation-channel" style="width: 100%;">
-                                    <option></option>
-                                    @foreach($notification_channels as $channel)
-                                        <option value="{{ $channel->id }}">{{ $channel->name }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                        </div>
-                    @endif
                 </form>
 
                 <div class="d-flex justify-content-between">

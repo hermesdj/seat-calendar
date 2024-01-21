@@ -141,12 +141,28 @@ Route::group([
 
 
         Route::group([
-            'prefix' => 'slack'
+            'prefix' => 'notifications'
         ], function () {
 
             Route::post('update', [
-                'as' => 'setting.slack.update',
-                'uses' => 'SettingController@updateSlack'
+                'as' => 'setting.notifications.update',
+                'uses' => 'SettingController@updateNotificationSettings'
+            ]);
+
+        });
+
+        Route::group([
+            'prefix' => 'discord',
+        ], function () {
+
+            Route::post('update', [
+                'as' => 'setting.discord.update',
+                'uses' => 'SettingController@updateDiscord'
+            ]);
+
+            Route::get('/callback', [
+                'as' => 'setting.discord.registration.callback',
+                'uses' => 'SettingController@handleDiscordCallback'
             ]);
 
         });

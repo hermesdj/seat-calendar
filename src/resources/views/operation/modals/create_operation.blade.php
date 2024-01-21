@@ -139,29 +139,6 @@
                                       placeholder="{{ trans('calendar::seat.placeholder_description') }}"></textarea>
                         </div>
                     </div>
-                    {{-- Operation slack --}}
-                    @if(setting('kassie.calendar.slack_integration', true))
-                        <div class="form-group row">
-                            <label for="create-operation-channel" class="col-sm-3 col-form-label">
-                                <i class="fas fa-bell"></i>&nbsp;
-                                {{ trans('calendar::seat.notification_enable') }}
-                            </label>
-                            <div class="col-sm-9">
-                                <select name="integration_id" id="create-operation-channel" style="width: 100%;">
-                                    <option value=""></option>
-                                    @foreach($notification_channels as $channel)
-                                        @if ($channel->id == setting('kassie.calendar.slack_integration_default_channel', true))
-                                            {
-                                            <option value="{{ $channel->id }}" selected>{{ $channel->name }}</option>
-                                        @else
-                                            {
-                                            <option value="{{ $channel->id }}">{{ $channel->name }}</option>
-                                        @endif
-                                    @endforeach
-                                </select>
-                            </div>
-                        </div>
-                    @endif
                 </form>
 
                 <div class="d-flex justify-content-between">

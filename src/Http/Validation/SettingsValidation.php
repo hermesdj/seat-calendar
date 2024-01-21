@@ -50,8 +50,6 @@ class SettingsValidation extends FormRequest
     public function rules(): array
     {
         return [
-            'slack_integration' => ['boolean'],
-            'slack_integration_default_channel' => ['nullable', 'exists:integrations,id'],
             'slack_emoji_importance_full' => ['nullable', 'string'],
             'slack_emoji_importance_half' => ['nullable', 'string'],
             'slack_emoji_importance_empty' => ['nullable', 'string'],
@@ -61,6 +59,10 @@ class SettingsValidation extends FormRequest
             'notify_cancel_operation' => ['boolean'],
             'notify_activate_operation' => ['boolean'],
             'notify_end_operation' => ['boolean'],
+            'discord_integration' => ['boolean'],
+            'discord_client_id' => ['nullable', 'string'],
+            'discord_client_secret' => ['nullable', 'string'],
+            'discord_bot_token' => ['nullable', 'string'],
         ];
     }
 }

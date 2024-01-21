@@ -1,45 +1,12 @@
 <div class="card card-info">
     <div class="card-header with-border p-0">
         <h3 class="card-title p-3">
-            <i class="fab fa-slack"></i> {{ trans('calendar::seat.slack_integration') }}
+            <i class="fab fa-slack"></i> {{ trans('calendar::seat.notification_settings') }}
         </h3>
     </div>
-    <form class="form-horizontal" method="POST" action="{{ route('setting.slack.update') }}">
+    <form class="form-horizontal" method="POST" action="{{ route('setting.notifications.update') }}">
         {{ csrf_field() }}
         <div class="card-body">
-            <div class="form-group row">
-                <label for="slack_integration"
-                       class="col-sm-3 col-form-label">{{ trans('calendar::seat.enabled') }}</label>
-                <div class="col-sm-9">
-                    <div class="form-check">
-                        @if(setting('kassie.calendar.slack_integration', true) == 1)
-                            <input type="checkbox" name="slack_integration" class="form-check-input"
-                                   id="slack_integration" value="1" checked/>
-                        @else
-                            <input type="checkbox" name="slack_integration" class="form-check-input"
-                                   id="slack_integration" value="1"/>
-                        @endif
-                    </div>
-                </div>
-                <label for="slack_integration_default_channel"
-                       class="col-sm-3 col-form-label">{{ trans('calendar::seat.default_channel') }}</label>
-                <div class="col-sm-9">
-                    <select name="slack_integration_default_channel" class="form-control">
-                        <option value="">None</option>
-
-                        @foreach ($slack_integrations as $slack_integration)
-                            @if ($slack_integration->id == setting('kassie.calendar.slack_integration_default_channel', true))
-                                {
-                                <option value="{{ $slack_integration->id }}"
-                                        selected>{{ $slack_integration->name }}</option>
-                            @else
-                                <option value="{{ $slack_integration->id }}">{{ $slack_integration->name }}</option>
-                            @endif
-                        @endforeach
-                    </select>
-                </div>
-            </div>
-
             <div class="form-group row">
                 <label class="col-sm-3 col-form-label">{{ trans('calendar::seat.notifications_to_send') }}</label>
                 <div class="col-sm-9">

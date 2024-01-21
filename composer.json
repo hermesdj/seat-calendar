@@ -14,7 +14,8 @@
     "eveseat/notifications": "^5",
     "eveseat/services": "^5",
     "eveseat/eseye": "^3",
-    "s9e/text-formatter": "^2.4"
+    "s9e/text-formatter": "^2.4",
+    "socialiteproviders/discord": "^4.2"
   },
   "authors": [
     {

@@ -110,4 +110,17 @@ class Helper
         return $base_uri . '?' . http_build_query($query);
     }
 
+    /**
+     * @param array $masks
+     * @return int
+     */
+    public static function arrayBitwiseOr(array $masks): int
+    {
+        $value = 0;
+
+        foreach ($masks as $mask)
+            $value |= $mask;
+
+        return $value;
+    }
 }

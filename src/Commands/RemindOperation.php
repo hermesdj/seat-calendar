@@ -4,9 +4,9 @@ namespace Seat\Kassie\Calendar\Commands;
 
 use Carbon\Carbon;
 use Illuminate\Console\Command;
-use Illuminate\Support\Facades\Notification;
 use Seat\Kassie\Calendar\Models\Operation;
-use Seat\Kassie\Calendar\Notifications\OperationPinged;
+use Seat\Notifications\Models\NotificationGroup;
+use Seat\Notifications\Traits\NotificationDispatchTool;
 use Seat\Services\Exceptions\SettingException;
 
 /**
@@ -16,6 +16,8 @@ use Seat\Services\Exceptions\SettingException;
  */
 class RemindOperation extends Command
 {
+    use NotificationDispatchTool;
+
     /**
      * @var string
      */
@@ -36,18 +38,39 @@ class RemindOperation extends Command
         # when more than one event is being reminded, the last reminder in chat
         # is the next event to occur.
         $configured_marks = setting('kassie.calendar.notify_operation_interval', true);
-        if ($configured_marks === null || !setting('kassie.calendar.slack_integration', true)) return;
+        if ($configured_marks === null) return;
         $marks = explode(',', $configured_marks);
         rsort($marks);
+
+        $allOps = [];
 
         foreach ($marks as $mark) {
             $when = Carbon::now('UTC')->floorMinute()->addMinutes($mark);
             $ops = Operation::where('is_cancelled', false)
                 ->where('start_at', $when)
                 ->get();
-            foreach ($ops as $op) {
-                Notification::send($op, new OperationPinged());
+
+            if (!$ops->isEmpty()) {
+                foreach ($ops as $op) {
+                    $allOps[] = $op;
+                }
             }
         }
+
+        if (!empty($allOps)) {
+            $this->dispatchNotification($allOps);
+        }
+    }
+
+    private function dispatchNotification(array $ops): void
+    {
+        $groups = NotificationGroup::with('alerts')
+            ->whereHas('alerts', function ($query) {
+                $query->where('alert', 'seat_calendar_operation_pinged');
+            })->get();
+
+        $this->dispatchNotifications("seat_calendar_operation_pinged", $groups, function ($constructor) use ($ops) {
+            return new $constructor($ops);
+        });
     }
 }
