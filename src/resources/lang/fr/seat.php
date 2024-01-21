@@ -29,7 +29,6 @@ return [
     'cancel' => 'Annuler',
     'cancelled' => 'Annulé',
 
-    // TODO
     'cancel_confirm_notice' => 'Êtes-vous sûr(e) de vouloir annuler cette opération ? Une opération annuler sera visible dans la section "Anciennes". Vous pouvez réactiver une opération annulée.',
     'cancel_confirm_button_no' => 'Non, n\'annulez pas cette opération.',
     'cancel_confirm_button_yes' => 'Oui, je veux annuler cette opération',
@@ -100,13 +99,6 @@ return [
     'staging_system' => 'Staging System',
     'character' => 'Personnage',
 
-    'notification_new_operation' => '<!channel> :rocket: A new operation has been posted !',
-    'notification_edit_operation' => '<!channel> :pencil2: An operation has been edited !',
-    'notification_cancel_operation' => '<!channel> :no_entry_sign: An operation has been cancelled !',
-    'notification_activate_operation' => '<!channel> :white_check_mark: A cancelled operation has been reactivated !',
-    'notification_ping_operation' => '<!channel> :bell: ',
-    'notification_ping_operation_multiple' => '<!channel> :bell: Plusieurs opérations épinglées :',
-    'notification_end_operation' => '<!here> :no_entry_sign: Cette opération est terminée !',
     'notification_enable' => 'Notifier sur Slack',
     'integration_channel' => 'Salon d\'intégration',
 
@@ -120,7 +112,7 @@ return [
 
     'notifications_to_send' => 'Notifications à envoyer',
 
-    'help_notify_operation_interval' => 'Décidez de combien de ping vous voulez envoyer avant chaque opération. Chaque valeur est un nombre de minutes précédant l\'opération d\'envoi du ping. Séparez les nombres par des virgules. Les valeurs par défaut de :default_ibnterval envoie trois notifications : 15 minutes, 30 minutes et 60 minutes avant le début de l\opération.',
+    'help_notify_operation_interval' => 'Décidez de combien de ping vous voulez envoyer avant chaque opération. Chaque valeur est un nombre de minutes précédent l\'opération d\'envoi du ping. Séparez les nombres par des virgules. Les valeurs par défaut de :default_interval envoie trois notifications : 15 minutes, 30 minutes et 60 minutes avant le début de l\'opération.',
     //'Decide how many pings to send before each operation. Each value is the number of minutes prior to the operation to send the ping. Separate numbers with commas. Default value of :default_interval will send 3 notifications: 15 minutes, 30 minutes, and 60 minutes prior to the operation start time.'
     'ping_intervals' => 'Intervalles des ping',
 
@@ -137,7 +129,7 @@ return [
     'emoji_full' => 'Full Emoji',
     'emoji_half' => 'Half Emoji',
     'emoji_empty' => 'Empty Emoji',
-    'help_emoji' => 'Définissez chaque emoji a faire apparaitre pour montrer l\'importance d\une opération lorsque cela apparait sur Slack.',
+    'help_emoji' => 'Définissez chaque emoji a faire apparaitre pour montrer l\'importance d\'une opération lorsque cela apparait sur Slack.',
     //Setup which emoji to use to display the "importance" of an operation when relaying to Slack.
     'save' => 'Sauvegarder',
 
