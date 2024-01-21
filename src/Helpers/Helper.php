@@ -3,7 +3,9 @@
 namespace Seat\Kassie\Calendar\Helpers;
 
 use Closure;
+use Illuminate\Notifications\Messages\SlackAttachmentField;
 use Seat\Notifications\Services\Discord\Messages\DiscordEmbed;
+use Seat\Notifications\Services\Discord\Messages\DiscordEmbedField;
 use Seat\Services\Exceptions\SettingException;
 
 /**
@@ -34,7 +36,6 @@ class Helper
         $fields[trans('calendar::seat.staging_system')] = $op->staging_sys ?: trans('calendar::seat.unknown');
         $fields[trans('calendar::seat.staging_info')] = $op->staging_info ?: trans('calendar::seat.unknown');
         $fields[trans('calendar::seat.description')] = $op->description ?: trans('calendar::seat.unknown');
-        $fields[trans('calendar::seat.add_to_calendar')] = '<' . self::BuildAddToGoogleCalendarUrl($op) . '|' . trans('calendar::seat.google_calendar') . '>';
 
         return $fields;
     }
@@ -48,8 +49,16 @@ class Helper
         $url = url('/calendar/operation', [$op->id]);
 
         return function ($attachment) use ($op, $url): void {
+            $calendarName = trans('calendar::seat.google_calendar');
+            $calendarUrl = self::BuildAddToGoogleCalendarUrl($op);
+
             $attachment->title($op->title, $url)
                 ->fields(Helper::BuildFields($op))
+                ->field(function (SlackAttachmentField $field) use ($op, $calendarName, $calendarUrl) {
+                    $field
+                        ->title(trans('calendar::seat.add_to_calendar'))
+                        ->content('<' . $calendarUrl . '|' . $calendarName . '>');
+                })
                 ->footer(trans('calendar::seat.created_by') . ' ' . $op->user->name)
                 ->markdown(['fields']);
         };
@@ -64,9 +73,17 @@ class Helper
         $url = url('/calendar/operation', [$op->id]);
 
         return function (DiscordEmbed $embed) use ($op, $url): void {
+            $calendarName = trans('calendar::seat.google_calendar');
+            $calendarUrl = self::BuildAddToGoogleCalendarUrl($op);
+
             $embed->title($op->title, $url)
                 ->description($op->description)
                 ->fields(Helper::BuildFields($op))
+                ->field(function (DiscordEmbedField $field) use ($op, $calendarName, $calendarUrl): void {
+                    $field
+                        ->name(trans('calendar::seat.add_to_calendar'))
+                        ->value("[$calendarUrl]($calendarName)");
+                })
                 ->author($op->user->name, config('calendar.discord.eve.imageServerUrl') . $op->user->id . "/portrait", "")
                 ->footer(trans('calendar::seat.created_by') . ' ' . $op->user->name);
         };
