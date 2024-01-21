@@ -32,17 +32,17 @@ class OperationPingedSlack extends AbstractSlackNotification
         if (count($ops) == 1) {
             $attachment = Helper::BuildSlackNotificationAttachment($ops[0]);
             $message
-                ->content(trans('calendar::seat.notification_ping_operation') . '*' . trans('calendar::seat.starts_in') . ' ' . $notifiable->starts_in . '*')
+                ->content(trans('calendar::notifications.notification_ping_operation') . '*' . trans('calendar::seat.starts_in') . ' ' . $notifiable->starts_in . '*')
                 ->attachment($attachment);
         } else {
             $message->attachment(function ($attachment) use ($ops) {
-                $attachment->title(trans('calendar::seat.notification_ping_operation_multiple'));
+                $attachment->title(trans('calendar::notifications.notification_ping_operation_multiple'));
                 foreach ($ops as $op) {
                     $url = url('/calendar/operation', [$op->id]);
                     $attachment->field(function ($field) use ($op, $url) {
                         $field->long()
                             ->title($op->title, $url)
-                            ->content(trans('calendar::seat.notification_ping_operation') . '*' . trans('calendar::seat.starts_in') . ' ' . $op->starts_in . '*');
+                            ->content(trans('calendar::notifications.notification_ping_operation') . '*' . trans('calendar::seat.starts_in') . ' ' . $op->starts_in . '*');
                     });
                 }
             });

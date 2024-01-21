@@ -3,6 +3,7 @@
 namespace Seat\Kassie\Calendar\Helpers;
 
 use Closure;
+use Seat\Notifications\Services\Discord\Messages\DiscordEmbed;
 use Seat\Services\Exceptions\SettingException;
 
 /**
@@ -13,14 +14,10 @@ use Seat\Services\Exceptions\SettingException;
 class Helper
 {
     /**
-     * @param $op
-     * @return Closure
      * @throws SettingException
      */
-    public static function BuildSlackNotificationAttachment($op): Closure
+    public static function BuildFields($op): array
     {
-        $url = url('/calendar/operation', [$op->id]);
-
         $fields = [];
 
         $fields[trans('calendar::seat.starts_at')] = $op->start_at->format('F j @ H:i EVE');
@@ -39,11 +36,39 @@ class Helper
         $fields[trans('calendar::seat.description')] = $op->description ?: trans('calendar::seat.unknown');
         $fields[trans('calendar::seat.add_to_calendar')] = '<' . self::BuildAddToGoogleCalendarUrl($op) . '|' . trans('calendar::seat.google_calendar') . '>';
 
-        return function ($attachment) use ($op, $url, $fields): void {
+        return $fields;
+    }
+
+    /**
+     * @param $op
+     * @return Closure
+     */
+    public static function BuildSlackNotificationAttachment($op): Closure
+    {
+        $url = url('/calendar/operation', [$op->id]);
+
+        return function ($attachment) use ($op, $url): void {
             $attachment->title($op->title, $url)
-                ->fields($fields)
+                ->fields(Helper::BuildFields($op))
                 ->footer(trans('calendar::seat.created_by') . ' ' . $op->user->name)
                 ->markdown(['fields']);
+        };
+    }
+
+    /**
+     * @param $op
+     * @return Closure
+     */
+    public static function BuildDiscordOperationEmbed($op): Closure
+    {
+        $url = url('/calendar/operation', [$op->id]);
+
+        return function (DiscordEmbed $embed) use ($op, $url): void {
+            $embed->title($op->title, $url)
+                ->description($op->description)
+                ->fields(Helper::BuildFields($op))
+                ->author($op->user->name, config('calendar.discord.eve.imageServerUrl') . $op->user->id . "/portrait", "")
+                ->footer(trans('calendar::seat.created_by') . ' ' . $op->user->name);
         };
     }
 

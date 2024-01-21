@@ -1,14 +1,14 @@
 <div class="card card-info">
     <div class="card-header with-border p-0">
         <h3 class="card-title p-3">
-            <i class="fab fa-slack"></i> {{ trans('calendar::seat.notification_settings') }}
+            <i class="fab fa-slack"></i> {{ trans('calendar::notifications.notification_settings') }}
         </h3>
     </div>
     <form class="form-horizontal" method="POST" action="{{ route('setting.notifications.update') }}">
         {{ csrf_field() }}
         <div class="card-body">
             <div class="form-group row">
-                <label class="col-sm-3 col-form-label">{{ trans('calendar::seat.notifications_to_send') }}</label>
+                <label class="col-sm-3 col-form-label">{{ trans('calendar::notifications.notifications_to_send') }}</label>
                 <div class="col-sm-9">
                     <div class="form-check">
                         <input type="checkbox"

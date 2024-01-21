@@ -28,7 +28,7 @@ class OperationCancelledSlack extends AbstractSlackNotification
 
         $message->error()
             ->from('SeAT Calendar', ':calendar:')
-            ->content(trans('calendar::seat.notification_cancel_operation'))
+            ->content(trans('calendar::notifications.notification_cancel_operation'))
             ->attachment($attachment);
     }
 }

@@ -100,8 +100,6 @@ return [
     'staging_system' => 'Staging System',
     'character' => 'Personnage',
 
-    'notification_settings' => 'Configuration des Notifications',
-
     'notification_new_operation' => '<!channel> :rocket: A new operation has been posted !',
     'notification_edit_operation' => '<!channel> :pencil2: An operation has been edited !',
     'notification_cancel_operation' => '<!channel> :no_entry_sign: An operation has been cancelled !',

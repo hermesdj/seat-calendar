@@ -28,7 +28,7 @@ class OperationPostedSlack extends AbstractSlackNotification
 
         $message->success()
             ->from('SeAT Calendar', ':calendar:')
-            ->content(trans('calendar::seat.notification_new_operation'))
+            ->content(trans('calendar::notifications.notification_new_operation'))
             ->attachment($attachment);
     }
 }
