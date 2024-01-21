@@ -28,12 +28,12 @@
     <script type="text/javascript" src="{{ asset('web/js/bootstrap-colorpicker.min.js') }}"></script>
     <script type="text/javascript" src="{{ asset('web/js/settings.js') }}"></script>
     <script type="text/javascript">
-        var bgEditPicker = $('#edit_tag_bg_color').colorpicker();
-        var fgEditPicker = $('#edit_tag_text_color').colorpicker();
+        const bgEditPicker = $('#edit_tag_bg_color').colorpicker();
+        const fgEditPicker = $('#edit_tag_text_color').colorpicker();
 
         $('#modalEdit').on('show.bs.modal', function (e) {
-            var link = '{{ route('tags.show', 0) }}';
-            var modal = $(this);
+            const link = '{{ route('tags.show', 0) }}';
+            const modal = $(this);
 
             modal.find('.overlay').removeClass('d-none').addClass('d-flex');
             modal.find('input[type="text"]').each(function (index, input) {

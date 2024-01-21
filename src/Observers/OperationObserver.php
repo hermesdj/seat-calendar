@@ -5,7 +5,6 @@ namespace Seat\Kassie\Calendar\Observers;
 use Carbon\Carbon;
 use Seat\Kassie\Calendar\Discord\DiscordAction;
 use Seat\Kassie\Calendar\Discord\DiscordActionException;
-use Seat\Kassie\Calendar\Discord\DiscordSettingsException;
 use Seat\Kassie\Calendar\Models\Operation;
 use Seat\Notifications\Models\NotificationGroup;
 use Seat\Notifications\Traits\NotificationDispatchTool;
@@ -25,6 +24,7 @@ class OperationObserver
      */
     public function created(Operation $operation): void
     {
+        logger()->debug("OperationObserver::created $operation->id");
         $this->sendCalendarAlert('seat_calendar_operation_posted', $operation);
         $this->syncWithDiscord("created", $operation);
     }
@@ -39,7 +39,7 @@ class OperationObserver
             } else {
                 logger()->debug("Discord integration is not activated");
             }
-        } catch (DiscordActionException|DiscordSettingsException|SettingException $e) {
+        } catch (DiscordActionException|SettingException $e) {
             logger()->error("Error guild event on discord " . $e->getMessage());
         }
     }
@@ -50,13 +50,18 @@ class OperationObserver
      */
     public function updated(Operation $new_operation): void
     {
+        logger()->debug("OperationObserver::updated $new_operation->id");
         $old_operation = Operation::find($new_operation->id);
 
+        logger()->debug("old_op=$old_operation->is_cancelled, new_op=$new_operation->is_cancelled, diff=" . ($old_operation->is_cancelled != $new_operation->is_cancelled));
+
         if ($old_operation->is_cancelled != $new_operation->is_cancelled) {
-            if ($new_operation->is_cancelled && setting('kassie.calendar.notify_cancel_operation', true)) {
+            if ($new_operation->is_cancelled) {
+                logger()->debug("New operation is cancelled, sending cancelled event");
                 $this->sendCalendarAlert('seat_calendar_operation_cancelled', $new_operation);
                 $this->syncWithDiscord("cancelled", $new_operation);
-            } elseif (setting('kassie.calendar.notify_activate_operation', true)) {
+            } else {
+                logger()->debug("New operation is reactivated, sending activated event");
                 $this->sendCalendarAlert('seat_calendar_operation_activated', $new_operation);
                 $this->syncWithDiscord("activated", $new_operation);
             }
@@ -64,11 +69,12 @@ class OperationObserver
             $new_operation->end_at
             && $new_operation->end_at->lessThan(Carbon::now('UTC'))
             && !$new_operation->is_cancelled
-            && setting('kassie.calendar.notify_end_operation', true)
         ) {
+            logger()->debug("Operation has ended");
             $this->sendCalendarAlert('seat_calendar_operation_ended', $new_operation);
             $this->syncWithDiscord("ended", $new_operation);
-        } elseif (setting('kassie.calendar.notify_update_operation', true)) {
+        } else {
+            logger()->debug("Operation has been updated without matching any other condition for cancelling or end");
             $this->sendCalendarAlert('seat_calendar_operation_updated', $new_operation);
             $this->syncWithDiscord("updated", $new_operation);
         }
@@ -88,6 +94,7 @@ class OperationObserver
 
     public function deleted(Operation $operation): void
     {
+        logger()->debug("OperationObserver::deleted $operation->id");
         $this->syncWithDiscord("deleted", $operation);
     }
 }

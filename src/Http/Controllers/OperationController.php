@@ -136,7 +136,6 @@ class OperationController extends Controller
         $tags = [];
 
         if (auth()->user()->can('calendar.update_all') || $operation->user->id == auth()->user()->id) {
-
             foreach ($request->toArray() as $name => $value) {
                 if (empty($value)) {
                     $operation->{$name} = null;
@@ -176,7 +175,7 @@ class OperationController extends Controller
 
             $operation->tags()->sync($tags);
 
-            return $operation;
+            return redirect()->route('operation.index');
         }
 
         return redirect()
@@ -250,11 +249,7 @@ class OperationController extends Controller
     {
         $operation = Operation::find($request->operation_id);
         if ((auth()->user()->can('calendar.close_all') || $operation->user->id == auth()->user()->id) && $operation != null) {
-            $operation->timestamps = false;
-            $operation->is_cancelled = true;
-            $operation->integration_id = ($request->get('integration_id') == "") ?
-                null : $request->get('integration_id');
-            $operation->save();
+            $this->changeStatus($operation, true);
             return redirect()->route('operation.index');
         }
 
@@ -271,17 +266,20 @@ class OperationController extends Controller
     {
         $operation = Operation::find($request->operation_id);
         if ((auth()->user()->can('calendar.close_all') || $operation->user->id == auth()->user()->id) && $operation != null) {
-            $operation->timestamps = false;
-            $operation->is_cancelled = false;
-            $operation->integration_id = ($request->get('integration_id') == "") ?
-                null : $request->get('integration_id');
-            $operation->save();
+            $this->changeStatus($operation, false);
             return redirect()->route('operation.index');
         }
 
         return redirect()
             ->back()
             ->with('error', 'An error occurred while processing the request.');
+    }
+
+    private function changeStatus(Operation $operation, bool $status): void
+    {
+        $operation->timestamps = false;
+        $operation->is_cancelled = $status;
+        $operation->save();
     }
 
     /**
