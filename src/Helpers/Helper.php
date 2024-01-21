@@ -74,7 +74,7 @@ class Helper
 
         return function (DiscordEmbed $embed) use ($op, $url): void {
             $calendarName = trans('calendar::seat.google_calendar');
-            $calendarUrl = self::BuildAddToGoogleCalendarUrl($op);
+            $calendarUrl = urlencode(self::BuildAddToGoogleCalendarUrl($op));
 
             $embed->title($op->title, $url)
                 ->description($op->description)
@@ -82,9 +82,9 @@ class Helper
                 ->field(function (DiscordEmbedField $field) use ($op, $calendarName, $calendarUrl): void {
                     $field
                         ->name(trans('calendar::seat.add_to_calendar'))
-                        ->value("[$calendarUrl]($calendarName)");
+                        ->value("[$calendarName]($calendarUrl)");
                 })
-                ->author($op->user->name, config('calendar.discord.eve.imageServerUrl') . $op->user->id . "/portrait", "")
+                ->author($op->user->name, config('calendar.discord.eve.imageServerUrl') . $op->user->id . "/portrait")
                 ->footer(trans('calendar::seat.created_by') . ' ' . $op->user->name);
         };
     }

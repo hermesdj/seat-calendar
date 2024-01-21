@@ -55,8 +55,11 @@ class OperationObserver
 
         logger()->debug("old_op=$old_operation->is_cancelled, new_op=$new_operation->is_cancelled, diff=" . ($old_operation->is_cancelled != $new_operation->is_cancelled));
 
-        if ($old_operation->is_cancelled != $new_operation->is_cancelled) {
-            if ($new_operation->is_cancelled) {
+        $oldOpCancelled = boolval($old_operation->is_cancelled);
+        $newOpCancelled = boolval($new_operation->is_cancelled);
+
+        if ($oldOpCancelled != $newOpCancelled) {
+            if ($newOpCancelled) {
                 logger()->debug("New operation is cancelled, sending cancelled event");
                 $this->sendCalendarAlert('seat_calendar_operation_cancelled', $new_operation);
                 $this->syncWithDiscord("cancelled", $new_operation);
@@ -68,7 +71,7 @@ class OperationObserver
         } elseif (
             $new_operation->end_at
             && $new_operation->end_at->lessThan(Carbon::now('UTC'))
-            && !$new_operation->is_cancelled
+            && !$newOpCancelled
         ) {
             logger()->debug("Operation has ended");
             $this->sendCalendarAlert('seat_calendar_operation_ended', $new_operation);
