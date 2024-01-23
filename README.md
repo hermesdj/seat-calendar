@@ -1,4 +1,4 @@
-# eveseat-calendar
+# seat-calendar
 
 [![Latest Stable Version](https://img.shields.io/packagist/v/hermesdj/seat-calendar.svg?style=for-the-badge)](https://packagist.org/packages/hermesdj/seat-calendar)
 [![Next Version](https://img.shields.io/packagist/vpre/hermesdj/seat-calendar.svg?style=for-the-badge)](https://packagist.org/packages/hermesdj/seat-calendar)
