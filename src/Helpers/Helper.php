@@ -52,7 +52,7 @@ class Helper
             $calendarUrl = self::BuildAddToGoogleCalendarUrl($op);
 
             $attachment->title($op->title, $url)
-                ->fields(Helper::BuildFields($op))
+                ->fields(self::BuildFields($op))
                 ->field(function (SlackAttachmentField $field) use ($op, $calendarName, $calendarUrl) {
                     $field
                         ->title(trans('calendar::seat.add_to_calendar'))
@@ -77,7 +77,7 @@ class Helper
 
             $embed->title($op->title, $url)
                 ->description($op->description)
-                ->fields(Helper::BuildFields($op))
+                ->fields(self::BuildFields($op))
                 ->field(function (DiscordEmbedField $field) use ($op, $calendarName, $calendarUrl): void {
                     $field
                         ->name(trans('calendar::seat.add_to_calendar'))

@@ -2,9 +2,9 @@
 
 [![Latest Stable Version](https://img.shields.io/packagist/v/hermesdj/seat-calendar.svg?style=for-the-badge)](https://packagist.org/packages/hermesdj/seat-calendar)
 [![Next Version](https://img.shields.io/packagist/vpre/hermesdj/seat-calendar.svg?style=for-the-badge)](https://packagist.org/packages/hermesdj/seat-calendar)
-[![Downloads](https://img.shields.io/packagist/dt/hermesdj/seat-calendar?style=for-the-badge)](https://packagist.org/packages/BenHUET/eveseat-calendar)
-[![Core Version](https://img.shields.io/badge/SeAT-4.0.x-blueviolet?style=for-the-badge)](https://github.com/eveseat/seat)
-[![License](https://img.shields.io/github/license/BenHUET/eveseat-calendar?style=for-the-badge)](https://github.com/BenHUET/eveseat-calendar/blob/master/LICENCE)
+[![Downloads](https://img.shields.io/packagist/dt/hermesdj/seat-calendar?style=for-the-badge)](https://packagist.org/packages/hermesdj/seat-calendar)
+[![Core Version](https://img.shields.io/badge/SeAT-5.0.x-blue?style=for-the-badge)](https://github.com/eveseat/seat)
+[![License](https://img.shields.io/github/license/hermesdj/seat-calendar?style=for-the-badge)](https://github.com/hermesdj/seat-calendar/blob/master/LICENCE)
 
 Calendar plugin for EVE SeAT
 
@@ -36,6 +36,20 @@ https://packagist.org/packages/hermesdj/seat-calendar
 * `php artisan db:seed --class=Seat\\Kassie\\Calendar\\database\\seeds\\CalendarTagsSeeder`
 * `php artisan db:seed --class=Seat\\Kassie\\Calendar\\database\\seeds\\ScheduleSeeder`
 
+## Discord
+The version compatible with SeAT 5.x comes with a discord integration able to sync calendar events on a discord server.
+A bot must be setup for this to work.
+
+## Create Bot on Discord Developer Portal
+- Go to the [following url](https://discordapp.com/developers/applications) in order to create an application and retrieve bot token.
+- Give it a name and suitable description; so user will be able to know what it is related to later.
+- On sidebar, click on **Oauth2** > **General** and hit the **Add Redirect** button twice and seed spawned field with the address bellow :
+    - `{seat-public-url}/calendar/setting/discord/callback`
+- On sidebar click on **Bot** and hit the **Add Bot** button
+    - Check **Public Bot**
+    - Check **Requires OAuth2 Code Grant**
+    - Check **Server Members Intent**
+
 ## Since 1.3.2
 
 Since 1.3.2, the PAP mechanism has been implemented. You need `esi-fleets.read_fleet.v1` into your requested scopes
@@ -43,11 +57,9 @@ list.
 
 # Feedbacks or support
 
-@kassie_yvo on eve-seat.slack.com  
-kassie.yvo@gmail.com  
-Kassie Yvo in-game
-
-If you like this module, consider giving some ISK, I'm space poor.
+@jaysgaming2023 on eve-seat discord  
+jays.gaming.contact@gmail.com
+Jay Fendragon/Kyra Skeako in game
 
 # Screenshots
 
