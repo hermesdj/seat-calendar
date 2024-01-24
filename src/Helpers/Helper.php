@@ -3,9 +3,8 @@
 namespace Seat\Kassie\Calendar\Helpers;
 
 use Closure;
-use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Notifications\Messages\SlackAttachment;
 use Illuminate\Notifications\Messages\SlackAttachmentField;
-use Seat\Notifications\Models\Integration;
 use Seat\Notifications\Services\Discord\Messages\DiscordEmbed;
 use Seat\Notifications\Services\Discord\Messages\DiscordEmbedField;
 use Seat\Services\Exceptions\SettingException;
@@ -49,7 +48,7 @@ class Helper
     {
         $url = url('/calendar/operation', [$op->id]);
 
-        return function ($attachment) use ($op, $url): void {
+        return function (SlackAttachment $attachment) use ($op, $url): void {
             $calendarName = trans('calendar::seat.google_calendar');
             $calendarUrl = self::BuildAddToGoogleCalendarUrl($op);
 
@@ -78,7 +77,6 @@ class Helper
             $calendarUrl = self::BuildAddToGoogleCalendarUrl($op);
 
             $embed->title($op->title, $url)
-                ->description($op->description)
                 ->fields(self::BuildFields($op))
                 ->field(function (DiscordEmbedField $field) use ($op, $calendarName, $calendarUrl): void {
                     $field
@@ -87,6 +85,10 @@ class Helper
                 })
                 ->author($op->user->name, config('calendar.discord.eve.imageServerUrl') . $op->user->main_character_id . "/portrait")
                 ->footer(trans('calendar::seat.created_by') . ' ' . $op->user->name);
+
+            if (is_string($op->description) && strlen($op->description) > 0) {
+                $embed->description($op->description);
+            }
         };
     }
 
