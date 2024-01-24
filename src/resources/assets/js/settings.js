@@ -1,12 +1,12 @@
 $(function () {
     function refreshPreview(background, foreground, text, preview) {
-        var name = $(text).val();
-        var bg_color = $(background).val();
-        var text_color = $(foreground).val();
-        var tag_preview = $(preview);
+        let name = $(text).val();
+        let bg_color = $(background).val();
+        let text_color = $(foreground).val();
+        let tag_preview = $(preview);
 
-        var bg_color_hex = /(^#[0-9A-F]{6}$)|(^#[0-9A-F]{3}$)/i.test(bg_color);
-        var text_color_hex = /(^#[0-9A-F]{6}$)|(^#[0-9A-F]{3}$)/i.test(text_color);
+        let bg_color_hex = /(^#[0-9A-F]{6}$)|(^#[0-9A-F]{3}$)/i.test(bg_color);
+        let text_color_hex = /(^#[0-9A-F]{6}$)|(^#[0-9A-F]{3}$)/i.test(text_color);
 
         if (bg_color_hex === true) {
             tag_preview.css('background-color', bg_color);
@@ -39,7 +39,7 @@ $(function () {
     $('#tag_bg_color, #tag_text_color').colorpicker();
 
     $('#modalConfirmDelete').on('show.bs.modal', function (e) {
-        var tag_id = $(e.relatedTarget).data('tag-id');
+        let tag_id = $(e.relatedTarget).data('tag-id');
 
         $(e.currentTarget).find('input[name="tag_id"]').val(tag_id);
     });

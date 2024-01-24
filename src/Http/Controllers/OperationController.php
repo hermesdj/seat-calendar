@@ -15,10 +15,12 @@ use Seat\Eseye\Exceptions\EsiScopeAccessDeniedException;
 use Seat\Eseye\Exceptions\InvalidContainerDataException;
 use Seat\Eseye\Exceptions\RequestFailedException;
 use Seat\Eveapi\Models\RefreshToken;
+use Seat\Kassie\Calendar\Discord\DiscordAction;
 use Seat\Kassie\Calendar\Models\Attendee;
 use Seat\Kassie\Calendar\Models\Operation;
 use Seat\Kassie\Calendar\Models\Pap;
 use Seat\Kassie\Calendar\Models\Tag;
+use Seat\Kassie\Calendar\Notifications\NotificationDispatcher;
 use Seat\Notifications\Models\Integration;
 use Seat\Services\Contracts\EsiClient;
 use Seat\Services\Exceptions\SettingException;
@@ -115,6 +117,8 @@ class OperationController extends Controller
         $operation->save();
 
         $operation->tags()->attach($tags);
+
+        NotificationDispatcher::dispatchOperationCreated($operation);
     }
 
     /**
@@ -175,6 +179,9 @@ class OperationController extends Controller
 
             $operation->tags()->sync($tags);
 
+            NotificationDispatcher::dispatchOperationUpdated($operation);
+            DiscordAction::syncWithDiscord("updated", $operation);
+
             return redirect()->route('operation.index');
         }
 
@@ -233,6 +240,7 @@ class OperationController extends Controller
         if ((auth()->user()->can('calendar.close_all') || $operation->user->id == auth()->user()->id) && $operation != null) {
             $operation->end_at = Carbon::now('UTC');
             $operation->save();
+            NotificationDispatcher::dispatchOperationEnded($operation);
             return redirect()->route('operation.index');
         }
 
@@ -250,6 +258,7 @@ class OperationController extends Controller
         $operation = Operation::find($request->operation_id);
         if ((auth()->user()->can('calendar.close_all') || $operation->user->id == auth()->user()->id) && $operation != null) {
             $this->changeStatus($operation, true);
+
             return redirect()->route('operation.index');
         }
 
@@ -280,6 +289,14 @@ class OperationController extends Controller
         $operation->timestamps = false;
         $operation->is_cancelled = $status;
         $operation->save();
+
+        if ($status) {
+            NotificationDispatcher::dispatchOperationCancelled($operation);
+            DiscordAction::syncWithDiscord("cancelled", $operation);
+        } else {
+            NotificationDispatcher::dispatchOperationActivated($operation);
+            DiscordAction::syncWithDiscord("activated", $operation);
+        }
     }
 
     /**

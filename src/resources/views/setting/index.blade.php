@@ -53,6 +53,12 @@
                 modal.find('select[name="analytics"]').val(data.analytics);
                 modal.find('input[name="quantifier"]').val(data.quantifier);
                 modal.find('input[name="tag_id"]').val(data.id);
+                modal.find('input[name="bg_color"]').val(data.bg_color);
+                modal.find('input[name="text_color"]').val(data.text_color);
+
+                for (let integration of data.integrations) {
+                    modal.find(`option[id="integration-${integration.id}"]`).prop('selected', true);
+                }
 
                 modal.find('.overlay').addClass('d-none').removeClass('d-flex');
             });

@@ -5,6 +5,8 @@
                 <h4 class="modal-title">
                     <i class="fas fa-pencil-alt"></i> {{ trans('calendar::seat.update') }}
                 </h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                            aria-hidden="true">&times;</span></button>
             </div>
 
             <div class="modal-body">
@@ -85,6 +87,18 @@
                         <label for="preview" class="col-sm-3">{{ trans('calendar::seat.preview') }}</label>
                         <div class="col-sm-9">
                             <span class="badge tag" id="edit_tag_preview">TAG</span>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label for="integrations" class="col-sm-3">{{trans('calendar::seat.integrations')}}</label>
+                        <div class="col-sm-9">
+                            <select name="integrations[]" id="integrations" class="form-control" multiple="multiple">
+                                @foreach($integrations->sortBy('name') as $integration)
+                                    <option value="{{$integration->id}}"
+                                            id="integration-{{$integration->id}}">{{ $integration->name }}</option>
+                                @endforeach
+                            </select>
                         </div>
                     </div>
 

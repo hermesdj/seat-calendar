@@ -3,7 +3,9 @@
 namespace Seat\Kassie\Calendar\Helpers;
 
 use Closure;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Notifications\Messages\SlackAttachmentField;
+use Seat\Notifications\Models\Integration;
 use Seat\Notifications\Services\Discord\Messages\DiscordEmbed;
 use Seat\Notifications\Services\Discord\Messages\DiscordEmbedField;
 use Seat\Services\Exceptions\SettingException;

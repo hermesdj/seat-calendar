@@ -37,11 +37,11 @@ class SettingController extends Controller
     public function index(): Factory|View
     {
         $tags = Tag::all();
-        $notification_channels = Integration::where('type', 'slack')->get();
+        $integrations = Integration::all();
 
         return view('calendar::setting.index', [
             'tags' => $tags,
-            'slack_integrations' => $notification_channels,
+            'integrations' => $integrations,
         ]);
     }
 

@@ -168,4 +168,6 @@ return [
     'mining' => 'Mining',
     'untracked' => 'Un-Tracked',
     'list' => 'List',
+
+    'integrations' => 'Notification Integrations'
 ];
