@@ -13,7 +13,7 @@
                     {{ csrf_field() }}
                     <input type="hidden" name="tag_id">
 
-                    <p>This action will delete definitely this tag. This can't be reverted, are you sure ?</p>
+                    <p>{{ trans('calendar::seat.delete_tag_description') }}</p>
 
                     <div class="d-flex justify-content-between">
                         <button type="button" class="btn btn-light" data-dismiss="modal">

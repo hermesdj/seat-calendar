@@ -11,18 +11,19 @@
             <h3 class="card-title">{{ trans('calendar::seat.paps') }}</h3>
         </div>
         <div class="card-body">
-            <h3>Stats</h3>
+            <h3>{{ trans('calendar::paps.stats_header') }}</h3>
             <div class="row">
                 <div class="col-sm-4">
                     <div class="input-group input-group-sm" id="yearChartSettings">
                         <div class="form-check mr-3">
                             <input type="checkbox" name="grouped" class="form-check-input"/>
-                            <label class="form-check-label">Use people groups settings ?</label>
+                            <label class="form-check-label">{{ trans('calendar::paps.use_people_group_settings') }}</label>
                         </div>
                         <input type="text" name="year" class="form-control" value="{{ carbon()->year }}"
                                placeholder="year"/>
                         <span class="input-group-append">
-                        <button type="button" class="btn btn-info btn-flat">Display</button>
+                        <button type="button"
+                                class="btn btn-info btn-flat">{{ trans('calendar::paps.display_btn') }}</button>
                     </span>
                     </div>
                 </div>
@@ -35,7 +36,7 @@
                     <div class="input-group input-group-sm" id="monthlyStackedChartSettings">
                         <div class="form-check mr-3">
                             <input type="checkbox" name="grouped" class="form-check-input"/>
-                            <label class="form-check-label">Use people groups settings ?</label>
+                            <label class="form-check-label">{{ trans('calendar::paps.use_people_group_settings') }}</label>
                         </div>
                         <select name="month" class="form-control">
                             @for($i = 1; $i < 13; $i++)
@@ -46,7 +47,8 @@
                         <input type="text" name="year" class="form-control" value="{{ carbon()->year }}"
                                placeholder="year"/>
                         <span class="input-group-append">
-                        <button type="button" class="btn btn-info btn-flat">Display</button>
+                        <button type="button"
+                                class="btn btn-info btn-flat">{{ trans('calendar::paps.display_btn') }}</button>
                     </span>
                     </div>
                 </div>
@@ -56,16 +58,16 @@
             </div>
             <div class="row">
                 <div class="col-md-12">
-                    <h3>Ranking</h3>
+                    <h3>{{ trans('calendar::paps.ranking_header') }}</h3>
                     <div class="row">
                         <div class="col-md-4">
-                            <h4>This week</h4>
+                            <h4>{{ trans('calendar::paps.this_week_header') }}</h4>
                             <table class="table table-striped @if($weeklyRanking->count() > 0) ranking-table @endif">
                                 <thead>
                                 <tr>
                                     <th>#</th>
-                                    <th>Character</th>
-                                    <th>Paps</th>
+                                    <th>{{ trans('calendar::paps.character_header') }}</th>
+                                    <th>{{ trans('calendar::paps.paps_header') }}</th>
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -78,20 +80,20 @@
                                     </tr>
                                 @empty
                                     <tr>
-                                        <td colspan="3">There are no paps for the current week.</td>
+                                        <td colspan="3">{{ trans('calendar::paps.no_paps_this_week') }}</td>
                                     </tr>
                                 @endforelse
                                 </tbody>
                             </table>
                         </div>
                         <div class="col-md-4">
-                            <h4>This month</h4>
+                            <h4>{{ trans('calendar::paps.this_month_header') }}</h4>
                             <table class="table table-striped @if($monthlyRanking->count() > 0) ranking-table @endif">
                                 <thead>
                                 <tr>
                                     <th>#</th>
-                                    <th>Character</th>
-                                    <th>Paps</th>
+                                    <th>{{ trans('calendar::paps.character_header') }}</th>
+                                    <th>{{ trans('calendar::paps.paps_header') }}</th>
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -105,20 +107,20 @@
                                     </tr>
                                 @empty
                                     <tr>
-                                        <td colspan="3">There are no paps for the current week.</td>
+                                        <td colspan="3">{{ trans('calendar::paps.no_paps_this_month') }}</td>
                                     </tr>
                                 @endforelse
                                 </tbody>
                             </table>
                         </div>
                         <div class="col-md-4">
-                            <h4>This year</h4>
+                            <h4>{{ trans('calendar::paps.this_year_header') }}</h4>
                             <table class="table table-striped @if($yearlyRanking->count() > 0) ranking-table @endif">
                                 <thead>
                                 <tr>
                                     <th>#</th>
-                                    <th>Character</th>
-                                    <th>Paps</th>
+                                    <th>{{ trans('calendar::paps.character_header') }}</th>
+                                    <th>{{ trans('calendar::paps.paps_header') }}</th>
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -132,7 +134,7 @@
                                     </tr>
                                 @empty
                                     <tr>
-                                        <td colspan="3">There are no paps for the current week.</td>
+                                        <td colspan="3">{{ trans('calendar::paps.no_paps_this_year') }}</td>
                                     </tr>
                                 @endforelse
                                 </tbody>
@@ -149,17 +151,17 @@
     <script type="text/javascript" src="{{ asset('web/js/rainbowvis.js') }}"></script>
     <script type="text/javascript">
         $(function () {
-            var yearChart, monthChart;
-            var rainbow = new Rainbow();
-            var yearChartParameters = $('#yearChartSettings');
-            var monthChartParameters = $('#monthlyStackedChartSettings');
-            var themeColor = rgb2hex($('.nav-pills .nav-link.active').css('backgroundColor'));
+            let yearChart, monthChart;
+            let rainbow = new Rainbow();
+            let yearChartParameters = $('#yearChartSettings');
+            let monthChartParameters = $('#monthlyStackedChartSettings');
+            let themeColor = rgb2hex($('.nav-pills .nav-link.active').css('backgroundColor'));
 
             // just in case we're on white paper, reverse color
             if (themeColor.substr(4) === rgb2hex($('.card').css('backgroundColor')).substr(4))
                 themeColor = '#000000';
 
-            var yearChartSettings = {
+            let yearChartSettings = {
                 type: 'bar',
                 data: {
                     labels: [],
@@ -212,7 +214,7 @@
                 }
             };
 
-            var monthChartSettings = {
+            let monthChartSettings = {
                 type: 'horizontalBar',
                 data: {
                     labels: [],
@@ -248,7 +250,7 @@
                         grouped: yearChartParameters.find('input[type="checkbox"]').is(':checked') ? 1 : 0
                     },
                     success: function (data) {
-                        var pareto = [];
+                        let pareto = [];
 
                         if (typeof yearChart !== 'undefined')
                             yearChart.destroy();
@@ -310,10 +312,10 @@
                     },
                     success: function (data) {
 
-                        var pointFound = false;
-                        var seriesFound = false;
-                        var datasetLabels = [];
-                        var series = [];
+                        let pointFound = false;
+                        let seriesFound = false;
+                        let datasetLabels = [];
+                        let series = [];
 
                         if (typeof (monthChart) !== 'undefined')
                             monthChart.destroy();

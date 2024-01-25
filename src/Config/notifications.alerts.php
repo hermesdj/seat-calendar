@@ -2,7 +2,7 @@
 
 return [
     'seat_calendar_operation_activated' => [
-        'label' => 'calendar::notifications.notification_operation_activated_label',
+        'label' => 'calendar::seat.notification_operation_activated_label',
         'handlers' => [
             'slack' => \Seat\Kassie\Calendar\Notifications\Slack\OperationActivatedSlack::class,
             'discord' => \Seat\Kassie\Calendar\Notifications\Discord\OperationActivatedDiscord::class,
@@ -10,7 +10,7 @@ return [
         ]
     ],
     'seat_calendar_operation_cancelled' => [
-        'label' => 'calendar::notifications.notification_operation_cancelled_label',
+        'label' => 'calendar::seat.notification_operation_cancelled_label',
         'handlers' => [
             'slack' => \Seat\Kassie\Calendar\Notifications\Slack\OperationCancelledSlack::class,
             'discord' => \Seat\Kassie\Calendar\Notifications\Discord\OperationCancelledDiscord::class,
@@ -18,7 +18,7 @@ return [
         ]
     ],
     'seat_calendar_operation_ended' => [
-        'label' => 'calendar::notifications.notification_operation_ended_label',
+        'label' => 'calendar::seat.notification_operation_ended_label',
         'handlers' => [
             'slack' => \Seat\Kassie\Calendar\Notifications\Slack\OperationEndedSlack::class,
             'discord' => \Seat\Kassie\Calendar\Notifications\Discord\OperationEndedDiscord::class,
@@ -26,7 +26,7 @@ return [
         ]
     ],
     'seat_calendar_operation_pinged' => [
-        'label' => 'calendar::notifications.notification_operation_pinged_label',
+        'label' => 'calendar::seat.notification_operation_pinged_label',
         'handlers' => [
             'slack' => \Seat\Kassie\Calendar\Notifications\Slack\OperationPingedSlack::class,
             'discord' => \Seat\Kassie\Calendar\Notifications\Discord\OperationPingedDiscord::class,
@@ -34,7 +34,7 @@ return [
         ]
     ],
     'seat_calendar_operation_posted' => [
-        'label' => 'calendar::notifications.notification_operation_posted_label',
+        'label' => 'calendar::seat.notification_operation_posted_label',
         'handlers' => [
             'slack' => \Seat\Kassie\Calendar\Notifications\Slack\OperationPostedSlack::class,
             'discord' => \Seat\Kassie\Calendar\Notifications\Discord\OperationPostedDiscord::class,
@@ -42,7 +42,7 @@ return [
         ]
     ],
     'seat_calendar_operation_updated' => [
-        'label' => 'calendar::notifications.notification_operation_updated_label',
+        'label' => 'calendar::seat.notification_operation_updated_label',
         'handlers' => [
             'slack' => \Seat\Kassie\Calendar\Notifications\Slack\OperationUpdatedSlack::class,
             'discord' => \Seat\Kassie\Calendar\Notifications\Discord\OperationUpdatedDiscord::class,

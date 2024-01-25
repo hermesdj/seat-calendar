@@ -27,6 +27,8 @@ class SyncDiscordUsers extends Command
         foreach ($ops as $op) {
             $users = DiscordClient::getGuildEventUsers(GuildEvent::fromOperation($op));
             Log::debug(print_r($users, true));
+
+            // TODO sync attendees
         }
     }
 }
