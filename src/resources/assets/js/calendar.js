@@ -5,13 +5,13 @@ const op_modals = {
 };
 
 op_modals.create.on('show.bs.modal', function (e) {
-    const ROUNDING = 15 * 60 * 1000;
+    const ROUNDING = 5 * 60 * 1000;
     let nowRounded = moment.utc();
     nowRounded = moment.utc(Math.ceil((+nowRounded) / ROUNDING) * ROUNDING);
 
     const options = {
         timePicker: true,
-        timePickerIncrement: 15,
+        timePickerIncrement: 5,
         timePicker24Hour: true,
         minDate: moment.utc(),
         startDate: nowRounded,
@@ -90,7 +90,7 @@ $('#formCreateOperation').submit(function (e) {
 });
 
 op_modals.update.on('show.bs.modal', function (e) {
-    const ROUNDING = 15 * 60 * 1000;
+    const ROUNDING = 5 * 60 * 1000;
     const operation_id = $(e.relatedTarget).data('op-id');
 
     op_modals.update.find('.overlay').removeClass('d-none').addClass('d-flex');
@@ -132,7 +132,7 @@ op_modals.update.on('show.bs.modal', function (e) {
 
         const options = {
             timePicker: true,
-            timePickerIncrement: 15,
+            timePickerIncrement: 5,
             timePicker24Hour: true,
             minDate: nowRounded,
             startDate: moment.utc(op.start_at),
