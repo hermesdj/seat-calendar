@@ -102,12 +102,12 @@ return [
     'notification_enable' => 'Notifier sur Slack',
     'integration_channel' => 'Salon d\'intégration',
 
-    'notification_operation_posted_label' => 'Nouvelle opération',
-    'notification_operation_activated_label' => 'Opération activée',
-    'notification_operation_cancelled_label' => 'Operation annulée',
-    'notification_operation_ended_label' => 'Operation terminée',
-    'notification_operation_pinged_label' => 'Opération épinglée',
-    'notification_operation_updated_label' => 'Opération mis à jour',
+    'notification_operation_posted_label' => 'Calendrier: Nouvelle Opération',
+    'notification_operation_activated_label' => 'Calendrier: Opération activée',
+    'notification_operation_cancelled_label' => 'Calendrier: Operation annulée',
+    'notification_operation_ended_label' => 'Calendrier: Operation terminée',
+    'notification_operation_pinged_label' => 'Calendrier: Opération ping',
+    'notification_operation_updated_label' => 'Calendrier: Opération mise à jour',
 
 
     'notifications_to_send' => 'Notifications à envoyer',

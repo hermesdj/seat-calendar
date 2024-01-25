@@ -98,12 +98,12 @@ return [
     'staging_system' => 'Staging System',
     'character' => 'Character',
 
-    'notification_operation_posted_label' => 'New Operation',
-    'notification_operation_activated_label' => 'Operation Activated',
-    'notification_operation_cancelled_label' => 'Operation Cancelled',
-    'notification_operation_ended_label' => 'Operation Ended',
-    'notification_operation_pinged_label' => 'Operation Pinged',
-    'notification_operation_updated_label' => 'Operation Updated',
+    'notification_operation_posted_label' => 'Calendar: New Operation',
+    'notification_operation_activated_label' => 'Calendar: Operation Activated',
+    'notification_operation_cancelled_label' => 'Calendar: Operation Cancelled',
+    'notification_operation_ended_label' => 'Calendar: Operation Ended',
+    'notification_operation_pinged_label' => 'Calendar: Operation Pinged',
+    'notification_operation_updated_label' => 'Calendar: Operation Updated',
 
 
     'notifications_to_send' => 'Notifications to send',
