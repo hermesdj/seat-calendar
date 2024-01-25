@@ -11,24 +11,24 @@
             <h3 class="card-title">{{ trans('calendar::seat.paps') }}</h3>
         </div>
         <div class="card-body">
-            <h4>My participation per month</h4>
+            <h4>{{ trans('calendar::paps.my_paps_per_month') }}</h4>
             <div class="chart">
                 <canvas id="papPerMonth" height="150" width="1000"></canvas>
             </div>
-            <h4>My participation per ship type</h4>
+            <h4>{{ trans('calendar::paps.my_paps_per_ship_type') }}</h4>
             <div class="chart">
                 <canvas id="papPerType" height="150" width="1000"></canvas>
             </div>
-            <h4>Hall of fame</h4>
+            <h4>{{ trans('calendar::paps.hall_of_fame_header') }}</h4>
             <div class="row">
                 <div class="col-md-4">
-                    <h5>This week</h5>
+                    <h5>{{ trans('calendar::paps.this_week_header') }}</h5>
                     <table class="table table-striped" id="weekly-top">
                         <thead>
                         <tr>
                             <th>#</th>
-                            <th>Character</th>
-                            <th>Paps</th>
+                            <th>{{ trans('calendar::paps.character_header') }}</th>
+                            <th>{{ trans('calendar::paps.paps_header') }}</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -42,7 +42,7 @@
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="3" class="text-center">Be the first to be PAP this week !</td>
+                                <td colspan="3" class="text-center">{{ trans('calendar::paps.first_week_paps') }}</td>
                             </tr>
                         @endforelse
                         </tbody>
@@ -62,13 +62,13 @@
                     </table>
                 </div>
                 <div class="col-md-4">
-                    <h5>This month</h5>
+                    <h5>{{ trans('calendar::paps.this_month_header') }}</h5>
                     <table class="table table-striped" id="monthly-top">
                         <thead>
                         <tr>
                             <th>#</th>
-                            <th>Character</th>
-                            <th>Paps</th>
+                            <th>{{ trans('calendar::paps.character_header') }}</th>
+                            <th>{{ trans('calendar::paps.paps_header') }}</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -82,7 +82,7 @@
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="3" class="text-center">Be the first to be PAP this month !</td>
+                                <td colspan="3" class="text-center">{{ trans('calendar::paps.first_month_paps') }}</td>
                             </tr>
                         @endforelse
                         </tbody>
@@ -102,13 +102,13 @@
                     </table>
                 </div>
                 <div class="col-md-4">
-                    <h5>This year</h5>
+                    <h5>{{ trans('calendar::paps.this_year_header') }}</h5>
                     <table class="table table-striped" id="yearly-top">
                         <thead>
                         <tr>
                             <th>#</th>
-                            <th>Character</th>
-                            <th>Paps</th>
+                            <th>{{ trans('calendar::paps.character_header') }}</th>
+                            <th>{{ trans('calendar::paps.paps_header') }}</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -122,7 +122,7 @@
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="3" class="text-center">Be the first to be PAP this year !</td>
+                                <td colspan="3" class="text-center">{{ trans('calendar::paps.first_year_paps') }}</td>
                             </tr>
                         @endforelse
                         </tbody>
@@ -150,12 +150,12 @@
     <script type="text/javascript" src="{{ asset('web/js/rainbowvis.js') }}"></script>
     <script type="text/javascript">
         $(function () {
-            var rainbow = new Rainbow();
-            var themeColor = rgb2hex($('.nav-pills .nav-link.active').css('backgroundColor'));
-            var monthlyData = [];
-            var shipTypeData = [];
-            var shipTypeLabels = [];
-            var shipTypeColors = [];
+            let rainbow = new Rainbow();
+            let themeColor = rgb2hex($('.nav-pills .nav-link.active').css('backgroundColor'));
+            let monthlyData = [];
+            let shipTypeData = [];
+            let shipTypeLabels = [];
+            let shipTypeColors = [];
 
             // just in case we're on white paper, reverse color
             if (themeColor.substr(4) === rgb2hex($('.card').css('backgroundColor')).substr(4))
@@ -237,13 +237,13 @@
                 }
             });
 
-            var tops = $('#weekly-top, #monthly-top, #yearly-top');
+            let tops = $('#weekly-top, #monthly-top, #yearly-top');
 
             tops.each(function () {
-                var found = false;
-                var children = $(this).find('tr');
+                let found = false;
+                let children = $(this).find('tr');
                 children.each(function () {
-                    if ($(this).attr('data-attr') == {{ $character->character_id }}) {
+                    if ($(this).attr('data-attr') === {{ $character->character_id }}) {
                         $(this).addClass('bg-' + getActiveThemeColor() + '-gradient');
                         found = true;
                     }
@@ -257,7 +257,7 @@
             });
 
             function getActiveThemeColor() {
-                var bodyClass = new RegExp(/skin-([a-z0-9_]+)(-light)?/, 'gi').exec($('body').attr('class'));
+                let bodyClass = new RegExp(/skin-([a-z0-9_]+)(-light)?/, 'gi').exec($('body').attr('class'));
                 if (bodyClass.length > 0)
                     return bodyClass[1];
 

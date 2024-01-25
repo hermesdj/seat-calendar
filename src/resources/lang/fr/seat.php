@@ -174,4 +174,7 @@ return [
     'mining' => 'Minage',
     'untracked' => 'Non suivi',
     'list' => 'Liste',
+
+    // New
+    'delete_tag_description' => 'This action will delete definitely this tag. This can\'t be reverted, are you sure ?'
 ];
