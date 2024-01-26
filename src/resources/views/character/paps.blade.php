@@ -36,7 +36,7 @@
                             <tr data-attr="{{ $top->character_id }}">
                                 <td>{{ $loop->iteration }}.</td>
                                 <td>
-                                    @include('web::partials.character', ['character' => $top])
+                                    @include('web::partials.character', ['character' => $top->character])
                                 </td>
                                 <td>{{ $top->qty }}</td>
                             </tr>

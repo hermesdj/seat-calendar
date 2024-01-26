@@ -171,9 +171,5 @@ return [
 
     'integrations' => 'Notification Integrations',
 
-
-
-
-    // New
-    'delete_tag_description' => 'This action will delete definitely this tag. This can\'t be reverted, are you sure ?'
+    'delete_tag_description' => 'This action will delete definitely this tag. This can\'t be reverted, are you sure ?',
 ];

@@ -2,10 +2,13 @@
 
 namespace Seat\Kassie\Calendar;
 
-use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Support\Facades\Event;
 use Seat\Kassie\Calendar\Commands\RemindOperation;
 use Seat\Kassie\Calendar\Commands\SyncDiscordUsers;
+use Seat\Kassie\Calendar\Commands\SyncFleetPaps;
+use Seat\Kassie\Calendar\database\seeds\CalendarSettingsTableSeeder;
+use Seat\Kassie\Calendar\database\seeds\CalendarTagsSeeder;
+use Seat\Kassie\Calendar\database\seeds\ScheduleSeeder;
 use Seat\Kassie\Calendar\Models\Operation;
 use Seat\Kassie\Calendar\Observers\OperationObserver;
 use Seat\Services\AbstractSeatPlugin;
@@ -28,18 +31,14 @@ class CalendarServiceProvider extends AbstractSeatPlugin
         $this->addObservers();
 
         $this->registerSocialiteDiscordDriver();
-
-        $this->app->booted(function (): void {
-            $schedule = $this->app->make(Schedule::class);
-            $schedule->command('calendar:remind')->everyMinute();
-        });
     }
 
     private function addCommands(): void
     {
         $this->commands([
             RemindOperation::class,
-            SyncDiscordUsers::class
+            SyncDiscordUsers::class,
+            SyncFleetPaps::class
         ]);
     }
 
@@ -90,6 +89,12 @@ class CalendarServiceProvider extends AbstractSeatPlugin
         $this->registerPermissions(__DIR__ . '/Config/Permissions/calendar.php', 'calendar');
         $this->registerPermissions(__DIR__ . '/Config/Permissions/character.php', 'character');
         $this->registerPermissions(__DIR__ . '/Config/Permissions/corporation.php', 'corporation');
+
+        $this->registerDatabaseSeeders([
+            ScheduleSeeder::class,
+            CalendarTagsSeeder::class,
+            CalendarSettingsTableSeeder::class
+        ]);
     }
 
     private function registerSocialiteDiscordDriver(): void

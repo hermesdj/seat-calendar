@@ -176,5 +176,5 @@ return [
     'list' => 'Liste',
 
     // New
-    'delete_tag_description' => 'This action will delete definitely this tag. This can\'t be reverted, are you sure ?'
+    'delete_tag_description' => 'Cette action va définitivement supprimer ce tag, en êtes vous sûr ?',
 ];

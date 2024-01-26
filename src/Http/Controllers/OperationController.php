@@ -5,20 +5,18 @@ namespace Seat\Kassie\Calendar\Http\Controllers;
 use Carbon\Carbon;
 use Illuminate\Contracts\Container\BindingResolutionException;
 use Illuminate\Contracts\View\Factory;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
 use Illuminate\View\View;
-use Seat\Eseye\Exceptions\EsiScopeAccessDeniedException;
 use Seat\Eseye\Exceptions\InvalidContainerDataException;
-use Seat\Eseye\Exceptions\RequestFailedException;
 use Seat\Eveapi\Models\RefreshToken;
 use Seat\Kassie\Calendar\Discord\DiscordAction;
+use Seat\Kassie\Calendar\Exceptions\PapsException;
+use Seat\Kassie\Calendar\Helpers\Helper;
 use Seat\Kassie\Calendar\Models\Attendee;
 use Seat\Kassie\Calendar\Models\Operation;
-use Seat\Kassie\Calendar\Models\Pap;
 use Seat\Kassie\Calendar\Models\Tag;
 use Seat\Kassie\Calendar\Notifications\NotificationDispatcher;
 use Seat\Notifications\Models\Integration;
@@ -360,51 +358,11 @@ class OperationController extends Controller
                 ->with('error', 'You are not the fleet commander or wrong character has been set.');
 
         try {
-            $token = RefreshToken::findOrFail($operation->fc_character_id);
-        } catch (ModelNotFoundException $e) {
+            Helper::syncFleetMembersForPaps($operation);
+        } catch (PapsException $e) {
             return redirect()
                 ->back()
-                ->with('error', 'Fleet commander is not already linked to SeAT. Unable to PAP the fleet.');
-        }
-
-        $client = $this->eseye($token);
-
-        try {
-            $fleet = $client->setVersion('v1')->invoke('get', '/characters/{character_id}/fleet/', [
-                'character_id' => $token->character_id,
-            ]);
-
-            $membersResponse = $client->setVersion('v1')->invoke('get', '/fleets/{fleet_id}/members/', [
-                'fleet_id' => $fleet->getBody()->fleet_id,
-            ]);
-
-            foreach ($membersResponse->getBody() as $member) {
-                Pap::firstOrCreate([
-                    'character_id' => $member->character_id,
-                    'operation_id' => $operation_id,
-                ], [
-                    'ship_type_id' => $member->ship_type_id,
-                    'join_time' => carbon($member->join_time)->toDateTimeString(),
-                ]);
-            }
-        } catch (RequestFailedException $e) {
-            if ($e->getError() == 'Character is not in a fleet')
-                return redirect()
-                    ->back()
-                    ->with('error', $e->getError());
-
-            if ($e->getError() == 'The fleet does not exist or you don\'t have access to it!')
-                return redirect()
-                    ->back()
-                    ->with('error', sprintf('%s Ensure %s have the fleet boss and try again.', $e->getError(), $operation->fc));
-
-            return redirect()
-                ->back()
-                ->with('error', 'Esi respond with an unhandled error : (' . $e->getCode() . ') ' . $e->getError());
-        } catch (EsiScopeAccessDeniedException $e) {
-            return redirect()
-                ->back()
-                ->with('error', 'Registered tokens has not enough privileges. Please bind your character and pap again.');
+                ->with('error', $e->getMessage());
         }
 
         return redirect()
