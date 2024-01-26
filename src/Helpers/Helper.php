@@ -3,8 +3,15 @@
 namespace Seat\Kassie\Calendar\Helpers;
 
 use Closure;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Notifications\Messages\SlackAttachment;
 use Illuminate\Notifications\Messages\SlackAttachmentField;
+use Seat\Eveapi\Models\RefreshToken;
+use Seat\Kassie\Calendar\Exceptions\PapsException;
+use Seat\Kassie\Calendar\Jobs\FleetInfoJob;
+use Seat\Kassie\Calendar\Jobs\FleetMembersJob;
+use Seat\Kassie\Calendar\Models\Operation;
+use Seat\Kassie\Calendar\Models\Pap;
 use Seat\Notifications\Services\Discord\Messages\DiscordEmbed;
 use Seat\Notifications\Services\Discord\Messages\DiscordEmbedField;
 use Seat\Services\Exceptions\SettingException;
@@ -165,5 +172,24 @@ class Helper
             $value |= $mask;
 
         return $value;
+    }
+
+    /**
+     * @throws PapsException
+     */
+    public static function syncFleetMembersForPaps(Operation $operation): void
+    {
+        if (is_null($operation->fc_character_id)) {
+            throw new PapsException("No fleet commander has been set for this operation.");
+        }
+
+        try {
+            $token = RefreshToken::findOrFail($operation->fc_character_id);
+        } catch (ModelNotFoundException $e) {
+            throw new PapsException("Fleet commander is not already linked to SeAT. Unable to PAP the fleet.");
+        }
+
+        FleetInfoJob::dispatchSync($operation->id, $token);
+        FleetMembersJob::dispatchSync($operation->id, $token);
     }
 }

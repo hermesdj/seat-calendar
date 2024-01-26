@@ -14,11 +14,6 @@ class CalendarSettingsTableSeeder extends Seeder
     public function run(): void
     {
         setting([
-            'kassie.calendar.slack_integration',
-            false,
-        ], true);
-
-        setting([
             'kassie.calendar.slack_emoji_importance_full',
             ':full_moon_with_face:',
         ], true);
