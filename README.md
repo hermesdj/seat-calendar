@@ -11,9 +11,15 @@ Calendar plugin for EVE SeAT
 
 * Create/Update/Cancel/Delete/Close & Tag operations
 * Register to operations
-* SeAT Notifications integration
+* SeAT Notifications integration (slack & discord)
 * Permissions
-* Sync with discord event
+* Sync with discord event and sync discord event participants to the calendar op (only work for main characters)
+* Auto sync paps from fleet members ingame every 15 minutes (only if the fleet commander is registered on SeAT and his
+  token is working)
+
+# Known limitations
+
+Email notifications are not done.
 
 # Release
 
@@ -37,7 +43,8 @@ https://packagist.org/packages/hermesdj/seat-calendar
 ## Discord
 
 The version compatible with SeAT 5.x comes with a discord integration able to sync calendar events on a discord server.
-A bot must be setup for this to work.
+A bot must be setup for this to work. The bot can read the participant of the event on discord and mark the main character
+of the account matched to the op. It only works if you are using seat-discord-connector.
 
 ## Create Bot on Discord Developer Portal
 
