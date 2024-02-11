@@ -108,7 +108,6 @@ class Helper
      */
     public static function ImportanceAsEmoji($importance, string $emoji_full, string $emoji_half, string $emoji_empty): string
     {
-        $output = "";
 
         $tmp = explode('.', (string)$importance);
         $val = $tmp[0];
@@ -117,8 +116,7 @@ class Helper
         if (count($tmp) > 1)
             $dec = $tmp[1];
 
-        for ($i = 0; $i < $val; $i++)
-            $output .= $emoji_full;
+        $output = str_repeat($emoji_full, $val);
 
         $left = 5;
         if ($dec != 0) {

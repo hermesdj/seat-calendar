@@ -19,7 +19,7 @@ class OperationPingedDiscord extends AbstractDiscordNotification
         $this->operation = $operation;
     }
 
-    protected function populateMessage(DiscordMessage $message, $notifiable): void
+    protected function populateMessage(DiscordMessage $message, $notifiable)
     {
         $message
             ->success()

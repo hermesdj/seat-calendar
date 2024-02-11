@@ -145,7 +145,7 @@ class Operation extends Model
             return $this->end_at->diffForHumans($this->start_at,
                 [
                     'syntax' => CarbonInterface::DIFF_ABSOLUTE,
-                    'options' => Carbon::ROUND,
+                    'options' => CarbonInterface::ROUND,
                 ]
             );
 
@@ -177,7 +177,7 @@ class Operation extends Model
         return $this->start_at->diffForHumans(Carbon::now('UTC'),
             [
                 'syntax' => CarbonInterface::DIFF_RELATIVE_TO_NOW,
-                'options' => Carbon::ROUND,
+                'options' => CarbonInterface::ROUND,
             ]
         );
     }
@@ -190,7 +190,7 @@ class Operation extends Model
         return $this->end_at->longRelativeToNowDiffForHumans(Carbon::now('UTC'),
             [
                 'syntax' => CarbonInterface::DIFF_RELATIVE_TO_NOW,
-                'options' => Carbon::ROUND,
+                'options' => CarbonInterface::ROUND,
             ]
         );
     }
@@ -203,7 +203,7 @@ class Operation extends Model
         return $this->start_at->longRelativeToNowDiffForHumans(Carbon::now('UTC'),
             [
                 'syntax' => CarbonInterface::DIFF_RELATIVE_TO_NOW,
-                'options' => Carbon::ROUND,
+                'options' => CarbonInterface::ROUND,
             ]
         );
     }
