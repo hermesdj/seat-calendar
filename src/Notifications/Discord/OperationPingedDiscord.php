@@ -19,12 +19,12 @@ class OperationPingedDiscord extends AbstractDiscordNotification
         $this->operation = $operation;
     }
 
-    protected function populateMessage(DiscordMessage $message, $notifiable)
+    protected function populateMessage(DiscordMessage $message, $notifiable): void
     {
         $message
             ->success()
             ->from('SeAT Calendar', config('buyback.discord.webhook.logoUrl'))
-            ->content(trans('calendar::notifications.notification_ping_operation') . '*' . trans('calendar::seat.starts_in') . ' ' . $this->operation->starts_in . '*')
+            ->content(trans('calendar::notifications.notification_ping_operation') . '*' . trans('calendar::seat.starts_in') . ' ' . $this->operation->getStartsInAttribute() . '*')
             ->embed(Helper::BuildDiscordOperationEmbed($this->operation));
     }
 }
