@@ -40,6 +40,13 @@ class NotificationDispatcher
         self::dispatch('seat_calendar_operation_updated', $operation);
     }
 
+    public static function dispatchOperationsPinged(Collection $operations): void
+    {
+        foreach ($operations as $operation) {
+            self::dispatch('seat_calendar_operation_pinged', $operation);
+        }
+    }
+
     private static function dispatch($alertType, $operation): void
     {
         logger()->debug("dispatch notification $alertType on operation $operation->title");

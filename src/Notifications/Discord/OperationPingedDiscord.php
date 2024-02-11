@@ -12,37 +12,19 @@ class OperationPingedDiscord extends AbstractDiscordNotification
 {
     use SerializesModels;
 
-    private array $operations;
+    private Operation $operation;
 
-    public function __construct($operations)
+    public function __construct(Operation $operation)
     {
-        $this->operations = $operations;
+        $this->operation = $operation;
     }
 
-    protected function populateMessage(DiscordMessage $message, $notifiable)
+    protected function populateMessage(DiscordMessage $message, $notifiable): void
     {
-        $ops = $this->operations;
-
-        $message->success()
-            ->from('SeAT Calendar', config('buyback.discord.webhook.logoUrl'));
-
-        if (count($ops) == 1) {
-            $attachment = Helper::BuildDiscordOperationEmbed($ops[0]);
-            $message
-                ->content(trans('calendar::notifications.notification_ping_operation') . '*' . trans('calendar::seat.starts_in') . ' ' . $notifiable->starts_in . '*')
-                ->embed($attachment);
-        } else {
-            $message->embed(function ($embed) use ($ops) {
-                $embed->title(trans('calendar::notifications.notification_ping_operation_multiple'));
-                foreach ($ops as $op) {
-                    $url = url('/calendar/operation', [$op->id]);
-                    $embed->field(function ($field) use ($op, $url) {
-                        $field->long()
-                            ->title($op->title, $url)
-                            ->content(trans('calendar::notifications.notification_ping_operation') . '*' . trans('calendar::seat.starts_in') . ' ' . $op->starts_in . '*');
-                    });
-                }
-            });
-        }
+        $message
+            ->success()
+            ->from('SeAT Calendar', config('buyback.discord.webhook.logoUrl'))
+            ->content(trans('calendar::notifications.notification_ping_operation') . '*' . trans('calendar::seat.starts_in') . ' ' . $this->operation->starts_in . '*')
+            ->embed(Helper::BuildDiscordOperationEmbed($this->operation));
     }
 }
