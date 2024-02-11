@@ -20,9 +20,8 @@ class OperationUpdatedSlack extends AbstractSlackNotification
     }
 
     /**
-     * @throws SettingException
      */
-    public function populateMessage(SlackMessage $message, $notifiable)
+    public function populateMessage(SlackMessage $message, $notifiable): void
     {
         $attachment = Helper::BuildSlackNotificationAttachment($this->operation);
 

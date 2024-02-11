@@ -10,9 +10,9 @@ class ScheduleSeeder extends Seeder
 {
     protected array $schedules = [
         [
-            // Remind calendar operations every
+            // Remind calendar operations every minute
             'command' => 'calendar:remind',
-            'expression' => '1 * * * *',
+            'expression' => '* * * * *',
             'allow_overlap' => false,
             'allow_maintenance' => false,
             'ping_before' => null,

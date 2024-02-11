@@ -54,7 +54,7 @@
 
 @push('javascript')
     <script>
-        var seat_calendar = {
+        const seat_calendar = {
             url: {
                 create_operation: '{{ route('operation.store') }}',
                 update_operation: '{{ route('operation.update') }}',

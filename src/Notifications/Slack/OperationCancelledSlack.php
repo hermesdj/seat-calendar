@@ -20,7 +20,6 @@ class OperationCancelledSlack extends AbstractSlackNotification
     }
 
     /**
-     * @throws SettingException
      */
     public function populateMessage(SlackMessage $message, $notifiable): void
     {

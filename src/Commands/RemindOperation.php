@@ -4,8 +4,9 @@ namespace Seat\Kassie\Calendar\Commands;
 
 use Carbon\Carbon;
 use Illuminate\Console\Command;
+use Illuminate\Support\Collection;
 use Seat\Kassie\Calendar\Models\Operation;
-use Seat\Notifications\Models\NotificationGroup;
+use Seat\Kassie\Calendar\Notifications\NotificationDispatcher;
 use Seat\Notifications\Traits\NotificationDispatchTool;
 use Seat\Services\Exceptions\SettingException;
 
@@ -42,9 +43,10 @@ class RemindOperation extends Command
         $marks = explode(',', $configured_marks);
         rsort($marks);
 
-        $allOps = [];
+        $allOps = new Collection();
 
         foreach ($marks as $mark) {
+            // This is ran every minutes so it will trigger only when the correct mark is reached for an operation
             $when = Carbon::now('UTC')->floorMinute()->addMinutes($mark);
             $ops = Operation::where('is_cancelled', false)
                 ->where('start_at', $when)
@@ -52,25 +54,15 @@ class RemindOperation extends Command
 
             if (!$ops->isEmpty()) {
                 foreach ($ops as $op) {
-                    $allOps[] = $op;
+                    if (!$allOps->has($op->id)) {
+                        $allOps->put($op->id, $op);
+                    }
                 }
             }
         }
 
-        if (!empty($allOps)) {
-            $this->dispatchNotification($allOps);
+        if (!$allOps->isEmpty()) {
+            NotificationDispatcher::dispatchOperationsPinged($allOps);
         }
-    }
-
-    private function dispatchNotification(array $ops): void
-    {
-        $groups = NotificationGroup::with('alerts')
-            ->whereHas('alerts', function ($query) {
-                $query->where('alert', 'seat_calendar_operation_pinged');
-            })->get();
-
-        $this->dispatchNotifications("seat_calendar_operation_pinged", $groups, function ($constructor) use ($ops) {
-            return new $constructor($ops);
-        });
     }
 }

@@ -3,7 +3,6 @@
 namespace Seat\Kassie\Calendar\Http\Controllers;
 
 use Carbon\Carbon;
-use Illuminate\Contracts\Container\BindingResolutionException;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
@@ -11,7 +10,6 @@ use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
 use Illuminate\View\View;
 use Seat\Eseye\Exceptions\InvalidContainerDataException;
-use Seat\Eveapi\Models\RefreshToken;
 use Seat\Kassie\Calendar\Discord\DiscordAction;
 use Seat\Kassie\Calendar\Exceptions\PapsException;
 use Seat\Kassie\Calendar\Helpers\Helper;
@@ -20,7 +18,6 @@ use Seat\Kassie\Calendar\Models\Operation;
 use Seat\Kassie\Calendar\Models\Tag;
 use Seat\Kassie\Calendar\Notifications\NotificationDispatcher;
 use Seat\Notifications\Models\Integration;
-use Seat\Services\Contracts\EsiClient;
 use Seat\Services\Exceptions\SettingException;
 use Seat\Web\Http\Controllers\Controller;
 use Seat\Web\Models\Acl\Role;
@@ -369,18 +366,4 @@ class OperationController extends Controller
             ->back()
             ->with('success', 'Fleet members has been successfully papped.');
     }
-
-    /**
-     * @param RefreshToken $token
-     * @return EsiClient
-     * @throws InvalidContainerDataException|BindingResolutionException
-     */
-    private function eseye(RefreshToken $token): EsiClient
-    {
-        $client = app()->make(EsiClient::class);
-        $client->setAuthentication($token);
-
-        return $client;
-    }
-
 }
