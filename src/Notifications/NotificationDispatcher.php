@@ -94,7 +94,7 @@ class NotificationDispatcher
                 $notification->setMentions($integration->mentions);
 
                 Notification::route($integration->channel, $integration->route)
-                    ->notify($notification);
+                    ->notifyNow($notification);
             }
         });
     }
