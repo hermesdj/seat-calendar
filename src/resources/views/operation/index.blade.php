@@ -85,6 +85,7 @@
                 {data: 'start_at', name: 'start_at'},
                 {data: 'end_at', name: 'end_at'},
                 {data: 'fleet_commander', name: 'fleet_commander', orderable: false},
+                {data: 'doctrine', name: 'doctrine', orderable: false},
                 {data: 'staging_sys', name: 'staging_sys'},
                 {data: 'subscription', name: 'subscription', orderable: false},
                 {data: 'actions', name: 'actions', orderable: false, searchable: false}
@@ -115,6 +116,7 @@
                 {data: 'start_at', name: 'start_at'},
                 {data: 'duration', name: 'duration', orderable: false},
                 {data: 'fleet_commander', name: 'fleet_commander', orderable: false},
+                {data: 'doctrine', name: 'doctrine', orderable: false},
                 {data: 'staging_sys', name: 'staging_sys'},
                 {data: 'subscription', name: 'subscription', orderable: false},
                 {data: 'actions', name: 'actions', orderable: false, searchable: false}
@@ -145,6 +147,7 @@
                 {data: 'start_at', name: 'start_at'},
                 {data: 'end_at', name: 'end_at'},
                 {data: 'fleet_commander', name: 'fleet_commander', orderable: false},
+                {data: 'doctrine', name: 'doctrine', orderable: false},
                 {data: 'staging_sys', name: 'staging_sys'},
                 {data: 'subscription', name: 'subscription', orderable: false},
                 {data: 'actions', name: 'actions', orderable: false, searchable: false}
@@ -163,15 +166,15 @@
 
         $('#modalDetails')
             .on('show.bs.modal', function (e) {
-                var link = '{{ route('operation.detail', 0) }}';
+                let link = '{{ route('operation.detail', 0) }}';
 
                 // load detail content dynamically
                 $(this).find('.modal-body')
                     .html('<div class="overlay dark d-flex justify-content-center align-items-center"><i class="fas fa-2x fa-sync-alt fa-spin"></i></div> Loading...')
                     .load(link.replace(/0$/gi, $(e.relatedTarget).attr('data-op-id')), "", function () {
                         // attach the datatable to the loaded modal
-                        var attendees_table = $('#attendees');
-                        var confirmed_table = $('#confirmed');
+                        let attendees_table = $('#attendees');
+                        let confirmed_table = $('#confirmed');
 
                         if (!$.fn.DataTable.isDataTable(attendees_table)) {
                             attendees_table.DataTable({
@@ -228,16 +231,13 @@
                     });
             })
             .on('hidden.bs.modal', function (e) {
-                var table = $(this).find('#attendees').DataTable();
-                table.destroy();
-
-                table = $(this).find('#confirmed').DataTable();
-                table.destroy();
+                $(this).find('#attendees').DataTable().destroy();
+                $(this).find('#confirmed').DataTable().destroy();
             });
 
         // direct link
         @if(request()->route()->hasParameter('id'))
-        var dl = $('<i>');
+        let dl = $('<i>');
         dl.attr('data-op-id', {{ request()->route()->parameter('id') }});
         dl.attr('data-toggle', 'modal');
         dl.attr('data-target', '#modalDetails');

@@ -177,4 +177,6 @@ return [
 
     // New
     'delete_tag_description' => 'Cette action va définitivement supprimer ce tag, en êtes vous sûr ?',
+
+    'doctrines' => 'Doctrine'
 ];

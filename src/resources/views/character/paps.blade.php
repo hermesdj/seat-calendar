@@ -179,7 +179,7 @@
                 data: {
                     datasets: [{
                         label: '# participation',
-                        data: monthlyData,
+                        data: mont&hlyData,
                         borderColor: themeColor
                     }]
                 },

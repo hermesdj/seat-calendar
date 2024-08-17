@@ -136,6 +136,19 @@
                             <input type="hidden" name="fc_character_id">
                         </div>
                     </div>
+                    {{-- Operation Doctrine --}}
+                    <div class="form-group row">
+                        <label class="col-sm-3 col-form-label"
+                               for="doctrine_id">{{ trans('calendar::seat.doctrines') }}</label>
+                        <div class="col-sm-9">
+                            <select name="doctrine_id" class="form-control" id="doctrine_id">
+                                @foreach($doctrines as $doctrine)
+                                    <option value="">-</option>
+                                    <option value="{{$doctrine->id}}">{{$doctrine->name}}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
                     {{-- Operation description --}}
                     <div class="form-group row">
                         <label for="description"

@@ -62,6 +62,7 @@ class AjaxController
                 }
             })
             ->editColumn('fleet_commander', fn($row) => view('calendar::operation.partials.fleet_commander', ['op' => $row]))
+            ->editColumn('doctrine', fn($row) => view('calendar::operation.partials.doctrine', ['op' => $row]))
             ->addColumn('duration', fn($row): string => sprintf('<span data-toggle="tooltip" title="%s">%s</span>',
                 $row->end_at, $row->duration))
             ->editColumn('staging_sys', fn($row) => view('calendar::operation.partials.staging', ['op' => $row]))
@@ -70,7 +71,7 @@ class AjaxController
             ->setRowClass(fn($row): string => $row->is_cancelled == 0 ? 'text-muted' : 'danger text-muted')
             ->addRowAttr('data-attr-op', fn($row) => $row->id)
             ->rawColumns(['title', 'tags', 'importance', 'start_at', 'end_at', 'duration',
-                'fleet_commander', 'staging_sys', 'subscription', 'actions'])
+                'fleet_commander', 'doctrine', 'staging_sys', 'subscription', 'actions'])
             ->toJson();
     }
 

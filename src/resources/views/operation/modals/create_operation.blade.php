@@ -91,7 +91,7 @@
                             <input type="text" class="form-control" name="time_start"/>
                         </div>
                     </div>
-                    {{-- Operation duration --}}
+                    {{-- Operation end --}}
                     <div class="form-group row datepicker">
                         <label for="time_start_end"
                                class="col-sm-3 col-form-label">{{ trans('calendar::seat.duration') }}
@@ -128,6 +128,19 @@
                             <input type="text" class="form-control" name="fc"
                                    placeholder="{{ trans('calendar::seat.placeholder_fc') }}">
                             <input type="hidden" name="fc_character_id">
+                        </div>
+                    </div>
+                    {{-- Operation Doctrine --}}
+                    <div class="form-group row">
+                        <label class="col-sm-3 col-form-label"
+                               for="doctrine_id">{{ trans('calendar::seat.doctrines') }}</label>
+                        <div class="col-sm-9">
+                            <select name="doctrine_id" class="form-control" id="doctrine_id">
+                                @foreach($doctrines as $doctrine)
+                                    <option value="" selected>-</option>
+                                    <option value="{{$doctrine->id}}">{{$doctrine->name}}</option>
+                                @endforeach
+                            </select>
                         </div>
                     </div>
                     {{-- Operation description --}}

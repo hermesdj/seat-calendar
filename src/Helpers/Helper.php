@@ -11,7 +11,6 @@ use Seat\Kassie\Calendar\Exceptions\PapsException;
 use Seat\Kassie\Calendar\Jobs\FleetInfoJob;
 use Seat\Kassie\Calendar\Jobs\FleetMembersJob;
 use Seat\Kassie\Calendar\Models\Operation;
-use Seat\Kassie\Calendar\Models\Pap;
 use Seat\Notifications\Services\Discord\Messages\DiscordEmbed;
 use Seat\Notifications\Services\Discord\Messages\DiscordEmbedField;
 use Seat\Services\Exceptions\SettingException;
@@ -43,6 +42,7 @@ class Helper
         $fields[trans('calendar::seat.fleet_commander')] = $op->fc ?: trans('calendar::seat.unknown');
         $fields[trans('calendar::seat.staging_system')] = $op->staging_sys ?: trans('calendar::seat.unknown');
         $fields[trans('calendar::seat.staging_info')] = $op->staging_info ?: trans('calendar::seat.unknown');
+        $fields[trans('calendar::seat.tags')] = $op->tags->pluck('name')->join(', ') ?: trans('calendar::seat.unknown');
 
         return $fields;
     }
@@ -92,6 +92,19 @@ class Helper
                 })
                 ->author($op->user->name, config('calendar.discord.eve.imageServerUrl') . $op->user->main_character_id . "/portrait")
                 ->footer(trans('calendar::seat.created_by') . ' ' . $op->user->name);
+
+            if (SeatFittingPluginHelper::pluginIsAvailable() && $op->doctrine_id != null) {
+                $doctrine = SeatFittingPluginHelper::$DOCTRINE_MODEL::where('id', $op->doctrine_id)->first();
+
+                if ($doctrine != null) {
+                    $embed->field(function (DiscordEmbedField $field) use ($op, $doctrine): void {
+                        $doctrineUrl = route('fitting.doctrineviewdetails', ['id' => $doctrine->id]);
+
+                        $field->name(trans('calendar::seat.doctrines'))
+                            ->value('[' . $doctrine->name . '](' . $doctrineUrl . ')');
+                    });
+                }
+            }
 
             if (is_string($op->description) && strlen($op->description) > 0) {
                 $embed->description($op->description);

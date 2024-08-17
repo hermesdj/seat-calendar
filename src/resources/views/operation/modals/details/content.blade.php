@@ -84,6 +84,17 @@
                 <b>{{ trans('calendar::seat.direct_link') }}</b> :
                 <a href="{{ url('/calendar/operation', [$op->id]) }}">{{ url('/calendar/operation', [$op->id]) }}</a>
             </li>
+            @if($op->doctrine != null)
+                <li class="list-group-item no-border">
+                    <b>{{ trans('calendar::seat.doctrines') }}</b> :
+                    <a
+                            href="{{ route('fitting.doctrineviewdetails', ['id' => $op->doctrine_id]) }}"
+                            target="_blank"
+                    >
+                        {{ $op->doctrine->name }}
+                    </a>
+                </li>
+            @endif
 
         </ul>
     </div>
@@ -94,7 +105,7 @@
         @if($op->description)
             <blockquote class="quote-secondary">{!! $op->parsed_description !!}</blockquote>
         @else
-            <i>{{ trans('calendar::seat.unknown') }}</i>
+            <blockquote class="quote-secondary">{{ trans('calendar::seat.unknown') }}</blockquote>
         @endif
     </div>
 </div>

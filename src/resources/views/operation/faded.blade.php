@@ -15,6 +15,9 @@
                 <th class="hidden-xs">{{ trans('calendar::seat.started_at') }}</th>
                 <th>{{ trans('calendar::seat.ended_at') }}</th>
                 <th class="hidden-xs">{{ trans('calendar::seat.fleet_commander') }}</th>
+                @if(\Seat\Kassie\Calendar\Helpers\SeatFittingPluginHelper::pluginIsAvailable())
+                    <th class="hidden-xs">{{ trans('calendar::seat.doctrines') }}</th>
+                @endif
                 <th>{{ trans('calendar::seat.staging') }}</th>
                 <th class="hidden-portrait-xs">{{ trans('calendar::seat.subscription') }}</th>
                 <th class="hidden-xs"></th>

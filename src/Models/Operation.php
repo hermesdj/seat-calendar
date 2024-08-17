@@ -13,6 +13,7 @@ use Illuminate\Notifications\Notifiable;
 use s9e\TextFormatter\Bundles\Forum as TextFormatter;
 use Seat\Eveapi\Models\Character\CharacterInfo;
 use Seat\Eveapi\Models\Sde\MapDenormalize;
+use Seat\Kassie\Calendar\Helpers\SeatFittingPluginHelper;
 use Seat\Notifications\Models\Integration;
 use Seat\Web\Models\User;
 
@@ -78,6 +79,11 @@ class Operation extends Model
         return $this->belongsToMany(Tag::class, 'calendar_tag_operation');
     }
 
+    public function paps(): HasMany
+    {
+        return $this->hasMany(Pap::class, 'operation_id', 'id');
+    }
+
     /**
      * @return HasOne
      */
@@ -104,6 +110,11 @@ class Operation extends Model
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function doctrine(): HasOne
+    {
+        return $this->hasOne(SeatFittingPluginHelper::$DOCTRINE_MODEL, 'id', 'doctrine_id');
     }
 
     /**

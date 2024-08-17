@@ -13,6 +13,7 @@ use Seat\Eseye\Exceptions\InvalidContainerDataException;
 use Seat\Kassie\Calendar\Discord\DiscordAction;
 use Seat\Kassie\Calendar\Exceptions\PapsException;
 use Seat\Kassie\Calendar\Helpers\Helper;
+use Seat\Kassie\Calendar\Helpers\SeatFittingPluginHelper;
 use Seat\Kassie\Calendar\Models\Attendee;
 use Seat\Kassie\Calendar\Models\Operation;
 use Seat\Kassie\Calendar\Models\Tag;
@@ -58,12 +59,19 @@ class OperationController extends Controller
             $user_characters->prepend($main_character);
         }
 
+        $doctrines = [];
+
+        if (SeatFittingPluginHelper::pluginIsAvailable()) {
+            $doctrines = SeatFittingPluginHelper::$DOCTRINE_MODEL::all();
+        }
+
         return view('calendar::operation.index', [
             'roles' => $roles,
             'characters' => $user_characters,
             'default_op' => $request->id ?: 0,
             'tags' => $tags,
             'notification_channels' => $notification_channels,
+            'doctrines' => $doctrines
         ]);
     }
 
@@ -78,7 +86,8 @@ class OperationController extends Controller
             'importance' => 'required|between:0,5',
             'known_duration' => 'required',
             'time_start' => 'required_without_all:time_start_end|date|after_or_equal:today',
-            'time_start_end' => 'required_without_all:time_start'
+            'time_start_end' => 'required_without_all:time_start',
+            'doctrine_id' => 'integer'
         ]);
 
         $operation = new Operation($request->all());
@@ -106,6 +115,8 @@ class OperationController extends Controller
 
         $operation->integration_id = ($request->get('integration_id') == "") ?
             null : $request->get('integration_id');
+
+        $operation->doctrine_id = ($request->get('doctrine_id') == "") ? null : $request->get('doctrine_id');
 
         $operation->user()->associate(auth()->user());
 
