@@ -136,8 +136,8 @@
                                for="doctrine_id">{{ trans('calendar::seat.doctrines') }}</label>
                         <div class="col-sm-9">
                             <select name="doctrine_id" class="form-control" id="doctrine_id">
+                                <option value="" selected>-</option>
                                 @foreach($doctrines as $doctrine)
-                                    <option value="" selected>-</option>
                                     <option value="{{$doctrine->id}}">{{$doctrine->name}}</option>
                                 @endforeach
                             </select>

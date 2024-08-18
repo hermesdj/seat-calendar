@@ -87,7 +87,7 @@ class OperationController extends Controller
             'known_duration' => 'required',
             'time_start' => 'required_without_all:time_start_end|date|after_or_equal:today',
             'time_start_end' => 'required_without_all:time_start',
-            'doctrine_id' => 'integer'
+            'doctrine_id' => 'integer|nullable'
         ]);
 
         $operation = new Operation($request->all());
