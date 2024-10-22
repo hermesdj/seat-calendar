@@ -16,6 +16,7 @@ Calendar plugin for EVE SeAT
 * Sync with discord event and sync discord event participants to the calendar op (only work for main characters)
 * Auto sync paps from fleet members ingame every 15 minutes (only if the fleet commander is registered on SeAT and his
   token is working)
+* Doctrine support if you install https://github.com/hermesdj/seat-fitting/releases
 
 # Known limitations
 
