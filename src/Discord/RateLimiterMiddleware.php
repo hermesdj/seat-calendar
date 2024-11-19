@@ -13,15 +13,11 @@ class RateLimiterMiddleware
     final public const MAP_ENDPOINTS = [
         '/guilds/{guild.id}/scheduled-events' => '/\/api\/guilds\/[0-9]+\/scheduled-events/i',
         '/guilds/{guild.id}/scheduled-events/{guild_scheduled_event.id}' => '/\/api\/guilds\/[0-9]+\/scheduled-events\/[0-9]+/i',
-        '/guilds/{guild.id}/scheduled-events/{guild_scheduled_event.id}/users' => '/\/api\/guilds\/[0-9]+\/scheduled-events\/[0-9]+\/users/i'
+        '/guilds/{guild.id}/scheduled-events/{guild_scheduled_event.id}/users' => '/\/api\/guilds\/[0-9]+\/scheduled-events\/[0-9]+\/users/i',
     ];
 
     final public const REDIS_CACHE_PREFIX = 'seat:seat-calendar.drivers.discord';
 
-    /**
-     * @param callable $handler
-     * @return Closure
-     */
     public function __invoke(callable $handler): Closure
     {
         return function (RequestInterface $request, array $options) use ($handler) {
@@ -32,7 +28,7 @@ class RateLimiterMiddleware
             $key = $this->getCacheKey($request->getUri());
             $metadata = Redis::get($key) ?: null;
 
-            if (!is_null($metadata)) {
+            if (! is_null($metadata)) {
                 $metadata = unserialize($metadata);
 
                 // compute delay between reset time and current time
@@ -41,8 +37,9 @@ class RateLimiterMiddleware
                 $delay = $metadata->reset + 10 - $now;
 
                 // in case limit is near to be reached, we pause the request for computed duration
-                if ($metadata->remaining < 2 && $delay > 0)
+                if ($metadata->remaining < 2 && $delay > 0) {
                     sleep($delay);
+                }
             }
 
             // send the request and retrieve response
@@ -60,18 +57,15 @@ class RateLimiterMiddleware
         };
     }
 
-    /**
-     * @param UriInterface $uri
-     * @return string
-     */
     private function getCacheKey(UriInterface $uri): string
     {
         $match_pattern = $uri->getPath();
 
         // attempt to resolve the requested endpoint
         foreach (self::MAP_ENDPOINTS as $endpoint => $pattern) {
-            if (preg_match($pattern, $uri->getPath()) === 1)
+            if (preg_match($pattern, $uri->getPath()) === 1) {
                 $match_pattern = $endpoint;
+            }
         }
 
         // generate a hash based on the endpoint
@@ -81,16 +75,12 @@ class RateLimiterMiddleware
         return sprintf('%s.%s.metadata', self::REDIS_CACHE_PREFIX, $hash);
     }
 
-    /**
-     * @param ResponseInterface $response
-     * @return object
-     */
     private function getEndpointMetadata(ResponseInterface $response): object
     {
-        $remaining = (int)$response->getHeaderLine('X-RateLimit-Remaining') ?: 0;
-        $reset = (int)$response->getHeaderLine('X-RateLimit-Reset') ?: 0;
+        $remaining = (int) $response->getHeaderLine('X-RateLimit-Remaining') ?: 0;
+        $reset = (int) $response->getHeaderLine('X-RateLimit-Reset') ?: 0;
 
-        return (object)[
+        return (object) [
             'reset' => $reset,
             'remaining' => $remaining,
         ];

@@ -31,7 +31,7 @@ class FleetInfoJob extends AbstractAuthCharacterJob
         parent::handle();
 
         $response = $this->retrieve([
-            'character_id' => $this->getCharacterId()
+            'character_id' => $this->getCharacterId(),
         ]);
 
         $fleet = $response->getBody();
@@ -44,9 +44,9 @@ class FleetInfoJob extends AbstractAuthCharacterJob
         // Store fleet info in the DB
         PapFleet::firstOrNew([
             'fleet_commander_id' => $this->getCharacterId(),
-            'operation_id' => $this->operation_id
+            'operation_id' => $this->operation_id,
         ])->fill([
-            'fleet_id' => $fleet->fleet_id
+            'fleet_id' => $fleet->fleet_id,
         ])->save();
     }
 }

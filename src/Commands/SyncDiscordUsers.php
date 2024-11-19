@@ -27,6 +27,7 @@ class SyncDiscordUsers extends Command
 
         if (count($ops) === 0) {
             logger()->debug('No events synced with discord currently in DB');
+
             return;
         }
 
@@ -35,7 +36,8 @@ class SyncDiscordUsers extends Command
             $users = [];
 
             if (count($guildEventUsers) === 0) {
-                logger()->debug('No users participating on discord for op ' . $op->id);
+                logger()->debug('No users participating on discord for op '.$op->id);
+
                 continue;
             }
 
@@ -49,13 +51,13 @@ class SyncDiscordUsers extends Command
                     ->where('connector_id', $userId)
                     ->first();
 
-                if (!is_null($connectorUser)) {
+                if (! is_null($connectorUser)) {
                     $seatUser = \Seat\Web\Models\User::find($connectorUser->user_id);
 
-                    if (!is_null($seatUser)) {
+                    if (! is_null($seatUser)) {
                         $users[] = [
                             'guildUser' => $user,
-                            'seatUser' => $seatUser
+                            'seatUser' => $seatUser,
                         ];
                     }
                 }
@@ -82,12 +84,12 @@ class SyncDiscordUsers extends Command
                 Attendee::updateOrCreate(
                     [
                         'operation_id' => $op->id,
-                        'character_id' => $user['seatUser']->main_character_id
+                        'character_id' => $user['seatUser']->main_character_id,
                     ],
                     [
                         'user_id' => $user['seatUser']->id,
                         'status' => 'yes',
-                        'comment' => 'synced_from_discord_event'
+                        'comment' => 'synced_from_discord_event',
                     ]
                 );
             }

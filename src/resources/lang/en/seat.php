@@ -105,7 +105,6 @@ return [
     'notification_operation_pinged_label' => 'Calendar: Operation Pinged',
     'notification_operation_updated_label' => 'Calendar: Operation Updated',
 
-
     'notifications_to_send' => 'Notifications to send',
 
     'help_notify_operation_interval' => 'Decide how many pings to send before each operation. Each value is the number of minutes prior to the operation to send the ping. Separate numbers with commas. Default value of :default_interval will send 3 notifications: 15 minutes, 30 minutes, and 60 minutes prior to the operation start time.',
@@ -173,5 +172,5 @@ return [
 
     'delete_tag_description' => 'This action will delete definitely this tag. This can\'t be reverted, are you sure ?',
 
-    'doctrines' => 'Doctrine'
+    'doctrines' => 'Doctrine',
 ];

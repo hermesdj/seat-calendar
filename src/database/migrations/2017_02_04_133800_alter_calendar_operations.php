@@ -8,8 +8,6 @@ class AlterCalendarOperations extends Migration
 {
     /**
      * Run the migrations.
-     *
-     * @return void
      */
     public function up(): void
     {
@@ -26,8 +24,6 @@ class AlterCalendarOperations extends Migration
 
     /**
      * Reverse the migrations.
-     *
-     * @return void
      */
     public function down(): void
     {

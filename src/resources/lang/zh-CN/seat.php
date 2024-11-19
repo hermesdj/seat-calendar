@@ -116,7 +116,7 @@ return [
     'help_emoji' => '设置在中继到 Slack 时用来显示操作“重要性”的表情符号。',
     'save' => '保存',
 
-    'warning_no_character' => "如果没有在SeAT中注册任何角色，则无法注册行动。请添加API密钥，然后重试。",
+    'warning_no_character' => '如果没有在SeAT中注册任何角色，则无法注册行动。请添加API密钥，然后重试。',
 
     'in' => '在',
     'to' => '到',

@@ -11,6 +11,7 @@ use Seat\Notifications\Services\Discord\Messages\DiscordMessage;
 class OperationEndedDiscord extends AbstractDiscordNotification
 {
     use SerializesModels;
+
     private Operation $operation;
 
     public function __construct($operation)

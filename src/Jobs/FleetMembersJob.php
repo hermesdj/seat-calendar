@@ -35,9 +35,9 @@ class FleetMembersJob extends AbstractAuthCharacterJob
             ->where('fleet_commander_id', $this->getCharacterId())
             ->first();
 
-        if (!is_null($fleet)) {
+        if (! is_null($fleet)) {
             $response = $this->retrieve([
-                'fleet_id' => $fleet->fleet_id
+                'fleet_id' => $fleet->fleet_id,
             ]);
 
             $members = $response->getBody();
@@ -45,10 +45,10 @@ class FleetMembersJob extends AbstractAuthCharacterJob
             collect($members)->each(function ($member) {
                 Pap::firstOrCreate([
                     'character_id' => $member->character_id,
-                    'operation_id' => $this->operation_id
+                    'operation_id' => $this->operation_id,
                 ], [
                     'ship_type_id' => $member->ship_type_id,
-                    'join_time' => carbon($member->join_time)->toDateTimeString()
+                    'join_time' => carbon($member->join_time)->toDateTimeString(),
                 ]);
             });
         }

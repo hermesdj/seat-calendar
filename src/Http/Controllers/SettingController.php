@@ -17,8 +17,6 @@ use SocialiteProviders\Manager\Config;
 
 /**
  * Class SettingController.
- *
- * @package Seat\Kassie\Calendar\Http\Controllers
  */
 class SettingController extends Controller
 {
@@ -28,12 +26,9 @@ class SettingController extends Controller
 
     final public const DISCORD_BOT_PERMISSIONS = [
         'MANAGE_EVENTS' => 0x200000000,
-        'CREATE_EVENTS' => 0x100000000000
+        'CREATE_EVENTS' => 0x100000000000,
     ];
 
-    /**
-     * @return Factory|View
-     */
     public function index(): Factory|View
     {
         $tags = Tag::all();
@@ -46,8 +41,6 @@ class SettingController extends Controller
     }
 
     /**
-     * @param SettingsValidation $request
-     * @return RedirectResponse
      * @throws SettingException
      */
     public function updateNotificationSettings(SettingsValidation $request): RedirectResponse
@@ -66,10 +59,10 @@ class SettingController extends Controller
      */
     public function updateDiscord(SettingsValidation $request): RedirectResponse
     {
-        setting(['kassie.calendar.discord_integration', (bool)$request->input('discord_integration')], true);
-        setting(['kassie.calendar.discord_client_id', (string)$request->input('discord_client_id')], true);
-        setting(['kassie.calendar.discord_client_secret', (string)$request->input('discord_client_secret')], true);
-        setting(['kassie.calendar.discord_bot_token', (string)$request->input('discord_bot_token')], true);
+        setting(['kassie.calendar.discord_integration', (bool) $request->input('discord_integration')], true);
+        setting(['kassie.calendar.discord_client_id', (string) $request->input('discord_client_id')], true);
+        setting(['kassie.calendar.discord_client_secret', (string) $request->input('discord_client_secret')], true);
+        setting(['kassie.calendar.discord_bot_token', (string) $request->input('discord_bot_token')], true);
 
         if (setting('kassie.calendar.discord_integration', true)) {
             $redirect_uri = route('setting.discord.registration.callback');

@@ -1,4 +1,5 @@
 <?php
+
 return [
     'notification_new_operation' => ':rocket: A new operation has been posted !',
     'notification_edit_operation' => ':pencil2: An operation has been edited !',
@@ -12,5 +13,5 @@ return [
     'notification_settings' => 'Notification Settings',
 
     'notification_settings_updated' => 'Notification Settings have been updated successfully !',
-    'discord_settings_updated' => 'Discord settings have been updated successfully !'
+    'discord_settings_updated' => 'Discord settings have been updated successfully !',
 ];

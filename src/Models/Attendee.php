@@ -9,8 +9,6 @@ use Seat\Web\Models\User;
 
 /**
  * Class Attendee.
- *
- * @package Seat\Kassie\Calendar\Models
  */
 class Attendee extends Model
 {
@@ -27,22 +25,16 @@ class Attendee extends Model
         'operation_id',
         'user_id',
         'status',
-        'comment'
+        'comment',
     ];
 
     protected $casts = ['created_at' => 'datetime', 'updated_at' => 'datetime'];
 
-    /**
-     * @return BelongsTo
-     */
     public function character(): BelongsTo
     {
         return $this->belongsTo(CharacterInfo::class, 'character_id', 'character_id');
     }
 
-    /**
-     * @return BelongsTo
-     */
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);

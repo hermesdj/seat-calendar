@@ -13,15 +13,15 @@ return [
                 'label' => 'calendar::seat.operations',
                 'icon' => 'fas fa-calendar-day',
                 'route' => 'operation.index',
-                'permission' => 'calendar.view'
+                'permission' => 'calendar.view',
             ],
             [
                 'name' => 'Settings',
                 'label' => 'calendar::seat.settings',
                 'icon' => 'fas fa-cog',
                 'route' => 'setting.index',
-                'permission' => 'calendar.setup'
-            ]
-        ]
-    ]
+                'permission' => 'calendar.setup',
+            ],
+        ],
+    ],
 ];

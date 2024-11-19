@@ -18,7 +18,6 @@ class DefaultNotificationSettings extends Migration
     /**
      * Run the migrations.
      *
-     * @return void
      * @throws SettingException
      */
     public function up(): void
@@ -30,8 +29,6 @@ class DefaultNotificationSettings extends Migration
 
     /**
      * Reverse the migrations.
-     *
-     * @return void
      */
     public function down(): void
     {

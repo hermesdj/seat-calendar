@@ -24,7 +24,7 @@ class OperationPingedDiscord extends AbstractDiscordNotification
         $message
             ->success()
             ->from('SeAT Calendar', config('buyback.discord.webhook.logoUrl'))
-            ->content(trans('calendar::notifications.notification_ping_operation') . '*' . trans('calendar::seat.starts_in') . ' ' . $this->operation->getStartsInAttribute() . '*')
+            ->content(trans('calendar::notifications.notification_ping_operation').'*'.trans('calendar::seat.starts_in').' '.$this->operation->getStartsInAttribute().'*')
             ->embed(Helper::BuildDiscordOperationEmbed($this->operation));
     }
 }

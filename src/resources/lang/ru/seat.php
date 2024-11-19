@@ -115,7 +115,7 @@ return [
     'help_emoji' => 'Setup which emoji to use to display the "importance" of an operation when relaying to Slack.',
     'save' => 'Save',
 
-    'warning_no_character' => "Вы не можете подписаться на операцию без регистрации аккаунта в SeAT. Добавьте API ключ и повторите.",
+    'warning_no_character' => 'Вы не можете подписаться на операцию без регистрации аккаунта в SeAT. Добавьте API ключ и повторите.',
 
     'in' => 'In',
     'to' => 'To',

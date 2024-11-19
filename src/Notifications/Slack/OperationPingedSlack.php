@@ -24,7 +24,7 @@ class OperationPingedSlack extends AbstractSlackNotification
 
         $message->success()
             ->from('SeAT Calendar', ':calendar:')
-            ->content(trans('calendar::notifications.notification_ping_operation') . '*' . trans('calendar::seat.starts_in') . ' ' . $this->operation->getStartsInAttribute() . '*')
+            ->content(trans('calendar::notifications.notification_ping_operation').'*'.trans('calendar::seat.starts_in').' '.$this->operation->getStartsInAttribute().'*')
             ->attachment(Helper::BuildSlackNotificationAttachment($this->operation));
     }
 }

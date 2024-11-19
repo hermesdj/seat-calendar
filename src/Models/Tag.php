@@ -8,8 +8,6 @@ use Seat\Notifications\Models\Integration;
 
 /**
  * Class Tag.
- *
- * @package Seat\Kassie\Calendar\Models
  */
 class Tag extends Model
 {
@@ -35,9 +33,6 @@ class Tag extends Model
         'analytics',
     ];
 
-    /**
-     * @return BelongsToMany
-     */
     public function operations(): BelongsToMany
     {
         return $this->belongsToMany(Operation::class, 'calendar_tag_operation');

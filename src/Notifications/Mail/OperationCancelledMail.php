@@ -10,6 +10,7 @@ use Seat\Notifications\Notifications\AbstractMailNotification;
 class OperationCancelledMail extends AbstractMailNotification
 {
     use SerializesModels;
+
     private Operation $operation;
 
     public function __construct($operation)

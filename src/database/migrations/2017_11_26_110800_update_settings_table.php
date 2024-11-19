@@ -11,7 +11,6 @@ class UpdateSettingsTable extends Migration
     /**
      * Run the migrations.
      *
-     * @return void
      * @throws SettingException
      */
     public function up(): void
@@ -20,7 +19,7 @@ class UpdateSettingsTable extends Migration
 
             $settings = DB::table('calendar_settings')->first();
 
-            if (!is_null($settings)) {
+            if (! is_null($settings)) {
 
                 if (Schema::hasColumn('calendar_settings', 'slack_integration')) {
                     setting([
@@ -67,12 +66,11 @@ class UpdateSettingsTable extends Migration
     /**
      * Reverse the migrations.
      *
-     * @return void
      * @throws SettingException
      */
     public function down(): void
     {
-        if (!Schema::hasTable('calendar_settings')) {
+        if (! Schema::hasTable('calendar_settings')) {
 
             Schema::create('calendar_settings', function (Blueprint $table) {
                 $table->increments('id');
@@ -85,39 +83,40 @@ class UpdateSettingsTable extends Migration
 
         }
 
-        if (!Schema::hasColumn('calendar_settings', 'slack_integration')) {
+        if (! Schema::hasColumn('calendar_settings', 'slack_integration')) {
             Schema::table('calendar_settings', function (Blueprint $table) {
                 $table->boolean('slack_integration')->first();
             });
         }
 
-        if (!Schema::hasColumn('calendar_settings', 'slack_webhook')) {
+        if (! Schema::hasColumn('calendar_settings', 'slack_webhook')) {
             Schema::table('calendar_settings', function (Blueprint $table) {
                 $table->string('slack_webhook')->after('slack_integration');
             });
         }
 
-        if (!Schema::hasColumn('calendar_settings', 'slack_emoji_importance_full')) {
+        if (! Schema::hasColumn('calendar_settings', 'slack_emoji_importance_full')) {
             Schema::table('calendar_settings', function (Blueprint $table) {
                 $table->string('slack_emoji_importance_full')->after('slack_webhook');
             });
         }
 
-        if (!Schema::hasColumn('calendar_settings', 'slack_emoji_importance_half')) {
+        if (! Schema::hasColumn('calendar_settings', 'slack_emoji_importance_half')) {
             Schema::table('calendar_settings', function (Blueprint $table) {
                 $table->string('slack_emoji_importance_half')->after('slack_emoji_importance_full');
             });
         }
 
-        if (!Schema::hasColumn('calendar_settings', 'slack_emoji_importance_empty')) {
+        if (! Schema::hasColumn('calendar_settings', 'slack_emoji_importance_empty')) {
             Schema::table('calendar_settings', function (Blueprint $table) {
                 $table->string('slack_emoji_importance_empty')->after('slack_emoji_importance_half');
             });
         }
 
         $settings['slack_integration'] = setting('kassie.calendar.slack_integration', true);
-        if (is_null($settings['slack_integration']))
+        if (is_null($settings['slack_integration'])) {
             $settings['slack_integration'] = 0;
+        }
 
         $settings['slack_webhook'] = setting('kassie.calendar.slack_webhook', true) ?: '';
 

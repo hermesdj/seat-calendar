@@ -109,7 +109,6 @@ return [
     'notification_operation_pinged_label' => 'Calendrier: Opération ping',
     'notification_operation_updated_label' => 'Calendrier: Opération mise à jour',
 
-
     'notifications_to_send' => 'Notifications à envoyer',
 
     'help_notify_operation_interval' => 'Décidez de combien de ping vous voulez envoyer avant chaque opération. Chaque valeur est un nombre de minutes précédent l\'opération d\'envoi du ping. Séparez les nombres par des virgules. Les valeurs par défaut de :default_interval envoie trois notifications : 15 minutes, 30 minutes et 60 minutes avant le début de l\'opération.',
@@ -137,7 +136,7 @@ return [
     'discord_client_secret' => 'Discord Client Secret',
     'discord_bot_token' => 'Discord Bot Token',
 
-    'warning_no_character' => "Vous ne pouvez pas vous abonnez à une opération sans personnage enregistrer dans SeAT. Ajoutez une clé API et réessayer.",
+    'warning_no_character' => 'Vous ne pouvez pas vous abonnez à une opération sans personnage enregistrer dans SeAT. Ajoutez une clé API et réessayer.',
 
     'in' => 'dans',
     'to' => 'à',
@@ -178,5 +177,5 @@ return [
     // New
     'delete_tag_description' => 'Cette action va définitivement supprimer ce tag, en êtes vous sûr ?',
 
-    'doctrines' => 'Doctrine'
+    'doctrines' => 'Doctrine',
 ];

@@ -9,13 +9,12 @@ class DiscordAction
 {
     protected string $actionType;
 
-    public function __construct()
-    {
-    }
+    public function __construct() {}
 
     public function setType(string $actionType): DiscordAction
     {
         $this->actionType = $actionType;
+
         return $this;
     }
 
@@ -25,22 +24,22 @@ class DiscordAction
     public function execute(Operation $operation): void
     {
         switch ($this->actionType) {
-            case "created":
+            case 'created':
                 $this->createGuildEvent($operation);
                 break;
-            case "cancelled":
+            case 'cancelled':
                 $this->cancelGuildEvent($operation);
                 break;
-            case "activated":
+            case 'activated':
                 $this->activateGuildEvent($operation);
                 break;
-            case "ended":
+            case 'ended':
                 $this->endGuildEvent($operation);
                 break;
-            case "updated":
+            case 'updated':
                 $this->updateGuildEvent($operation);
                 break;
-            case "deleted":
+            case 'deleted':
                 $this->deleteGuildEvent($operation);
                 break;
             default:
@@ -53,13 +52,13 @@ class DiscordAction
      */
     public function cancelGuildEvent(Operation $operation): void
     {
-        logger()->debug("Cancelled operation, settings cancelled status to guild event on discord");
+        logger()->debug('Cancelled operation, settings cancelled status to guild event on discord');
         $event = GuildEvent::fromOperation($operation);
         $event->status = 4; // CANCELLED
 
         if ($operation->discord_guild_event_id) {
             DiscordClient::modifyGuildEvent($operation->discord_guild_event_id, [
-                'status' => 4
+                'status' => 4,
             ]);
         }
     }
@@ -69,7 +68,7 @@ class DiscordAction
      */
     public function activateGuildEvent(Operation $operation): void
     {
-        logger()->debug("Activated operation, recreating guild event on discord");
+        logger()->debug('Activated operation, recreating guild event on discord');
         // Operation was cancelled and is being reactivated
         if ($operation->discord_guild_event_id) {
             DiscordClient::deleteGuildEvent($operation->discord_guild_event_id);
@@ -84,9 +83,9 @@ class DiscordAction
     public function endGuildEvent(Operation $operation): void
     {
         if ($operation->discord_guild_event_id) {
-            logger()->debug("Ending guild event by settings status 3 = COMPLETED");
+            logger()->debug('Ending guild event by settings status 3 = COMPLETED');
             DiscordClient::modifyGuildEvent($operation->discord_guild_event_id, [
-                'status' => 3 // COMPLETED
+                'status' => 3, // COMPLETED
             ]);
         }
     }
@@ -97,7 +96,7 @@ class DiscordAction
     public function updateGuildEvent(Operation $operation): void
     {
         if ($operation->discord_guild_event_id) {
-            logger()->debug("Updating guild event");
+            logger()->debug('Updating guild event');
             $event = GuildEvent::fromOperation($operation);
             DiscordClient::modifyGuildEvent($operation->discord_guild_event_id, $event->toArray());
         }
@@ -108,15 +107,13 @@ class DiscordAction
      */
     public function createGuildEvent(Operation $operation): void
     {
-        logger()->debug("Creating guild event on discord");
+        logger()->debug('Creating guild event on discord');
         $event = DiscordClient::createGuildEvent(GuildEvent::fromOperation($operation));
         $operation->discord_guild_event_id = $event->id;
         $operation->save();
     }
 
     /**
-     * @param Operation $operation
-     * @return void
      * @throws DiscordActionException
      */
     public function deleteGuildEvent(Operation $operation): void
@@ -124,9 +121,9 @@ class DiscordAction
         if ($operation->discord_guild_event_id) {
             logger()->debug("Deleting guild event on discord with id $operation->discord_guild_event_id");
             DiscordClient::deleteGuildEvent($operation->discord_guild_event_id);
-            logger()->debug("Guild event has been deleted !");
+            logger()->debug('Guild event has been deleted !');
         } else {
-            logger()->info("No guild event to delete on discord because the operation does not have a guild event id");
+            logger()->info('No guild event to delete on discord because the operation does not have a guild event id');
         }
     }
 
@@ -134,15 +131,15 @@ class DiscordAction
     {
         try {
             if (setting('kassie.calendar.discord_integration', true)) {
-                (new self())
+                (new self)
                     ->setType($actionType)
                     ->execute($operation);
                 logger()->debug("call discord action with type $actionType on operation $operation->title");
             } else {
-                logger()->debug("Discord integration is not activated");
+                logger()->debug('Discord integration is not activated');
             }
         } catch (DiscordActionException|SettingException $e) {
-            logger()->error("Error guild event on discord " . $e->getMessage());
+            logger()->error('Error guild event on discord '.$e->getMessage());
         }
     }
 }

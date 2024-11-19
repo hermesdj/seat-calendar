@@ -9,10 +9,8 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-
 class CreatePapsTables extends Migration
 {
-
     public function up(): void
     {
         Schema::create('kassie_calendar_esi_tokens', function (Blueprint $table) {
@@ -52,5 +50,4 @@ class CreatePapsTables extends Migration
         Schema::dropIfExists('kassie_calendar_paps');
         Schema::dropIfExists('kassie_calendar_esi_tokens');
     }
-
 }

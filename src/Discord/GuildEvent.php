@@ -15,14 +15,15 @@ class GuildEvent
 
     public static function fromDiscordResponse($json): GuildEvent
     {
-        $event = new GuildEvent();
+        $event = new GuildEvent;
         $event->set($json);
+
         return $event;
     }
 
     public static function fromOperation(Operation $operation): GuildEvent
     {
-        $event = new GuildEvent();
+        $event = new GuildEvent;
         $event->set([
             'id' => $operation->discord_guild_event_id ?: null,
             'entity_metadata' => [
@@ -35,6 +36,7 @@ class GuildEvent
             'description' => $operation->description,
             'entity_type' => 3, // EXTERNAL
         ]);
+
         return $event;
     }
 
@@ -50,7 +52,7 @@ class GuildEvent
             'scheduled_start_time' => $this->scheduled_start_time,
             'scheduled_end_time' => $this->scheduled_end_time,
             'description' => $this->description,
-            'entity_type' => $this->entity_type
+            'entity_type' => $this->entity_type,
         ];
     }
 }

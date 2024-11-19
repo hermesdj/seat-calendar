@@ -1,6 +1,5 @@
 <?php
 
-
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\DB;
@@ -9,7 +8,6 @@ use Seat\Services\Exceptions\SettingException;
 
 class UseCoreIntegrations extends Migration
 {
-
     /**
      * @throws SettingException
      */
@@ -18,11 +16,11 @@ class UseCoreIntegrations extends Migration
 
         $integration = setting('kassie.calendar.slack_webhook', true);
 
-        if (!is_null($integration)) {
+        if (! is_null($integration)) {
             DB::table('integrations')->insert([
                 'name' => 'SeAT Calendar',
                 'type' => 'slack',
-                'settings' => json_encode((object)['url' => $integration]),
+                'settings' => json_encode((object) ['url' => $integration]),
             ]);
 
             DB::table('global_settings')->where('name', 'kassie.calendar.slack_webhook')->delete();
@@ -42,7 +40,7 @@ class UseCoreIntegrations extends Migration
     {
         $integration = DB::table('integrations')->where('name', 'SeAT Calendar')->where('type', 'slack')->first();
 
-        if (!is_null($integration)) {
+        if (! is_null($integration)) {
             setting(['kassie.calendar.slack_webhook' => json_decode($integration->settings)->url], true);
         }
 
@@ -52,5 +50,4 @@ class UseCoreIntegrations extends Migration
 
         });
     }
-
 }

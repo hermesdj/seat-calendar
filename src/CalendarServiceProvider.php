@@ -16,7 +16,6 @@ use SocialiteProviders\Manager\SocialiteWasCalled;
 
 /**
  * Class CalendarServiceProvider.
- * @package Seat\Kassie\Calendar
  */
 class CalendarServiceProvider extends AbstractSeatPlugin
 {
@@ -38,37 +37,37 @@ class CalendarServiceProvider extends AbstractSeatPlugin
         $this->commands([
             RemindOperation::class,
             SyncDiscordUsers::class,
-            SyncFleetPaps::class
+            SyncFleetPaps::class,
         ]);
     }
 
     private function addRoutes(): void
     {
-        $this->loadRoutesFrom(__DIR__ . '/Http/routes.php');
+        $this->loadRoutesFrom(__DIR__.'/Http/routes.php');
     }
 
     private function addViews(): void
     {
-        $this->loadViewsFrom(__DIR__ . '/resources/views', 'calendar');
+        $this->loadViewsFrom(__DIR__.'/resources/views', 'calendar');
     }
 
     private function addTranslations(): void
     {
-        $this->loadTranslationsFrom(__DIR__ . '/resources/lang', 'calendar');
+        $this->loadTranslationsFrom(__DIR__.'/resources/lang', 'calendar');
     }
 
     private function addMigrations(): void
     {
-        $this->loadMigrationsFrom(__DIR__ . '/database/migrations');
+        $this->loadMigrationsFrom(__DIR__.'/database/migrations');
     }
 
     private function addPublications(): void
     {
         $this->publishes([
-            __DIR__ . '/resources/assets/css' => public_path('web/css'),
-            __DIR__ . '/resources/assets/vendors/css' => public_path('web/css'),
-            __DIR__ . '/resources/assets/js' => public_path('web/js'),
-            __DIR__ . '/resources/assets/vendors/js' => public_path('web/js'),
+            __DIR__.'/resources/assets/css' => public_path('web/css'),
+            __DIR__.'/resources/assets/vendors/css' => public_path('web/css'),
+            __DIR__.'/resources/assets/js' => public_path('web/js'),
+            __DIR__.'/resources/assets/vendors/js' => public_path('web/js'),
         ]);
     }
 
@@ -79,21 +78,21 @@ class CalendarServiceProvider extends AbstractSeatPlugin
 
     public function register(): void
     {
-        $this->mergeConfigFrom(__DIR__ . '/Config/notifications.alerts.php', 'notifications.alerts');
+        $this->mergeConfigFrom(__DIR__.'/Config/notifications.alerts.php', 'notifications.alerts');
 
-        $this->mergeConfigFrom(__DIR__ . '/Config/package.sidebar.php', 'package.sidebar');
-        $this->mergeConfigFrom(__DIR__ . '/Config/calendar.character.menu.php', 'package.character.menu');
-        $this->mergeConfigFrom(__DIR__ . '/Config/calendar.corporation.menu.php', 'package.corporation.menu');
-        $this->mergeConfigFrom(__DIR__ . '/Config/Discord/calendar.discord.php', 'calendar.discord');
+        $this->mergeConfigFrom(__DIR__.'/Config/package.sidebar.php', 'package.sidebar');
+        $this->mergeConfigFrom(__DIR__.'/Config/calendar.character.menu.php', 'package.character.menu');
+        $this->mergeConfigFrom(__DIR__.'/Config/calendar.corporation.menu.php', 'package.corporation.menu');
+        $this->mergeConfigFrom(__DIR__.'/Config/Discord/calendar.discord.php', 'calendar.discord');
 
-        $this->registerPermissions(__DIR__ . '/Config/Permissions/calendar.php', 'calendar');
-        $this->registerPermissions(__DIR__ . '/Config/Permissions/character.php', 'character');
-        $this->registerPermissions(__DIR__ . '/Config/Permissions/corporation.php', 'corporation');
+        $this->registerPermissions(__DIR__.'/Config/Permissions/calendar.php', 'calendar');
+        $this->registerPermissions(__DIR__.'/Config/Permissions/character.php', 'character');
+        $this->registerPermissions(__DIR__.'/Config/Permissions/corporation.php', 'corporation');
 
         $this->registerDatabaseSeeders([
             ScheduleSeeder::class,
             CalendarTagsSeeder::class,
-            CalendarSettingsTableSeeder::class
+            CalendarSettingsTableSeeder::class,
         ]);
     }
 
@@ -105,9 +104,7 @@ class CalendarServiceProvider extends AbstractSeatPlugin
     /**
      * Return the plugin public name as it should be displayed into settings.
      *
-     * @return string
      * @example SeAT Web
-     *
      */
     public function getName(): string
     {
@@ -118,8 +115,6 @@ class CalendarServiceProvider extends AbstractSeatPlugin
      * Return the plugin repository address.
      *
      * @example https://github.com/eveseat/web
-     *
-     * @return string
      */
     public function getPackageRepositoryUrl(): string
     {
@@ -129,9 +124,7 @@ class CalendarServiceProvider extends AbstractSeatPlugin
     /**
      * Return the plugin technical name as published on package manager.
      *
-     * @return string
      * @example web
-     *
      */
     public function getPackagistPackageName(): string
     {
@@ -141,9 +134,7 @@ class CalendarServiceProvider extends AbstractSeatPlugin
     /**
      * Return the plugin vendor tag as published on package manager.
      *
-     * @return string
      * @example eveseat
-     *
      */
     public function getPackagistVendorName(): string
     {

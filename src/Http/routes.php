@@ -45,16 +45,16 @@ Route::group([
 Route::group([
     'namespace' => 'Seat\Kassie\Calendar\Http\Controllers',
     'middleware' => ['web', 'auth', 'locale', 'can:calendar.view'],
-    'prefix' => 'calendar'
+    'prefix' => 'calendar',
 ], function (): void {
 
     Route::group([
-        'prefix' => 'ajax'
+        'prefix' => 'ajax',
     ], function (): void {
 
         Route::get('/operation/{id}', [
             'as' => 'operation.detail',
-            'uses' => 'AjaxController@getDetail'
+            'uses' => 'AjaxController@getDetail',
         ])->where('id', '[0-9]+');
 
         Route::get('/operation/ongoing', [
@@ -74,18 +74,18 @@ Route::group([
     });
 
     Route::group([
-        'prefix' => 'operation'
+        'prefix' => 'operation',
     ], function (): void {
 
         Route::get('/', [
             'as' => 'operation.index',
-            'uses' => 'OperationController@index'
+            'uses' => 'OperationController@index',
         ]);
 
         Route::post('/', [
             'as' => 'operation.store',
             'uses' => 'OperationController@store',
-            'middleware' => 'can:calendar.create'
+            'middleware' => 'can:calendar.create',
         ]);
 
         Route::post('update', [
@@ -95,7 +95,7 @@ Route::group([
 
         Route::post('subscribe', [
             'as' => 'operation.subscribe',
-            'uses' => 'OperationController@subscribe'
+            'uses' => 'OperationController@subscribe',
         ]);
 
         Route::post('cancel', [
@@ -110,7 +110,7 @@ Route::group([
 
         Route::post('close', [
             'as' => 'operation.close',
-            'uses' => 'OperationController@close'
+            'uses' => 'OperationController@close',
         ]);
 
         Route::post('delete', [
@@ -131,22 +131,21 @@ Route::group([
 
     Route::group([
         'prefix' => 'setting',
-        'middleware' => 'can:calendar.setup'
+        'middleware' => 'can:calendar.setup',
     ], function (): void {
 
         Route::get('/', [
             'as' => 'setting.index',
-            'uses' => 'SettingController@index'
+            'uses' => 'SettingController@index',
         ]);
 
-
         Route::group([
-            'prefix' => 'notifications'
+            'prefix' => 'notifications',
         ], function () {
 
             Route::post('update', [
                 'as' => 'setting.notifications.update',
-                'uses' => 'SettingController@updateNotificationSettings'
+                'uses' => 'SettingController@updateNotificationSettings',
             ]);
 
         });
@@ -157,28 +156,28 @@ Route::group([
 
             Route::post('update', [
                 'as' => 'setting.discord.update',
-                'uses' => 'SettingController@updateDiscord'
+                'uses' => 'SettingController@updateDiscord',
             ]);
 
             Route::get('/callback', [
                 'as' => 'setting.discord.registration.callback',
-                'uses' => 'SettingController@handleDiscordCallback'
+                'uses' => 'SettingController@handleDiscordCallback',
             ]);
 
         });
 
         Route::group([
-            'prefix' => 'tag'
+            'prefix' => 'tag',
         ], function (): void {
 
             Route::post('create', [
                 'as' => 'setting.tag.create',
-                'uses' => 'TagController@store'
+                'uses' => 'TagController@store',
             ]);
 
             Route::post('delete', [
                 'as' => 'setting.tag.delete',
-                'uses' => 'TagController@delete'
+                'uses' => 'TagController@delete',
             ]);
 
             Route::get('show/{id}', [
@@ -189,7 +188,7 @@ Route::group([
 
             Route::post('update', [
                 'as' => 'setting.tag.update',
-                'uses' => 'TagController@store'
+                'uses' => 'TagController@store',
             ]);
 
         });
@@ -197,7 +196,7 @@ Route::group([
     });
 
     Route::group([
-        'prefix' => 'lookup'
+        'prefix' => 'lookup',
     ], function (): void {
 
         Route::get('characters', 'LookupController@lookupCharacters')->name('calendar.lookups.characters');
@@ -206,6 +205,5 @@ Route::group([
         Route::get('confirmed', 'LookupController@lookupConfirmed');
 
     });
-
 
 });

@@ -33,8 +33,8 @@ return [
         ],
         [
             'short' => 'fr',
-            'full' => 'French'
-        ]
+            'full' => 'French',
+        ],
     ],
 
 ];

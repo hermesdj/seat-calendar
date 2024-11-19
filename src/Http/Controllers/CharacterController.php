@@ -17,16 +17,9 @@ use Seat\Web\Http\Controllers\Controller;
 
 /**
  * Class CharacterController.
- *
- * @package Seat\Kassie\Calendar\Http\Controllers
  */
 class CharacterController extends Controller
 {
-    /**
-     * @param CharacterInfo $character
-     *
-     * @return Factory|View
-     */
     public function paps(CharacterInfo $character): Factory|View
     {
         $today = carbon();
@@ -75,7 +68,7 @@ class CharacterController extends Controller
             'weeklyRanking' => $weeklyRanking,
             'monthlyRanking' => $monthlyRanking,
             'yearlyRanking' => $yearlyRanking,
-            'character' => $character
+            'character' => $character,
         ]);
     }
 }
