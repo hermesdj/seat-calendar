@@ -112,11 +112,6 @@ class Operation extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function doctrine(): HasOne
-    {
-        return $this->hasOne(SeatFittingPluginHelper::$DOCTRINE_MODEL, 'id', 'doctrine_id');
-    }
-
     /**
      * @param $value
      * @return mixed

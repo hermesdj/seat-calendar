@@ -94,11 +94,11 @@ class Helper
                 ->footer(trans('calendar::seat.created_by') . ' ' . $op->user->name);
 
             if (SeatFittingPluginHelper::pluginIsAvailable() && $op->doctrine_id != null) {
-                $doctrine = SeatFittingPluginHelper::$DOCTRINE_MODEL::where('id', $op->doctrine_id)->first();
+                $doctrine = SeatFittingPluginHelper::getOperation($op->doctrine_id);
 
                 if ($doctrine != null) {
                     $embed->field(function (DiscordEmbedField $field) use ($op, $doctrine): void {
-                        $doctrineUrl = route('fitting.doctrineviewdetails', ['id' => $doctrine->id]);
+                        $doctrineUrl = SeatFittingPluginHelper::generateDoctrineUrl($doctrine->id);
 
                         $field->name(trans('calendar::seat.doctrines'))
                             ->value('[' . $doctrine->name . '](' . $doctrineUrl . ')');

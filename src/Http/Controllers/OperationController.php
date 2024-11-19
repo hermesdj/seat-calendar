@@ -62,7 +62,7 @@ class OperationController extends Controller
         $doctrines = [];
 
         if (SeatFittingPluginHelper::pluginIsAvailable()) {
-            $doctrines = SeatFittingPluginHelper::$DOCTRINE_MODEL::all();
+            $doctrines = SeatFittingPluginHelper::listDoctrines();
         }
 
         return view('calendar::operation.index', [
