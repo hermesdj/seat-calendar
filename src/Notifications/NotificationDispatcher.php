@@ -19,19 +19,19 @@ class NotificationDispatcher
 
     public static function dispatchOperationCancelled($operation): void
     {
-        logger()->debug("New operation is cancelled, sending cancelled event");
+        logger()->debug('New operation is cancelled, sending cancelled event');
         self::dispatch('seat_calendar_operation_cancelled', $operation);
     }
 
     public static function dispatchOperationActivated($operation): void
     {
-        logger()->debug("New operation is reactivated, sending activated event");
+        logger()->debug('New operation is reactivated, sending activated event');
         self::dispatch('seat_calendar_operation_activated', $operation);
     }
 
     public static function dispatchOperationEnded($operation): void
     {
-        logger()->debug("Operation has ended");
+        logger()->debug('Operation has ended');
         self::dispatch('seat_calendar_operation_ended', $operation);
     }
 
@@ -67,7 +67,7 @@ class NotificationDispatcher
 
         $integrations = self::mapGroups($groups);
 
-        $allowedIntegrationIds = new Collection();
+        $allowedIntegrationIds = new Collection;
 
         foreach ($operation->tags as $tag) {
             $tagIntegrations = $tag->integrations()->get();
@@ -83,7 +83,8 @@ class NotificationDispatcher
         }
 
         if ($integrations->isEmpty()) {
-            logger()->debug("No integration found");
+            logger()->debug('No integration found');
+
             return;
         }
 
@@ -103,17 +104,17 @@ class NotificationDispatcher
     {
         return $groups->map(function ($group) {
             return $group->integrations->map(function ($channel) use ($group) {
-                $setting = (array)$channel->settings;
+                $setting = (array) $channel->settings;
                 $key = array_key_first($setting);
                 $route = $setting[$key];
 
-                return (object)[
+                return (object) [
                     'id' => $channel->id,
                     'channel' => $channel->type,
                     'route' => $route,
                     'mentions' => $group->mentions->filter(function ($mention) use ($channel) {
                         return $mention->getType()->type = $channel->type;
-                    })
+                    }),
                 ];
             });
         })->flatten();

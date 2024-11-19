@@ -4,7 +4,4 @@ namespace Seat\Kassie\Calendar\Exceptions;
 
 use Exception;
 
-class PapsException extends Exception
-{
-
-}
+class PapsException extends Exception {}

@@ -9,16 +9,17 @@ use Seat\Eveapi\Models\Character\CharacterInfo;
 class PapFleet extends Model
 {
     public $timestamps = false;
+
     public $incrementing = false;
 
     protected $table = 'calendar_pap_fleets';
 
     protected $primaryKey = [
-        'operation_id', 'fleet_commander_id'
+        'operation_id', 'fleet_commander_id',
     ];
 
     protected $fillable = [
-        'operation_id', 'fleet_id', 'fleet_commander_id'
+        'operation_id', 'fleet_id', 'fleet_commander_id',
     ];
 
     public function commander(): BelongsTo

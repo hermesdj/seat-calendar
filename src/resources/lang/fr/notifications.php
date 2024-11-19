@@ -1,4 +1,5 @@
 <?php
+
 return [
     'notification_new_operation' => ':rocket: Une nouvelle opération a été créée !',
     'notification_edit_operation' => ':pencil2: Une opération a été modifiée !',

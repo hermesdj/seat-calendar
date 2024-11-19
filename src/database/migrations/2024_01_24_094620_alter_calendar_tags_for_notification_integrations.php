@@ -6,7 +6,6 @@ use Illuminate\Support\Facades\Schema;
 
 class AlterCalendarTagsForNotificationIntegrations extends Migration
 {
-
     public function up(): void
     {
         Schema::create('calendar_tag_integration', function (Blueprint $table) {

@@ -26,15 +26,11 @@ use Illuminate\Foundation\Http\FormRequest;
 
 /**
  * Class Settings.
- *
- * @package Seat\Kassie\Calendar\Validation
  */
 class SettingsValidation extends FormRequest
 {
     /**
      * Authorize the request by default.
-     *
-     * @return bool
      */
     public function authorize(): bool
     {
@@ -44,8 +40,6 @@ class SettingsValidation extends FormRequest
 
     /**
      * Get the validation rules that apply to the request.
-     *
-     * @return array
      */
     public function rules(): array
     {

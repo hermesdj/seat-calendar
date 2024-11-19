@@ -22,24 +22,20 @@ class DiscordFetcher
         }
 
         $stack = HandlerStack::create();
-        $stack->push(new RateLimiterMiddleware());
+        $stack->push(new RateLimiterMiddleware);
 
         $this->client = new Client([
             'base_uri' => $base_uri,
             'headers' => [
                 'Authorization' => sprintf('Bot %s', $token),
                 'Content-Type' => 'application/json',
-                'User-Agent' => sprintf('hermesdj@seat-calendar/%s GitHub SeAT', $version)
+                'User-Agent' => sprintf('hermesdj@seat-calendar/%s GitHub SeAT', $version),
             ],
-            'handler' => $stack
+            'handler' => $stack,
         ]);
     }
 
     /**
-     * @param string $method
-     * @param string $uri
-     * @param array $options
-     * @return ResponseInterface
      * @throws GuzzleException
      */
     public function request(string $method, string $uri = '', array $options = []): ResponseInterface

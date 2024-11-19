@@ -11,14 +11,10 @@ use Seat\Web\Http\Controllers\Controller;
 
 /**
  * Class TagController.
- *
- * @package Seat\Kassie\Calendar\Http\Controllers
  */
 class TagController extends Controller
 {
     /**
-     * @param Request $request
-     * @return RedirectResponse
      * @throws ValidationException
      */
     public function store(Request $request): RedirectResponse
@@ -27,11 +23,11 @@ class TagController extends Controller
             'name' => 'required|max:7',
             'bg_color' => [
                 'required',
-                'regex:^#(?:[0-9a-fA-F]{3}){1,2}$^'
+                'regex:^#(?:[0-9a-fA-F]{3}){1,2}$^',
             ],
             'text_color' => [
                 'required',
-                'regex:^#(?:[0-9a-fA-F]{3}){1,2}$^'
+                'regex:^#(?:[0-9a-fA-F]{3}){1,2}$^',
             ],
             'order' => 'required',
             'quantifier' => 'required|numeric',
@@ -41,7 +37,7 @@ class TagController extends Controller
 
         $tag = new Tag($request->all());
 
-        if (!is_null($request->input('tag_id'))) {
+        if (! is_null($request->input('tag_id'))) {
             $tag = Tag::find($request->input('tag_id'));
             $tag->fill($request->all());
         }
@@ -55,35 +51,28 @@ class TagController extends Controller
             ->with('success', sprintf('The tag "%s" has been successfully created.', $tag->name));
     }
 
-    /**
-     * @param Request $request
-     * @return RedirectResponse
-     */
     public function delete(Request $request): RedirectResponse
     {
         $tag = Tag::find($request->tag_id);
         if ($tag != null) {
             Tag::destroy($tag->id);
+
             return redirect()->back();
         }
 
         return redirect()->back();
     }
 
-    /**
-     * @param int $tag_id
-     * @return JsonResponse
-     */
     public function get(int $tag_id): JsonResponse
     {
         $tag = Tag::find($tag_id)->load(['integrations' => function ($query) {
             $query->select('id', 'name');
         }]);
 
-        if (is_null($tag))
+        if (is_null($tag)) {
             return response()->json(['msg' => sprintf('Unable to retrieve tag %s', $tag_id)], 404);
+        }
 
         return response()->json($tag);
     }
-
 }

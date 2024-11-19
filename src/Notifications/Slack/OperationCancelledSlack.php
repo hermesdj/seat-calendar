@@ -7,11 +7,11 @@ use Illuminate\Queue\SerializesModels;
 use Seat\Kassie\Calendar\Helpers\Helper;
 use Seat\Kassie\Calendar\Models\Operation;
 use Seat\Notifications\Notifications\AbstractSlackNotification;
-use Seat\Services\Exceptions\SettingException;
 
 class OperationCancelledSlack extends AbstractSlackNotification
 {
     use SerializesModels;
+
     private Operation $operation;
 
     public function __construct($operation)
@@ -19,8 +19,6 @@ class OperationCancelledSlack extends AbstractSlackNotification
         $this->operation = $operation;
     }
 
-    /**
-     */
     public function populateMessage(SlackMessage $message, $notifiable): void
     {
         $attachment = Helper::BuildSlackNotificationAttachment($this->operation);

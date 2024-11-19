@@ -10,6 +10,7 @@ use Seat\Services\Exceptions\SettingException;
 class DiscordClient
 {
     final public const BASE_URI = 'https://discord.com/api';
+
     final public const VERSION = 'v6';
 
     private static ?DiscordClient $instance = null;
@@ -41,7 +42,7 @@ class DiscordClient
      */
     public static function getInstance(): DiscordClient
     {
-        if (!isset(self::$instance)) {
+        if (! isset(self::$instance)) {
             $guildId = setting('kassie.calendar.discord_guild_id', true);
 
             if (is_null($guildId)) {
@@ -79,7 +80,7 @@ class DiscordClient
         $uri = ltrim($endpoint, '/');
 
         foreach ($arguments as $uri_parameter => $value) {
-            if (!str_contains($uri, sprintf('{%s}', $uri_parameter))) {
+            if (! str_contains($uri, sprintf('{%s}', $uri_parameter))) {
                 continue;
             }
 
@@ -129,7 +130,7 @@ class DiscordClient
 
             $json = $client->sendCall('POST', '/guilds/{guild.id}/scheduled-events', array_merge_recursive(
                 [
-                    'guild.id' => $client->getGuildId()
+                    'guild.id' => $client->getGuildId(),
                 ],
                 $event->toArray()
             ));
@@ -153,7 +154,7 @@ class DiscordClient
 
             $json = $client->sendCall('GET', '/guilds/{guild.id}/scheduled-events/{guild_scheduled_event.id}', [
                 'guild.id' => $client->getGuildId(),
-                'guild_scheduled_event.id' => $event->id
+                'guild_scheduled_event.id' => $event->id,
             ]);
 
             return GuildEvent::fromDiscordResponse($json);
@@ -175,7 +176,7 @@ class DiscordClient
             $client = DiscordClient::getInstance();
 
             $json = $client->sendCall('GET', '/guilds/{guild.id}/scheduled-events', [
-                'guild.id' => $client->getGuildId()
+                'guild.id' => $client->getGuildId(),
             ]);
 
             $results = [];
@@ -202,7 +203,7 @@ class DiscordClient
             $json = $client->sendCall('PATCH', '/guilds/{guild.id}/scheduled-events/{guild_scheduled_event.id}', array_merge_recursive(
                 [
                     'guild.id' => $client->getGuildId(),
-                    'guild_scheduled_event.id' => $id
+                    'guild_scheduled_event.id' => $id,
                 ],
                 $params
             ));
@@ -225,7 +226,7 @@ class DiscordClient
             $client->sendCall('DELETE', '/guilds/{guild.id}/scheduled-events/{guild_scheduled_event.id}',
                 [
                     'guild.id' => $client->getGuildId(),
-                    'guild_scheduled_event.id' => $id
+                    'guild_scheduled_event.id' => $id,
                 ]
             );
         } catch (GuzzleException|JsonException|DiscordSettingsException|SettingException $e) {
@@ -245,7 +246,7 @@ class DiscordClient
             $users = $client->sendCall('GET', '/guilds/{guild.id}/scheduled-events/{guild_scheduled_event.id}/users',
                 [
                     'guild.id' => $client->getGuildId(),
-                    'guild_scheduled_event.id' => $event->id
+                    'guild_scheduled_event.id' => $event->id,
                 ]);
 
             return $users;

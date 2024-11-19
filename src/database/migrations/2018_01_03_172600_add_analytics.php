@@ -1,13 +1,11 @@
 <?php
 
-
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
 class AddAnalytics extends Migration
 {
-
     public function up(): void
     {
         Schema::table('calendar_tags', function (Blueprint $table) {
@@ -40,5 +38,4 @@ class AddAnalytics extends Migration
 
         });
     }
-
 }

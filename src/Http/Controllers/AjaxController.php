@@ -15,13 +15,9 @@ use Seat\Kassie\Calendar\Models\Operation;
 
 /**
  * Class AjaxController.
- * @package Seat\Kassie\Calendar\Http\Controllers
  */
 class AjaxController
 {
-    /**
-     * @return mixed
-     */
     public function getOngoing(): mixed
     {
         $operations = Operation::with('tags', 'fleet_commander', 'attendees', 'staging')
@@ -31,7 +27,7 @@ class AjaxController
                 $query->orWhereNull('end_at');
             })
             ->where(function ($query): void {
-                if (!auth()->user()->isAdmin()) {
+                if (! auth()->user()->isAdmin()) {
                     $query->whereIn('role_name', auth()->user()->roles->pluck('title')->toArray());
                     $query->orWhereNull('role_name');
                 }
@@ -41,17 +37,13 @@ class AjaxController
         return $this->buildOperationDataTable($operations);
     }
 
-    /**
-     * @param Builder $operations
-     * @return mixed
-     */
     private function buildOperationDataTable(Builder $operations): mixed
     {
         return app('datatables')::of($operations)
-            ->editColumn('title', fn($row) => view('calendar::operation.partials.title', ['row' => $row]))
-            ->editColumn('tags', fn($row) => view('calendar::operation.partials.tags', ['op' => $row]))
-            ->editColumn('importance', fn($row) => view('calendar::operation.partials.importance', ['op' => $row]))
-            ->editColumn('start_at', fn($row): string => sprintf('<span data-toggle="tooltip" title="%s">%s</span>',
+            ->editColumn('title', fn ($row) => view('calendar::operation.partials.title', ['row' => $row]))
+            ->editColumn('tags', fn ($row) => view('calendar::operation.partials.tags', ['op' => $row]))
+            ->editColumn('importance', fn ($row) => view('calendar::operation.partials.importance', ['op' => $row]))
+            ->editColumn('start_at', fn ($row): string => sprintf('<span data-toggle="tooltip" title="%s">%s</span>',
                 $row->start_at, human_diff($row->start_at)))
             ->editColumn('end_at', function ($row) {
                 if ($row->end_at) {
@@ -61,28 +53,25 @@ class AjaxController
                     return '<span data-toggle="tooltip" title="no end set"></span>';
                 }
             })
-            ->editColumn('fleet_commander', fn($row) => view('calendar::operation.partials.fleet_commander', ['op' => $row]))
-            ->editColumn('doctrine', fn($row) => view('calendar::operation.partials.doctrine', ['op' => $row]))
-            ->addColumn('duration', fn($row): string => sprintf('<span data-toggle="tooltip" title="%s">%s</span>',
+            ->editColumn('fleet_commander', fn ($row) => view('calendar::operation.partials.fleet_commander', ['op' => $row]))
+            ->editColumn('doctrine', fn ($row) => view('calendar::operation.partials.doctrine', ['op' => $row]))
+            ->addColumn('duration', fn ($row): string => sprintf('<span data-toggle="tooltip" title="%s">%s</span>',
                 $row->end_at, $row->duration))
-            ->editColumn('staging_sys', fn($row) => view('calendar::operation.partials.staging', ['op' => $row]))
-            ->addColumn('subscription', fn($row) => view('calendar::operation.partials.registration', ['op' => $row]))
-            ->addColumn('actions', fn($row) => view('calendar::operation.partials.actions.actions', ['op' => $row]))
-            ->setRowClass(fn($row): string => $row->is_cancelled == 0 ? 'text-muted' : 'danger text-muted')
-            ->addRowAttr('data-attr-op', fn($row) => $row->id)
+            ->editColumn('staging_sys', fn ($row) => view('calendar::operation.partials.staging', ['op' => $row]))
+            ->addColumn('subscription', fn ($row) => view('calendar::operation.partials.registration', ['op' => $row]))
+            ->addColumn('actions', fn ($row) => view('calendar::operation.partials.actions.actions', ['op' => $row]))
+            ->setRowClass(fn ($row): string => $row->is_cancelled == 0 ? 'text-muted' : 'danger text-muted')
+            ->addRowAttr('data-attr-op', fn ($row) => $row->id)
             ->rawColumns(['title', 'tags', 'importance', 'start_at', 'end_at', 'duration',
                 'fleet_commander', 'doctrine', 'staging_sys', 'subscription', 'actions'])
             ->toJson();
     }
 
-    /**
-     * @return mixed
-     */
     public function getIncoming(): mixed
     {
         $operations = Operation::with('tags', 'fleet_commander', 'attendees', 'staging')
             ->where(function ($query) {
-                if (!auth()->user()->isAdmin()) {
+                if (! auth()->user()->isAdmin()) {
                     $query->whereIn('role_name', auth()->user()->roles->pluck('title')->toArray());
                     $query->orWhereNull('role_name');
                 }
@@ -93,9 +82,6 @@ class AjaxController
         return $this->buildOperationDataTable($operations);
     }
 
-    /**
-     * @return mixed
-     */
     public function getFaded(): mixed
     {
         $operations = Operation::with('tags', 'fleet_commander', 'attendees', 'staging')
@@ -104,7 +90,7 @@ class AjaxController
                     ->where('end_at', '<', carbon()->now());
             })
             ->where(function ($query): void {
-                if (!auth()->user()->isAdmin()) {
+                if (! auth()->user()->isAdmin()) {
                     $query->whereIn('role_name', auth()->user()->roles->pluck('title')->toArray());
                     $query->orWhereNull('role_name');
                 }
@@ -114,14 +100,11 @@ class AjaxController
         return $this->buildOperationDataTable($operations);
     }
 
-    /**
-     * @param $operation_id
-     * @return Factory|RedirectResponse|View
-     */
     public function getDetail($operation_id): Factory|View|RedirectResponse
     {
         if (auth()->user()->can('calendar.view')) {
             $op = Operation::with('tags')->find($operation_id);
+
             return view('calendar::operation.modals/details.content', ['op' => $op]);
         }
 

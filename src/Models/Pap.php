@@ -18,12 +18,9 @@ use Seat\Web\Models\User;
 
 /**
  * Class Pap.
- *
- * @package Seat\Kassie\Calendar\Models
  */
 class Pap extends Model
 {
-
     /**
      * @var bool
      */
@@ -43,7 +40,7 @@ class Pap extends Model
      * @var array
      */
     protected $primaryKey = [
-        'operation_id', 'character_id'
+        'operation_id', 'character_id',
     ];
 
     /**
@@ -53,20 +50,18 @@ class Pap extends Model
         'operation_id', 'character_id', 'ship_type_id', 'join_time', 'value',
     ];
 
-    /**
-     * @param array $options
-     * @return bool
-     */
     public function save(array $options = []): bool
     {
 
         $operation = Operation::find($this->getAttributeValue('operation_id'));
 
-        if (is_null($this->getAttributeValue('value')))
+        if (is_null($this->getAttributeValue('value'))) {
             $this->setAttribute('value', 0);
+        }
 
-        if (!is_null($operation) && $operation->tags->count() > 0)
+        if (! is_null($operation) && $operation->tags->count() > 0) {
             $this->setAttribute('value', $operation->tags->max('quantifier'));
+        }
 
         if (array_key_exists('join_time', $this->attributes)) {
             $dt = carbon($this->getAttributeValue('join_time'));
@@ -78,9 +73,6 @@ class Pap extends Model
         return parent::save($options);
     }
 
-    /**
-     * @return HasOne
-     */
     public function character(): HasOne
     {
         return $this->hasOne(CharacterInfo::class, 'character_id', 'character_id')
@@ -89,9 +81,6 @@ class Pap extends Model
             ]);
     }
 
-    /**
-     * @return HasOneThrough
-     */
     public function user(): HasOneThrough
     {
         return $this->hasOneThrough(User::class, RefreshToken::class,
@@ -101,9 +90,6 @@ class Pap extends Model
             ]);
     }
 
-    /**
-     * @return BelongsTo
-     */
     public function operation(): BelongsTo
     {
         return $this->belongsTo(Operation::class, 'operation_id', 'id')
@@ -112,9 +98,6 @@ class Pap extends Model
             ]);
     }
 
-    /**
-     * @return HasOne
-     */
     public function type(): HasOne
     {
         return $this->hasOne(InvType::class, 'typeID', 'ship_type_id')

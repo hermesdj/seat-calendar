@@ -5,7 +5,6 @@ namespace Seat\Kassie\Calendar\database\seeds;
 use Illuminate\Database\Seeder;
 use Seat\Services\Exceptions\SettingException;
 
-
 class CalendarSettingsTableSeeder extends Seeder
 {
     /**

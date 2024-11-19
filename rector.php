@@ -10,7 +10,7 @@ use RectorLaravel\Set\LaravelSetList;
 
 return static function (RectorConfig $rectorConfig): void {
     $rectorConfig->paths([
-        __DIR__ . '/src',
+        __DIR__.'/src',
     ]);
 
     // register a single rule
@@ -21,6 +21,6 @@ return static function (RectorConfig $rectorConfig): void {
         LevelSetList::UP_TO_PHP_82,
         SetList::CODE_QUALITY,
         SetList::TYPE_DECLARATION,
-        LaravelSetList::LARAVEL_100
+        LaravelSetList::LARAVEL_100,
     ]);
 };

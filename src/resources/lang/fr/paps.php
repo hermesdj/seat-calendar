@@ -28,5 +28,4 @@ return [
     'no_paps_this_month' => 'There no paps for the current month.',
     'no_paps_this_year' => 'There no paps for the current year.',
 
-
 ];

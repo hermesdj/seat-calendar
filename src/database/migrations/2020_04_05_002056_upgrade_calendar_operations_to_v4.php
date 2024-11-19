@@ -8,7 +8,6 @@ use Illuminate\Support\Facades\DB;
  */
 class UpgradeCalendarOperationsToV4 extends Migration
 {
-
     public function up(): void
     {
         DB::table('calendar_operations')
@@ -37,5 +36,4 @@ class UpgradeCalendarOperationsToV4 extends Migration
                     ]);
             });
     }
-
 }

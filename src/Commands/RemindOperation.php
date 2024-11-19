@@ -12,8 +12,6 @@ use Seat\Services\Exceptions\SettingException;
 
 /**
  * Class RemindOperation.
- *
- * @package Seat\Kassie\Calendar\Commands
  */
 class RemindOperation extends Command
 {
@@ -31,19 +29,22 @@ class RemindOperation extends Command
 
     /**
      * Process the command.
+     *
      * @throws SettingException
      */
     public function handle(): void
     {
-        # Ensure we send reminders starting with furthest in the future. That way
-        # when more than one event is being reminded, the last reminder in chat
-        # is the next event to occur.
+        // Ensure we send reminders starting with furthest in the future. That way
+        // when more than one event is being reminded, the last reminder in chat
+        // is the next event to occur.
         $configured_marks = setting('kassie.calendar.notify_operation_interval', true);
-        if ($configured_marks === null) return;
+        if ($configured_marks === null) {
+            return;
+        }
         $marks = explode(',', $configured_marks);
         rsort($marks);
 
-        $allOps = new Collection();
+        $allOps = new Collection;
 
         foreach ($marks as $mark) {
             // This is ran every minutes so it will trigger only when the correct mark is reached for an operation
@@ -52,16 +53,16 @@ class RemindOperation extends Command
                 ->where('start_at', $when)
                 ->get();
 
-            if (!$ops->isEmpty()) {
+            if (! $ops->isEmpty()) {
                 foreach ($ops as $op) {
-                    if (!$allOps->has($op->id)) {
+                    if (! $allOps->has($op->id)) {
                         $allOps->put($op->id, $op);
                     }
                 }
             }
         }
 
-        if (!$allOps->isEmpty()) {
+        if (! $allOps->isEmpty()) {
             NotificationDispatcher::dispatchOperationsPinged($allOps);
         }
     }

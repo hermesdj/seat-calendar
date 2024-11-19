@@ -1,13 +1,11 @@
 <?php
 
-
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
 class AddRoleToOperations extends Migration
 {
-
     public function up(): void
     {
         Schema::table('calendar_operations', function (Blueprint $table) {
@@ -25,5 +23,4 @@ class AddRoleToOperations extends Migration
 
         });
     }
-
 }

@@ -8,8 +8,6 @@ class AlterCalendarOperationsForTags extends Migration
 {
     /**
      * Run the migrations.
-     *
-     * @return void
      */
     public function up(): void
     {
@@ -43,8 +41,6 @@ class AlterCalendarOperationsForTags extends Migration
 
     /**
      * Reverse the migrations.
-     *
-     * @return void
      */
     public function down(): void
     {

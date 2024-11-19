@@ -4,7 +4,4 @@ namespace Seat\Kassie\Calendar\Discord;
 
 use Exception;
 
-class DiscordActionException extends Exception
-{
-
-}
+class DiscordActionException extends Exception {}

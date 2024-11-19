@@ -14,11 +14,12 @@ class SeatFittingPluginHelper
 
     public static function isOldVersion(): bool
     {
-        return (class_exists(self::$OLD_DOCTRINE_MODEL)
-            && class_exists(self::$OLD_FITTING_MODEL));
+        return class_exists(self::$OLD_DOCTRINE_MODEL)
+            && class_exists(self::$OLD_FITTING_MODEL);
     }
 
     protected static string $OLD_DOCTRINE_MODEL = "Denngarr\Seat\Fitting\Models\Doctrine";
+
     protected static string $OLD_FITTING_MODEL = "Denngarr\Seat\Fitting\Models\Fitting";
 
     protected static string $DOCTRINE_MODEL = "CryptaTech\Seat\Fitting\Models\Doctrine";

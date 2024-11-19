@@ -25,7 +25,6 @@ use Seat\Web\Models\Acl\Role;
 
 /**
  * Class OperationController
- * @package Seat\Kassie\Calendar\Http\Controllers
  */
 class OperationController extends Controller
 {
@@ -39,8 +38,6 @@ class OperationController extends Controller
     }
 
     /**
-     * @param Request $request
-     * @return Factory|View
      * @throws SettingException
      */
     public function index(Request $request): Factory|View
@@ -55,7 +52,7 @@ class OperationController extends Controller
 
         if ($main_character != null) {
             $main_character->main = true;
-            $user_characters = $user_characters->reject(fn($character): bool => $character->character_id == $main_character->character_id);
+            $user_characters = $user_characters->reject(fn ($character): bool => $character->character_id == $main_character->character_id);
             $user_characters->prepend($main_character);
         }
 
@@ -71,12 +68,11 @@ class OperationController extends Controller
             'default_op' => $request->id ?: 0,
             'tags' => $tags,
             'notification_channels' => $notification_channels,
-            'doctrines' => $doctrines
+            'doctrines' => $doctrines,
         ]);
     }
 
     /**
-     * @param Request $request
      * @throws ValidationException
      */
     public function store(Request $request): void
@@ -87,7 +83,7 @@ class OperationController extends Controller
             'known_duration' => 'required',
             'time_start' => 'required_without_all:time_start_end|date|after_or_equal:today',
             'time_start_end' => 'required_without_all:time_start',
-            'doctrine_id' => 'integer|nullable'
+            'doctrine_id' => 'integer|nullable',
         ]);
 
         $operation = new Operation($request->all());
@@ -96,27 +92,28 @@ class OperationController extends Controller
         foreach ($request->toArray() as $name => $value) {
             if (empty($value)) {
                 $operation->{$name} = null;
-            } else if (str_contains($name, 'checkbox-')) {
+            } elseif (str_contains($name, 'checkbox-')) {
                 $tags[] = $value;
             }
         }
 
-        if ($request->known_duration == "no")
+        if ($request->known_duration == 'no') {
             $operation->start_at = Carbon::parse($request->time_start);
-        else {
-            $dates = explode(" - ", (string)$request->time_start_end);
+        } else {
+            $dates = explode(' - ', (string) $request->time_start_end);
             $operation->start_at = Carbon::parse($dates[0]);
             $operation->end_at = Carbon::parse($dates[1]);
         }
         $operation->start_at = Carbon::parse($operation->start_at);
 
-        if ($request->importance == 0)
+        if ($request->importance == 0) {
             $operation->importance = 0;
+        }
 
-        $operation->integration_id = ($request->get('integration_id') == "") ?
+        $operation->integration_id = ($request->get('integration_id') == '') ?
             null : $request->get('integration_id');
 
-        $operation->doctrine_id = ($request->get('doctrine_id') == "") ? null : $request->get('doctrine_id');
+        $operation->doctrine_id = ($request->get('doctrine_id') == '') ? null : $request->get('doctrine_id');
 
         $operation->user()->associate(auth()->user());
 
@@ -128,8 +125,6 @@ class OperationController extends Controller
     }
 
     /**
-     * @param Request $request
-     * @return RedirectResponse
      * @throws ValidationException
      */
     public function update(Request $request): RedirectResponse
@@ -139,7 +134,7 @@ class OperationController extends Controller
             'importance' => 'required|between:0,5',
             'known_duration' => 'required',
             'time_start' => 'required_without_all:time_start_end|date|after_or_equal:today',
-            'time_start_end' => 'required_without_all:time_start'
+            'time_start_end' => 'required_without_all:time_start',
         ]);
 
         $operation = Operation::find($request->operation_id);
@@ -149,13 +144,13 @@ class OperationController extends Controller
             foreach ($request->toArray() as $name => $value) {
                 if (empty($value)) {
                     $operation->{$name} = null;
-                } else if (str_contains($name, 'checkbox-')) {
+                } elseif (str_contains($name, 'checkbox-')) {
                     $tags[] = $value;
                 }
             }
 
             $operation->title = $request->title;
-            $operation->role_name = ($request->role_name == "") ? null : $request->role_name;
+            $operation->role_name = ($request->role_name == '') ? null : $request->role_name;
             $operation->importance = $request->importance;
             $operation->description = $request->description;
             $operation->staging_sys = $request->staging_sys;
@@ -164,21 +159,22 @@ class OperationController extends Controller
             $operation->fc = $request->fc;
             $operation->fc_character_id = $request->fc_character_id == null ? null : $request->fc_character_id;
 
-            if ($request->known_duration == "no") {
+            if ($request->known_duration == 'no') {
                 $operation->start_at = Carbon::parse($request->time_start);
                 $operation->end_at = null;
             } else {
-                $dates = explode(" - ", (string)$request->time_start_end);
+                $dates = explode(' - ', (string) $request->time_start_end);
                 $operation->start_at = Carbon::parse($dates[0]);
                 $operation->end_at = Carbon::parse($dates[1]);
             }
 
             $operation->start_at = Carbon::parse($operation->start_at);
 
-            if ($request->importance == 0)
+            if ($request->importance == 0) {
                 $operation->importance = 0;
+            }
 
-            $operation->integration_id = ($request->get('integration_id') == "") ?
+            $operation->integration_id = ($request->get('integration_id') == '') ?
                 null : $request->get('integration_id');
 
             $operation->save();
@@ -186,7 +182,7 @@ class OperationController extends Controller
             $operation->tags()->sync($tags);
 
             NotificationDispatcher::dispatchOperationUpdated($operation);
-            DiscordAction::syncWithDiscord("updated", $operation);
+            DiscordAction::syncWithDiscord('updated', $operation);
 
             return redirect()->route('operation.index');
         }
@@ -196,17 +192,14 @@ class OperationController extends Controller
             ->with('error', 'An error occurred while processing the request.');
     }
 
-    /**
-     * @param $operation_id
-     * @return JsonResponse|RedirectResponse
-     */
     public function find($operation_id): JsonResponse|RedirectResponse
     {
         if (auth()->user()->can('calendar.view')) {
             $operation = Operation::find($operation_id)->load('tags');
 
-            if (!$operation->isUserGranted(auth()->user()))
+            if (! $operation->isUserGranted(auth()->user())) {
                 return redirect()->back()->with('error', 'You are not granted to this operation !');
+            }
 
             return response()->json($operation);
         }
@@ -216,18 +209,16 @@ class OperationController extends Controller
             ->with('error', 'An error occurred while processing the request.');
     }
 
-    /**
-     * @param Request $request
-     * @return RedirectResponse
-     */
     public function delete(Request $request): RedirectResponse
     {
         $operation = Operation::find($request->operation_id);
 
         if ((auth()->user()->can('calendar.delete_all') || $operation->user->id == auth()->user()->id) && $operation != null) {
-            if (!$operation->isUserGranted(auth()->user()))
+            if (! $operation->isUserGranted(auth()->user())) {
                 return redirect()->back()->with('error', 'You are not granted to this operation !');
+            }
             Operation::destroy($operation->id);
+
             return redirect()->route('operation.index');
         }
 
@@ -236,10 +227,6 @@ class OperationController extends Controller
             ->with('error', 'An error occurred while processing the request.');
     }
 
-    /**
-     * @param Request $request
-     * @return RedirectResponse
-     */
     public function close(Request $request): RedirectResponse
     {
         $operation = Operation::find($request->operation_id);
@@ -247,6 +234,7 @@ class OperationController extends Controller
             $operation->end_at = Carbon::now('UTC');
             $operation->save();
             NotificationDispatcher::dispatchOperationEnded($operation);
+
             return redirect()->route('operation.index');
         }
 
@@ -255,10 +243,6 @@ class OperationController extends Controller
             ->with('error', 'An error occurred while processing the request.');
     }
 
-    /**
-     * @param Request $request
-     * @return RedirectResponse
-     */
     public function cancel(Request $request): RedirectResponse
     {
         $operation = Operation::find($request->operation_id);
@@ -273,15 +257,12 @@ class OperationController extends Controller
             ->with('error', 'An error occurred while processing the request.');
     }
 
-    /**
-     * @param Request $request
-     * @return RedirectResponse
-     */
     public function activate(Request $request): RedirectResponse
     {
         $operation = Operation::find($request->operation_id);
         if ((auth()->user()->can('calendar.close_all') || $operation->user->id == auth()->user()->id) && $operation != null) {
             $this->changeStatus($operation, false);
+
             return redirect()->route('operation.index');
         }
 
@@ -298,38 +279,36 @@ class OperationController extends Controller
 
         if ($status) {
             NotificationDispatcher::dispatchOperationCancelled($operation);
-            DiscordAction::syncWithDiscord("cancelled", $operation);
+            DiscordAction::syncWithDiscord('cancelled', $operation);
         } else {
             NotificationDispatcher::dispatchOperationActivated($operation);
-            DiscordAction::syncWithDiscord("activated", $operation);
+            DiscordAction::syncWithDiscord('activated', $operation);
         }
     }
 
-    /**
-     * @param Request $request
-     * @return RedirectResponse
-     */
     public function subscribe(Request $request): RedirectResponse
     {
         $operation = Operation::find($request->operation_id);
 
         if ($operation != null) {
 
-            if (!$operation->isUserGranted(auth()->user()))
+            if (! $operation->isUserGranted(auth()->user())) {
                 return redirect()->back()->with('error', 'You are not granted to this operation !');
+            }
 
-            if ($operation->status == "incoming") {
+            if ($operation->status == 'incoming') {
                 Attendee::updateOrCreate(
                     [
                         'operation_id' => $request->operation_id,
-                        'character_id' => $request->character_id
+                        'character_id' => $request->character_id,
                     ],
                     [
                         'user_id' => auth()->user()->id,
                         'status' => $request->status,
-                        'comment' => $request->comment
+                        'comment' => $request->comment,
                     ]
                 );
+
                 return redirect()->route('operation.index');
             }
         }
@@ -340,30 +319,32 @@ class OperationController extends Controller
     }
 
     /**
-     * @param int $operation_id
-     * @return RedirectResponse
      * @throws InvalidContainerDataException
      */
     public function paps(int $operation_id): RedirectResponse
     {
         $operation = Operation::find($operation_id);
-        if (is_null($operation))
+        if (is_null($operation)) {
             return redirect()
                 ->back()
                 ->with('error', 'Unable to retrieve the requested operation.');
+        }
 
-        if (!$operation->isUserGranted(auth()->user()))
+        if (! $operation->isUserGranted(auth()->user())) {
             return redirect()->back()->with('error', 'You are not granted to this operation !');
+        }
 
-        if (is_null($operation->fc_character_id))
+        if (is_null($operation->fc_character_id)) {
             return redirect()
                 ->back()
                 ->with('error', 'No fleet commander has been set for this operation.');
+        }
 
-        if (!in_array($operation->fc_character_id, auth()->user()->associatedCharacterIds()))
+        if (! in_array($operation->fc_character_id, auth()->user()->associatedCharacterIds())) {
             return redirect()
                 ->back()
                 ->with('error', 'You are not the fleet commander or wrong character has been set.');
+        }
 
         try {
             Helper::syncFleetMembersForPaps($operation);

@@ -12,18 +12,12 @@ use Seat\Web\Http\Controllers\Controller;
 
 /**
  * Class LookupController.
- *
- * @package Seat\Kassie\Calendar\Http\Controllers
  */
 class LookupController extends Controller
 {
-    /**
-     * @param Request $request
-     * @return JsonResponse
-     */
     public function lookupCharacters(Request $request): JsonResponse
     {
-        $characters = CharacterInfo::where('name', 'LIKE', '%' . $request->input('query') . '%')
+        $characters = CharacterInfo::where('name', 'LIKE', '%'.$request->input('query').'%')
             ->take(5)
             ->get()
             ->unique('character_id');
@@ -31,36 +25,28 @@ class LookupController extends Controller
         $results = [];
 
         foreach ($characters as $character) {
-            $results[] = ["value" => $character->name, "data" => $character->character_id];
+            $results[] = ['value' => $character->name, 'data' => $character->character_id];
         }
 
         return response()->json(['suggestions' => $results]);
     }
 
-    /**
-     * @param Request $request
-     * @return JsonResponse
-     */
     public function lookupSystems(Request $request): JsonResponse
     {
         $systems = DB::table('invUniqueNames')->where([
             ['groupID', '=', 5],
-            ['itemName', 'like', $request->input('query') . '%']
+            ['itemName', 'like', $request->input('query').'%'],
         ])->take(10)->get();
 
         $results = [];
 
         foreach ($systems as $system) {
-            $results[] = ["value" => $system->itemName, "data" => $system->itemID];
+            $results[] = ['value' => $system->itemName, 'data' => $system->itemID];
         }
 
         return response()->json(['suggestions' => $results]);
     }
 
-    /**
-     * @param Request $request
-     * @return JsonResponse
-     */
     public function lookupAttendees(Request $request): JsonResponse
     {
         $attendees = Attendee::where('operation_id', $request->input('id'))
@@ -70,18 +56,14 @@ class LookupController extends Controller
 
         return app('DataTables')::collection($attendees)
             ->removeColumn('character_id', 'main_character', 'user_id', 'status', 'character', 'created_at', 'updated_at')
-            ->addColumn('_character', fn($row) => view('web::partials.character', ['character' => $row->character]))
-            ->addColumn('_character_name', fn($row) => is_null($row->character) ? '' : $row->character->name)
-            ->addColumn('_status', fn($row) => view('calendar::operation.includes.cols.attendees.status', ['row' => $row]))
-            ->addColumn('_timestamps', fn($row) => view('calendar::operation.includes.cols.attendees.timestamps', ['row' => $row]))
+            ->addColumn('_character', fn ($row) => view('web::partials.character', ['character' => $row->character]))
+            ->addColumn('_character_name', fn ($row) => is_null($row->character) ? '' : $row->character->name)
+            ->addColumn('_status', fn ($row) => view('calendar::operation.includes.cols.attendees.status', ['row' => $row]))
+            ->addColumn('_timestamps', fn ($row) => view('calendar::operation.includes.cols.attendees.timestamps', ['row' => $row]))
             ->rawColumns(['_character', '_status', '_timestamps'])
             ->toJson();
     }
 
-    /**
-     * @param Request $request
-     * @return JsonResponse
-     */
     public function lookupConfirmed(Request $request): JsonResponse
     {
         $confirmed = Pap::with([
@@ -89,7 +71,7 @@ class LookupController extends Controller
             'character.affiliation',
             'user:id',
             'type:typeID,typeName,groupID',
-            'type.group:groupID,groupName'
+            'type.group:groupID,groupName',
         ])
             ->where('operation_id', $request->input('id'))
             ->select('character_id', 'ship_type_id')
@@ -97,9 +79,9 @@ class LookupController extends Controller
 
         return app('DataTables')::collection($confirmed)
             ->removeColumn('ship_type_id', 'character_id')
-            ->editColumn('character.character_id', fn($row) => view('web::partials.character', ['character' => $row->character]))
-            ->editColumn('character.corporation_id', fn($row) => view('web::partials.corporation', ['corporation' => $row->character->affiliation->corporation]))
-            ->editColumn('type.typeID', fn($row) => view('web::partials.type', ['type_id' => $row->type->typeID, 'type_name' => $row->type->typeName]))
+            ->editColumn('character.character_id', fn ($row) => view('web::partials.character', ['character' => $row->character]))
+            ->editColumn('character.corporation_id', fn ($row) => view('web::partials.corporation', ['corporation' => $row->character->affiliation->corporation]))
+            ->editColumn('type.typeID', fn ($row) => view('web::partials.type', ['type_id' => $row->type->typeID, 'type_name' => $row->type->typeName]))
             ->toJson();
     }
 }

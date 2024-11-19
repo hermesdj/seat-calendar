@@ -5,7 +5,6 @@ namespace Seat\Kassie\Calendar\database\seeds;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
-
 class ScheduleSeeder extends Seeder
 {
     protected array $schedules = [
@@ -16,7 +15,7 @@ class ScheduleSeeder extends Seeder
             'allow_overlap' => false,
             'allow_maintenance' => false,
             'ping_before' => null,
-            'ping_after' => null
+            'ping_after' => null,
         ],
         [
             // Sync active operations participation every 15 minutes
@@ -25,7 +24,7 @@ class ScheduleSeeder extends Seeder
             'allow_overlap' => false,
             'allow_maintenance' => false,
             'ping_before' => null,
-            'ping_after' => null
+            'ping_after' => null,
         ],
         [
             // Sync discord participation every 2 hours 15 minutes
@@ -34,8 +33,8 @@ class ScheduleSeeder extends Seeder
             'allow_overlap' => false,
             'allow_maintenance' => false,
             'ping_before' => null,
-            'ping_after' => null
-        ]
+            'ping_after' => null,
+        ],
     ];
 
     public function run(): void
@@ -43,13 +42,13 @@ class ScheduleSeeder extends Seeder
         DB::table('schedules')->whereIn('command', [
             'calendar:remind',
             'calendar:paps:sync',
-            'calendar:discord:sync'
+            'calendar:discord:sync',
         ])->delete();
 
         foreach ($this->schedules as $job) {
             if (DB::table('schedules')->where('command', $job['command'])->exists()) {
                 DB::table('schedules')->where('command', $job['command'])->update([
-                    'expression' => $job['expression']
+                    'expression' => $job['expression'],
                 ]);
             } else {
                 DB::table('schedules')->insert($job);
