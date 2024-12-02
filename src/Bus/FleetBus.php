@@ -12,7 +12,7 @@ use Throwable;
 
 class FleetBus extends Bus
 {
-    private RefreshToken $token;
+    protected ?RefreshToken $token;
 
     private int $operation_id;
 

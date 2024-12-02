@@ -4,8 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateCalendarTables extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
      */
@@ -92,4 +91,4 @@ class CreateCalendarTables extends Migration
         Schema::drop('calendar_operations');
         Schema::drop('calendar_settings');
     }
-}
+};
