@@ -43,6 +43,7 @@ class CharacterController extends Controller
             ->get();
 
         $weeklyRanking = Pap::where('week', $today->weekOfMonth)
+            ->with('character')
             ->where('month', $today->month)
             ->where('year', $today->year)
             ->select('character_id', DB::raw('sum(value) as qty'))
@@ -52,12 +53,14 @@ class CharacterController extends Controller
 
         $monthlyRanking = Pap::where('month', $today->month)
             ->where('year', $today->year)
+            ->with('character')
             ->select('character_id', DB::raw('sum(value) as qty'))
             ->groupBy('character_id')
             ->orderBy('qty', 'desc')
             ->get();
 
         $yearlyRanking = Pap::where('year', $today->year)
+            ->with('character')
             ->select('character_id', DB::raw('sum(value) as qty'))
             ->groupBy('character_id')
             ->orderBy('qty', 'desc')

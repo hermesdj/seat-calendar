@@ -22,7 +22,19 @@
             <h4>{{ trans('calendar::paps.hall_of_fame_header') }}</h4>
             <div class="row">
                 <div class="col-md-4">
-                    <h5>{{ trans('calendar::paps.this_week_header') }}</h5>
+                    <div class="row">
+                        <div class="col">
+                            <h4 class="float-left">{{ trans('calendar::paps.this_week_header') }}</h4>
+                            @if($weeklyRanking->count() > 0)
+                                <button
+                                        type="button"
+                                        class="btn btn-sm btn-secondary float-right"
+                                        onclick="exportToCsv('{{ trans('calendar::paps.this_week_header') }}', {{json_encode($weeklyRanking)}})">
+                                    CSV
+                                </button>
+                            @endif
+                        </div>
+                    </div>
                     <table class="table table-striped" id="weekly-top">
                         <thead>
                         <tr>
@@ -62,7 +74,19 @@
                     </table>
                 </div>
                 <div class="col-md-4">
-                    <h5>{{ trans('calendar::paps.this_month_header') }}</h5>
+                    <div class="row">
+                        <div class="col">
+                            <h4 class="float-left">{{ trans('calendar::paps.this_month_header') }}</h4>
+                            @if($monthlyRanking->count() > 0)
+                                <button
+                                        type="button"
+                                        class="btn btn-sm btn-secondary float-right"
+                                        onclick="exportToCsv('{{ trans('calendar::paps.this_month_header') }}', {{json_encode($monthlyRanking)}})">
+                                    CSV
+                                </button>
+                            @endif
+                        </div>
+                    </div>
                     <table class="table table-striped" id="monthly-top">
                         <thead>
                         <tr>
@@ -102,7 +126,19 @@
                     </table>
                 </div>
                 <div class="col-md-4">
-                    <h5>{{ trans('calendar::paps.this_year_header') }}</h5>
+                    <div class="row">
+                        <div class="col">
+                            <h4 class="float-left">{{ trans('calendar::paps.this_year_header') }}</h4>
+                            @if($yearlyRanking->count() > 0)
+                                <button
+                                        type="button"
+                                        class="btn btn-sm btn-secondary float-right"
+                                        onclick="exportToCsv('{{ trans('calendar::paps.this_year_header') }}', {{json_encode($yearlyRanking)}})">
+                                    CSV
+                                </button>
+                            @endif
+                        </div>
+                    </div>
                     <table class="table table-striped" id="yearly-top">
                         <thead>
                         <tr>
@@ -149,6 +185,18 @@
 @push('javascript')
     <script type="text/javascript" src="{{ asset('web/js/rainbowvis.js') }}"></script>
     <script type="text/javascript">
+        function exportToCsv(type, paps) {
+            console.log(type, paps);
+            const filename = `Pap export - ${type}`;
+            const csv = `Character; Pap\n` + paps.map(pap => [pap.character.name, pap.qty].join('; ')).join('\n');
+            const blob = new Blob([csv], {type: 'text/csv'});
+            const url = URL.createObjectURL(blob);
+            const pom = document.createElement('a');
+            pom.href = url;
+            pom.setAttribute('download', filename);
+            pom.click();
+        }
+
         $(function () {
             let rainbow = new Rainbow();
             let themeColor = rgb2hex($('.nav-pills .nav-link.active').css('backgroundColor'));
@@ -179,7 +227,7 @@
                 data: {
                     datasets: [{
                         label: '# participation',
-                        data: mont&hlyData,
+                        data: monthlyData,
                         borderColor: themeColor
                     }]
                 },
@@ -258,7 +306,7 @@
 
             function getActiveThemeColor() {
                 let bodyClass = new RegExp(/skin-([a-z0-9_]+)(-light)?/, 'gi').exec($('body').attr('class'));
-                if (bodyClass.length > 0)
+                if (bodyClass && bodyClass.length > 0)
                     return bodyClass[1];
 
                 return '';
