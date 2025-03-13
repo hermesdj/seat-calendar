@@ -144,7 +144,7 @@ return [
     'preview' => 'Preview',
     'order' => 'Order',
 
-    'name_tag_placeholder' => 'Name of the tag... 7 characters max.',
+    'name_tag_placeholder' => 'Name of the tag... 25 characters max.',
     'background_placeholder' => 'Background color... #000000',
     'text_color_placeholder' => 'Text color... #FFFFFF',
     'order_placeholder' => 'For sorting (numeric). Lower displayed first.',

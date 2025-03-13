@@ -20,7 +20,7 @@ class TagController extends Controller
     public function store(Request $request): RedirectResponse
     {
         $this->validate($request, [
-            'name' => 'required|max:7',
+            'name' => 'required|max:25',
             'bg_color' => [
                 'required',
                 'regex:^#(?:[0-9a-fA-F]{3}){1,2}$^',
@@ -57,10 +57,10 @@ class TagController extends Controller
         if ($tag != null) {
             Tag::destroy($tag->id);
 
-            return redirect()->back();
+            return redirect()->back()->withFragment('#list_tag');
         }
 
-        return redirect()->back();
+        return redirect()->back()->withFragment('#list_tag');
     }
 
     public function get(int $tag_id): JsonResponse

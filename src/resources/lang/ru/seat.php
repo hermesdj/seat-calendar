@@ -129,7 +129,7 @@ return [
     'preview' => 'Предпросмотр',
     'order' => 'Order',
 
-    'name_tag_placeholder' => 'Название тага... 7 символов макс.',
+    'name_tag_placeholder' => 'Название тага... 25 символов макс.',
     'background_placeholder' => 'Цвет фона... #000000',
     'text_color_placeholder' => 'Цвет текста... #FFFFFF',
     'order_placeholder' => 'Для сортировки (цифры). Меньше - выше',

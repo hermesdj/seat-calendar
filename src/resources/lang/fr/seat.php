@@ -150,7 +150,7 @@ return [
     'preview' => 'Aperçu',
     'order' => 'Priorité',
 
-    'name_tag_placeholder' => 'Nom du tag... 7 caractères maximum.',
+    'name_tag_placeholder' => 'Nom du tag... 25 caractères maximum.',
     'background_placeholder' => 'Couleur de l\'arrière-plan... #000000',
     'text_color_placeholder' => 'Couleur du texte... #FFFFFF',
     'order_placeholder' => 'Pour trier (numerique). Valeur faible afficher en premier.',
