@@ -82,6 +82,8 @@ return [
     'description' => 'Beschreibung',
     'comment' => 'Kommentar',
     'starts_at' => 'Startet am',
+    'eve_time' => 'EVE Zeit',
+    'local_time' => 'Lokale Zeit',
     'starts_in' => 'Startet in',
     'started' => 'Gestartet',
     'started_at' => 'Gestartet am',
@@ -106,6 +108,9 @@ return [
     'notification_operation_updated_label' => 'Kalender: Event aktualisiert',
 
     'notifications_to_send' => 'Zu sendende Benachrichtigungen',
+
+    'help_notify_locale' => 'Wähle die Standardsprache für Benachrichtigungen aus.',
+    'notify_locale' => 'Standardsprache',
 
     'help_notify_operation_interval' => 'Legen Sie fest, wie viele Benachrichtigungen vor jedem Event gesendet werden sollen. Jeder Wert gibt an, iwe viele Minuten vor dem Event eine Benachrichtigung gesendet werden soll. Trennen Sie die Zahlen durch Kommas. Der Standardwert :default_interval sendet drei Benachrichtigungen: 15 Minuten, 30 Minuten und 60 Minuten vor dem Beginn des Events.',
     'ping_intervals' => 'Benachrichtigung-Intervalle',

@@ -24,7 +24,7 @@ class OperationPostedDiscord extends AbstractDiscordNotification
         $message
             ->success()
             ->from('SeAT Calendar', config('buyback.discord.webhook.logoUrl'))
-            ->content(trans('calendar::notifications.notification_new_operation'))
+            ->content(trans('calendar::notifications.notification_new_operation', locale: setting('kassie.calendar.notify_locale')))
             ->embed(Helper::BuildDiscordOperationEmbed($this->operation));
     }
 }

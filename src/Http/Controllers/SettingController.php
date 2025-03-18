@@ -33,10 +33,12 @@ class SettingController extends Controller
     {
         $tags = Tag::all();
         $integrations = Integration::all();
+        $languages = config('calendar.locale.languages');
 
         return view('calendar::setting.index', [
             'tags' => $tags,
             'integrations' => $integrations,
+            'languages' => $languages,
         ]);
     }
 
@@ -46,6 +48,7 @@ class SettingController extends Controller
     public function updateNotificationSettings(SettingsValidation $request): RedirectResponse
     {
         setting(['kassie.calendar.notify_operation_interval', $request['notify_operation_interval']], true);
+        setting(['kassie.calendar.notify_locale', $request['notify_locale']], true);
         setting(['kassie.calendar.slack_emoji_importance_full', $request['slack_emoji_importance_full']], true);
         setting(['kassie.calendar.slack_emoji_importance_half', $request['slack_emoji_importance_half']], true);
         setting(['kassie.calendar.slack_emoji_importance_empty', $request['slack_emoji_importance_empty']], true);

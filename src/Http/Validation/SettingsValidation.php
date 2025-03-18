@@ -48,6 +48,7 @@ class SettingsValidation extends FormRequest
             'slack_emoji_importance_half' => ['nullable', 'string'],
             'slack_emoji_importance_empty' => ['nullable', 'string'],
             'notify_operation_interval' => ['nullable', 'string'],
+            'notify_locale' => ['string'],
             'notify_create_operation' => ['boolean'],
             'notify_update_operation' => ['boolean'],
             'notify_cancel_operation' => ['boolean'],

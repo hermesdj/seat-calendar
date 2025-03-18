@@ -83,6 +83,8 @@ return [
     'description' => 'Description',
     'comment' => 'Commentaires',
     'starts_at' => 'Commence le',
+    'eve_time' => 'heure EVE',
+    'local_time' => 'heure locale',
     'starts_in' => 'Commence dans',
     'started' => 'Commencé',
     'started_at' => 'Commencé à',
@@ -110,6 +112,9 @@ return [
     'notification_operation_updated_label' => 'Calendrier: Opération mise à jour',
 
     'notifications_to_send' => 'Notifications à envoyer',
+
+    'help_notify_locale' => 'Sélectionnez la langue par défaut à utiliser pour les notifications.',
+    'notify_locale' => 'Langue par défaut',
 
     'help_notify_operation_interval' => 'Décidez de combien de ping vous voulez envoyer avant chaque opération. Chaque valeur est un nombre de minutes précédent l\'opération d\'envoi du ping. Séparez les nombres par des virgules. Les valeurs par défaut de :default_interval envoie trois notifications : 15 minutes, 30 minutes et 60 minutes avant le début de l\'opération.',
     //'Decide how many pings to send before each operation. Each value is the number of minutes prior to the operation to send the ping. Separate numbers with commas. Default value of :default_interval will send 3 notifications: 15 minutes, 30 minutes, and 60 minutes prior to the operation start time.'

@@ -8,6 +8,26 @@
         {{ csrf_field() }}
         <div class="card-body">
             <p class="callout callout-info text-justify">
+                {!! trans('calendar::seat.help_notify_locale') !!}
+            </p>
+
+            <div class="form-group row">
+                <label for="notify_locale"
+                       class="col-sm-3 col-form-label">{{ trans('calendar::seat.notify_locale') }}</label>
+                <div class="col-sm-9">
+                    <select id="notify_locale" name="notify_locale" class="form-control w-100">
+                        @foreach($languages as $language)
+                            <option value="{{ $language['short'] }}"
+                                    @if(setting('notify_locale') == $language['short'])
+                                        selected
+                                    @endif>
+                                {{ $language['full'] }}</option>
+                        @endforeach
+                    </select>
+                </div>
+            </div>
+
+            <p class="callout callout-info text-justify">
                 {!! trans('calendar::seat.help_notify_operation_interval', ['default_interval' => '<code>15,30,60</code>']) !!}
             </p>
             <div class="form-group row">
