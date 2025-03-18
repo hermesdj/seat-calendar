@@ -2,8 +2,10 @@
 
 namespace Seat\Kassie\Calendar\Jobs;
 
+use Seat\Eseye\Exceptions\RequestFailedException;
 use Seat\Eveapi\Jobs\AbstractAuthCharacterJob;
 use Seat\Eveapi\Models\RefreshToken;
+use Seat\Kassie\Calendar\Exceptions\PapsException;
 use Seat\Kassie\Calendar\Models\PapFleet;
 
 class FleetInfoJob extends AbstractAuthCharacterJob
@@ -30,9 +32,13 @@ class FleetInfoJob extends AbstractAuthCharacterJob
     {
         parent::handle();
 
-        $response = $this->retrieve([
-            'character_id' => $this->getCharacterId(),
-        ]);
+        try {
+            $response = $this->retrieve([
+                'character_id' => $this->getCharacterId(),
+            ]);
+        } catch (RequestFailedException $e) {
+            throw new PapsException('Fleet could not be tracked: ' . $e->getMessage());
+        }
 
         $fleet = $response->getBody();
 

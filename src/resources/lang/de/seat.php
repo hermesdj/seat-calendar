@@ -47,7 +47,7 @@ return [
     'create_confirm_button_yes' => 'anlegen',
     'update_confirm_button_yes' => 'aktualisieren',
     'subscribe_confirm_button_yes' => 'Teilnahme abschicken',
-    'subscription' => 'Anmeldungen',
+    'subscription' => 'Anmeldung',
     'subscribe' => 'Anmelden',
     'not_answered' => 'Nicht geantwortet!',
     'none' => 'keine',
@@ -173,4 +173,5 @@ return [
     'delete_tag_description' => 'Diese Aktion löscht dieses Tag endgültig. Dies kann nicht rückgängig gemacht werden. Sind Sie sicher?',
 
     'doctrines' => 'Doctrine',
+    'track_fleet' => 'Flotte erfassen (ESI)',
 ];
