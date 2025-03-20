@@ -90,7 +90,7 @@
                     </div>
                     {{-- Operation starts --}}
                     <div class="form-group row datepicker d-none">
-                        <label for="time_start" class="col-sm-3 col-form-label">{{ trans('calendar::seat.starts_at') }}
+                        <label for="time_start" class="col-sm-3 col-form-label">{{ trans('calendar::seat.starts_at') }} ({{ trans('calendar::seat.eve_time') }})
                             <span class="text-danger">*</span>
                         </label>
                         <div class="col-sm-9">
@@ -100,7 +100,7 @@
                     {{-- Operation duration --}}
                     <div class="form-group row datepicker">
                         <label for="time_start_end"
-                               class="col-sm-3 col-form-label">{{ trans('calendar::seat.duration') }}
+                               class="col-sm-3 col-form-label">{{ trans('calendar::seat.duration') }} ({{ trans('calendar::seat.eve_time') }})
                             <span class="text-danger">*</span>
                         </label>
                         <div class="col-sm-9">
