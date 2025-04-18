@@ -130,7 +130,7 @@ return [
     'preview' => '预览',
     'order' => '排序',
 
-    'name_tag_placeholder' => '标签的名称... 最多7个字符',
+    'name_tag_placeholder' => '标签的名称... 最多25个字符',
     'background_placeholder' => '背景颜色... #000000',
     'text_color_placeholder' => '文字颜色... #FFFFFF',
     'order_placeholder' => '用于排序，数字小的排在前面。',

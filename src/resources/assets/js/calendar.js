@@ -13,7 +13,6 @@ op_modals.create.on('show.bs.modal', function (e) {
         timePicker: true,
         timePickerIncrement: 5,
         timePicker24Hour: true,
-        minDate: moment.utc(),
         startDate: nowRounded,
         locale: {
             "format": "MM/DD/YYYY HH:mm"
@@ -97,14 +96,6 @@ op_modals.update.on('show.bs.modal', function (e) {
 
     $(e.currentTarget).find('input[name="operation_id"]').val(operation_id);
 
-    let nowRounded = moment.utc();
-    nowRounded = moment.utc(Math.ceil((+nowRounded) / ROUNDING) * ROUNDING);
-
-    op_modals.update.find('input[name="known_duration"][value="yes"]').prop('checked', true);
-    op_modals.update.find('input[name="known_duration"][value="no"]').prop('checked', false);
-    op_modals.update.find('input[name="time_start"]').closest('div.form-group').removeClass('d-none');
-    op_modals.update.find('input[name="time_start_end"]').closest('div.form-group').addClass('d-none');
-
     $.getJSON("/calendar/operation/find/" + operation_id, function (op) {
         op_modals.update.find('input[name="title"]').val(op.title);
 
@@ -135,8 +126,8 @@ op_modals.update.on('show.bs.modal', function (e) {
             timePicker: true,
             timePickerIncrement: 5,
             timePicker24Hour: true,
-            minDate: nowRounded,
             startDate: moment.utc(op.start_at),
+            endDate: op.end_at ? moment.utc(op.end_at) : moment.utc(),
             locale: {
                 "format": "MM/DD/YYYY HH:mm"
             },
@@ -147,15 +138,20 @@ op_modals.update.on('show.bs.modal', function (e) {
         op_modals.update.find('input[name="time_start"]').daterangepicker(options);
         options.singleDatePicker = false;
 
-        if (op.end_at) {
-            options.endDate = moment.utc(op.end_at);
-            op_modals.update.find('input[name="known_duration"][value="yes"]').prop('checked', true).trigger('change');
-            op_modals.update.find('input[name="time_start"]').closest('div.form-group').addClass('hidden');
-            op_modals.update.find('input[name="time_start_end"]').closest('div.form-group').removeClass('hidden');
+        if (op.end_at === null) {
+            options.endDate = moment.utc(op.start_at).clone().add('1', 'h');
+            op_modals.update.find('input[name="known_duration"][value="yes"]').prop('checked', false);
+            op_modals.update.find('input[name="known_duration"][value="no"]').prop('checked', true);
+
+            op_modals.update.find('input[name="time_start"]').closest('div.form-group').removeClass('d-none');
+            op_modals.update.find('input[name="time_start_end"]').closest('div.form-group').addClass('d-none');
         } else {
-            options.endDate = moment.utc(op.start_at).clone().add('3', 'h');
-            op_modals.update.find('input[name="time_start"]').closest('div.form-group').removeClass('hidden');
-            op_modals.update.find('input[name="time_start_end"]').closest('div.form-group').addClass('hidden');
+            options.endDate = moment.utc(op.end_at);
+            op_modals.update.find('input[name="known_duration"][value="yes"]').prop('checked', true);
+            op_modals.update.find('input[name="known_duration"][value="no"]').prop('checked', false);
+
+            op_modals.update.find('input[name="time_start"]').closest('div.form-group').addClass('d-none');
+            op_modals.update.find('input[name="time_start_end"]').closest('div.form-group').removeClass('d-none');
         }
 
         op_modals.update.find('input[name="time_start_end"]').daterangepicker(options);

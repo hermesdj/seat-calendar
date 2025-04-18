@@ -69,6 +69,12 @@ class NotificationDispatcher
 
         $allowedIntegrationIds = new Collection;
 
+        if ($operation->tags->isEmpty()) {
+            logger()->debug('No tags found');
+
+            return;
+        }
+
         foreach ($operation->tags as $tag) {
             $tagIntegrations = $tag->integrations()->get();
             foreach ($tagIntegrations as $integration) {
@@ -76,11 +82,15 @@ class NotificationDispatcher
             }
         }
 
-        if ($allowedIntegrationIds->isNotEmpty()) {
-            $integrations = $integrations->filter(function ($integration) use ($allowedIntegrationIds) {
-                return $allowedIntegrationIds->contains($integration->id);
-            });
+        if ($allowedIntegrationIds->isEmpty()) {
+            logger()->debug('No integrations defined by tags found');
+
+            return;
         }
+
+        $integrations = $integrations->filter(function ($integration) use ($allowedIntegrationIds) {
+            return $allowedIntegrationIds->contains($integration->id);
+        });
 
         if ($integrations->isEmpty()) {
             logger()->debug('No integration found');

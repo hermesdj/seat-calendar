@@ -44,16 +44,8 @@ class AjaxController
             ->editColumn('title', fn ($row) => view('calendar::operation.partials.title', ['row' => $row]))
             ->editColumn('tags', fn ($row) => view('calendar::operation.partials.tags', ['op' => $row]))
             ->editColumn('importance', fn ($row) => view('calendar::operation.partials.importance', ['op' => $row]))
-            ->editColumn('start_at', fn ($row): string => sprintf('<span data-toggle="tooltip" title="%s">%s</span>',
-                $row->start_at, human_diff($row->start_at)))
-            ->editColumn('end_at', function ($row) {
-                if ($row->end_at) {
-                    return sprintf('<span data-toggle="tooltip" title="%s">%s</span>',
-                        $row->end_at, human_diff($row->end_at));
-                } else {
-                    return '<span data-toggle="tooltip" title="no end set"></span>';
-                }
-            })
+            ->editColumn('start_at', fn ($row) => view('calendar::operation.partials.time', ['timestamp' => $row->start_at->timestamp, 'id' => uniqid()]))
+            ->editColumn('end_at', fn ($row) => view('calendar::operation.partials.time', ['timestamp' => $row->end_at?->timestamp, 'id' => uniqid()]))
             ->editColumn('fleet_commander', fn ($row) => view('calendar::operation.partials.fleet_commander', ['op' => $row]))
             ->editColumn('doctrine', fn ($row) => view('calendar::operation.partials.doctrine', ['op' => $row]))
             ->addColumn('duration', fn ($row): string => sprintf('<span data-toggle="tooltip" title="%s">%s</span>',

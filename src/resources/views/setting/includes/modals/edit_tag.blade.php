@@ -22,7 +22,7 @@
                         <label for="name" class="col-sm-3 col-form-label">{{ trans('calendar::seat.name') }}</label>
                         <div class="col-sm-9">
                             <input type="text" class="form-control" name="name" id="edit_tag_name"
-                                   placeholder="{{ trans('calendar::seat.name_tag_placeholder') }}" maxlength="7">
+                                   placeholder="{{ trans('calendar::seat.name_tag_placeholder') }}" maxlength="25">
                         </div>
                     </div>
 

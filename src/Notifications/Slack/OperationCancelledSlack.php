@@ -25,7 +25,7 @@ class OperationCancelledSlack extends AbstractSlackNotification
 
         $message->error()
             ->from('SeAT Calendar', ':calendar:')
-            ->content(trans('calendar::notifications.notification_cancel_operation'))
+            ->content(trans('calendar::notifications.notification_cancel_operation', locale: setting('kassie.calendar.notify_locale')))
             ->attachment($attachment);
     }
 }

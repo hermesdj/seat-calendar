@@ -85,7 +85,9 @@
                 {data: 'start_at', name: 'start_at'},
                 {data: 'end_at', name: 'end_at'},
                 {data: 'fleet_commander', name: 'fleet_commander', orderable: false},
-                {data: 'doctrine', name: 'doctrine', orderable: false},
+                @if(\Seat\Kassie\Calendar\Helpers\SeatFittingPluginHelper::pluginIsAvailable())
+                    {data: 'doctrine', name: 'doctrine', orderable: false},
+                @endif
                 {data: 'staging_sys', name: 'staging_sys'},
                 {data: 'subscription', name: 'subscription', orderable: false},
                 {data: 'actions', name: 'actions', orderable: false, searchable: false}
@@ -116,7 +118,9 @@
                 {data: 'start_at', name: 'start_at'},
                 {data: 'duration', name: 'duration', orderable: false},
                 {data: 'fleet_commander', name: 'fleet_commander', orderable: false},
-                {data: 'doctrine', name: 'doctrine', orderable: false},
+                @if(\Seat\Kassie\Calendar\Helpers\SeatFittingPluginHelper::pluginIsAvailable())
+                    {data: 'doctrine', name: 'doctrine', orderable: false},
+                @endif
                 {data: 'staging_sys', name: 'staging_sys'},
                 {data: 'subscription', name: 'subscription', orderable: false},
                 {data: 'actions', name: 'actions', orderable: false, searchable: false}
@@ -147,7 +151,9 @@
                 {data: 'start_at', name: 'start_at'},
                 {data: 'end_at', name: 'end_at'},
                 {data: 'fleet_commander', name: 'fleet_commander', orderable: false},
-                {data: 'doctrine', name: 'doctrine', orderable: false},
+                @if(\Seat\Kassie\Calendar\Helpers\SeatFittingPluginHelper::pluginIsAvailable())
+                    {data: 'doctrine', name: 'doctrine', orderable: false},
+                @endif
                 {data: 'staging_sys', name: 'staging_sys'},
                 {data: 'subscription', name: 'subscription', orderable: false},
                 {data: 'actions', name: 'actions', orderable: false, searchable: false}

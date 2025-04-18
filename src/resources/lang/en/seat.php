@@ -82,6 +82,8 @@ return [
     'description' => 'Description',
     'comment' => 'Comment',
     'starts_at' => 'Starts at',
+    'eve_time' => 'EVE time',
+    'local_time' => 'Local time',
     'starts_in' => 'Starts in',
     'started' => 'Started',
     'started_at' => 'Started at',
@@ -106,6 +108,9 @@ return [
     'notification_operation_updated_label' => 'Calendar: Operation Updated',
 
     'notifications_to_send' => 'Notifications to send',
+
+    'help_notify_locale' => 'Select the default language to use for notifications.',
+    'notify_locale' => 'Default language',
 
     'help_notify_operation_interval' => 'Decide how many pings to send before each operation. Each value is the number of minutes prior to the operation to send the ping. Separate numbers with commas. Default value of :default_interval will send 3 notifications: 15 minutes, 30 minutes, and 60 minutes prior to the operation start time.',
     'ping_intervals' => 'Ping intervals',
@@ -144,7 +149,7 @@ return [
     'preview' => 'Preview',
     'order' => 'Order',
 
-    'name_tag_placeholder' => 'Name of the tag... 7 characters max.',
+    'name_tag_placeholder' => 'Name of the tag... 25 characters max.',
     'background_placeholder' => 'Background color... #000000',
     'text_color_placeholder' => 'Text color... #FFFFFF',
     'order_placeholder' => 'For sorting (numeric). Lower displayed first.',
@@ -173,4 +178,5 @@ return [
     'delete_tag_description' => 'This action will delete definitely this tag. This can\'t be reverted, are you sure ?',
 
     'doctrines' => 'Doctrine',
+    'track_fleet' => 'Track Fleet (ESI)',
 ];

@@ -24,16 +24,16 @@ return [
 
     'languages' => [
         [
-            'short' => 'zh-CN',
-            'full' => 'Chinese (Simplified)',
-        ],
-        [
             'short' => 'en',
             'full' => 'English',
         ],
         [
             'short' => 'fr',
             'full' => 'French',
+        ],
+        [
+            'short' => 'de',
+            'full' => 'German',
         ],
     ],
 

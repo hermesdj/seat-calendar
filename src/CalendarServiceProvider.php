@@ -83,6 +83,7 @@ class CalendarServiceProvider extends AbstractSeatPlugin
         $this->mergeConfigFrom(__DIR__.'/Config/package.sidebar.php', 'package.sidebar');
         $this->mergeConfigFrom(__DIR__.'/Config/calendar.character.menu.php', 'package.character.menu');
         $this->mergeConfigFrom(__DIR__.'/Config/calendar.corporation.menu.php', 'package.corporation.menu');
+        $this->mergeConfigFrom(__DIR__.'/Config/calendar.locale.php', 'calendar.locale');
         $this->mergeConfigFrom(__DIR__.'/Config/Discord/calendar.discord.php', 'calendar.discord');
 
         $this->registerPermissions(__DIR__.'/Config/Permissions/calendar.php', 'calendar');

@@ -25,7 +25,7 @@ class OperationActivatedSlack extends AbstractSlackNotification
 
         $message->success()
             ->from('SeAT Calendar', ':calendar:')
-            ->content(trans('calendar::notifications.notification_activate_operation'))
+            ->content(trans('calendar::notifications.notification_activate_operation', locale: setting('kassie.calendar.notify_locale')))
             ->attachment($attachment);
     }
 }
