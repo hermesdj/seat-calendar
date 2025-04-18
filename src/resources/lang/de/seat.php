@@ -135,7 +135,7 @@ return [
     'discord_client_secret' => 'Discord Client Secret',
     'discord_bot_token' => 'Discord Bot Token',
 
-    'warning_no_character' => "Du kannst bei keinem Event zusagen ohne im SeAT einen Charakter registriert zu haben. Bitte registriere einen Charakter bevor du fortfährst.",
+    'warning_no_character' => 'Du kannst bei keinem Event zusagen ohne im SeAT einen Charakter registriert zu haben. Bitte registriere einen Charakter bevor du fortfährst.',
 
     'in' => 'Von',
     'to' => 'Bis',

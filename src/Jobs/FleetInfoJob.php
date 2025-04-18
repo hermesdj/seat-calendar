@@ -37,7 +37,7 @@ class FleetInfoJob extends AbstractAuthCharacterJob
                 'character_id' => $this->getCharacterId(),
             ]);
         } catch (RequestFailedException $e) {
-            throw new PapsException('Fleet could not be tracked: ' . $e->getMessage());
+            throw new PapsException('Fleet could not be tracked: '.$e->getMessage());
         }
 
         $fleet = $response->getBody();

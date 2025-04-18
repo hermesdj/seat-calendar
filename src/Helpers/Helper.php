@@ -53,7 +53,7 @@ class Helper
     {
         $fields = [];
 
-        $currentTime = new DateTime();
+        $currentTime = new DateTime;
 
         if ($op->start_at > $currentTime) {
             $startTranslation = trans('calendar::seat.starts_at', locale: setting('kassie.calendar.notify_locale'));
@@ -61,47 +61,41 @@ class Helper
             $startTranslation = trans('calendar::seat.started_at', locale: setting('kassie.calendar.notify_locale'));
         }
 
-        $fields[] = (new DiscordEmbedField())
+        $fields[] = (new DiscordEmbedField)
             ->name(sprintf(
                 '%s (%s)',
                 $startTranslation,
                 trans('calendar::seat.eve_time', locale: setting('kassie.calendar.notify_locale')),
             ))
             ->value($op->start_at->format('l, j F o @ H:i'))
-            ->long()
-        ;
+            ->long();
 
-        $fields[] = (new DiscordEmbedField())
+        $fields[] = (new DiscordEmbedField)
             ->name(sprintf(
                 '%s (%s)',
                 $startTranslation,
                 trans('calendar::seat.local_time', locale: setting('kassie.calendar.notify_locale')),
             ))
-            ->value('<t:'. $op->start_at->getTimestamp() . ':F>')
-            ->long()
-        ;
+            ->value('<t:'.$op->start_at->getTimestamp().':F>')
+            ->long();
 
-        $fields[] = (new DiscordEmbedField())
+        $fields[] = (new DiscordEmbedField)
             ->name(trans('calendar::seat.duration', locale: setting('kassie.calendar.notify_locale')))
             ->value($op->getDurationAttribute() ?: trans('calendar::seat.unknown'))
-            ->long()
-        ;
+            ->long();
 
-        $fields[] = (new DiscordEmbedField())
+        $fields[] = (new DiscordEmbedField)
             ->name(trans('calendar::seat.fleet_commander', locale: setting('kassie.calendar.notify_locale')))
             ->value($op->fc ?: trans('calendar::seat.unknown'))
-            ->long()
-        ;
+            ->long();
 
-        $fields[] = (new DiscordEmbedField())
+        $fields[] = (new DiscordEmbedField)
             ->name(trans('calendar::seat.staging_system', locale: setting('kassie.calendar.notify_locale')))
-            ->value($op->staging_sys ?: trans('calendar::seat.unknown'))
-        ;
+            ->value($op->staging_sys ?: trans('calendar::seat.unknown'));
 
-        $fields[] = (new DiscordEmbedField())
+        $fields[] = (new DiscordEmbedField)
             ->name(trans('calendar::seat.staging_info', locale: setting('kassie.calendar.notify_locale')))
-            ->value($op->staging_info ?: trans('calendar::seat.unknown'))
-        ;
+            ->value($op->staging_info ?: trans('calendar::seat.unknown'));
 
         if (SeatFittingPluginHelper::pluginIsAvailable() && $op->doctrine_id != null) {
             $doctrine = SeatFittingPluginHelper::getOperation($op->doctrine_id);
@@ -109,15 +103,14 @@ class Helper
             if ($doctrine) {
                 $doctrineUrl = SeatFittingPluginHelper::generateDoctrineUrl($doctrine->id);
 
-                $fields[] = (new DiscordEmbedField())
+                $fields[] = (new DiscordEmbedField)
                     ->name(trans('calendar::seat.doctrines', locale: setting('kassie.calendar.notify_locale')))
                     ->value('['.$doctrine->name.']('.$doctrineUrl.')')
-                    ->long()
-                ;
+                    ->long();
             }
         }
 
-        $fields[] = (new DiscordEmbedField())
+        $fields[] = (new DiscordEmbedField)
             ->name(trans('calendar::seat.importance', locale: setting('kassie.calendar.notify_locale')))
             ->value(
                 self::ImportanceAsEmoji(
@@ -126,14 +119,12 @@ class Helper
                     (setting('kassie.calendar.slack_emoji_importance_half', true) ?? ':last_quarter_moon:'),
                     (setting('kassie.calendar.slack_emoji_importance_empty', true)) ?? ':new_moon:'),
             )
-            ->long()
-        ;
+            ->long();
 
-        $fields[] = (new DiscordEmbedField())
+        $fields[] = (new DiscordEmbedField)
             ->name(trans('calendar::seat.tags', locale: setting('kassie.calendar.notify_locale')))
             ->value($op->tags->pluck('name')->join(', ') ?: trans('calendar::seat.unknown'))
-            ->long()
-        ;
+            ->long();
 
         return $fields;
     }
@@ -172,8 +163,7 @@ class Helper
                     $field
                         ->name(trans('calendar::seat.add_to_calendar', locale: setting('kassie.calendar.notify_locale')))
                         ->value('['.$calendarName.']('.$calendarUrl.')');
-                })
-            ;
+                });
 
             if (is_string($op->description) && strlen($op->description) > 0) {
                 $embed->description($op->description);
