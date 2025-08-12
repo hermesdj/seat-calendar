@@ -117,6 +117,7 @@ op_modals.update.on('show.bs.modal', function (e) {
         op_modals.update.find('input[name="fc_character_id"]').val(op.fc_character_id);
         op_modals.update.find('textarea[name="description"]').val(op.description);
         op_modals.update.find('select[name="doctrine_id"]').val(op.doctrine_id);
+        op_modals.update.find('select[name="discord_voice_channel_id"]').val(op.discord_voice_channel_id);
 
         $.each(op.tags, function (i, tag) {
             $('#checkbox-update-' + tag.id).prop('checked', true);

@@ -31,7 +31,7 @@ class SyncFleetPaps extends Command
         $activeOps = $query->get();
 
         if ($activeOps->isEmpty()) {
-            logger()->debug('No active operations found.');
+            logger()->warning('No active operations found.');
         }
 
         $activeOps->each(function ($op) {
@@ -40,13 +40,16 @@ class SyncFleetPaps extends Command
 
                 (new FleetBus($op->id, $token))->fire();
 
-                logger()->debug('Started process paps', [
+                logger()->info('Started process paps', [
                     'operation_id' => $op->id,
                     'flow' => 'character',
                     'token' => $token->character_id,
                 ]);
             } catch (ModelNotFoundException $e) {
-                logger()->warn("Fleet commander is not already linked to SeAT. Unable to PAP the op $op->id.");
+                logger()->warning(
+                    "Fleet commander $op->fc_character_id is not already linked to SeAT. Unable to PAP the op $op->id.",
+                    ['message' => $e->getMessage()]
+                );
             }
         });
     }

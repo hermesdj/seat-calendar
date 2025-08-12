@@ -13,13 +13,7 @@ return new class extends Migration
     {
         Schema::create('calendar_operations', function (Blueprint $table) {
             $table->increments('id');
-
-            if (Schema::hasTable('groups')) {
-                $table->bigInteger('user_id');
-            } else {
-                $table->unsignedInteger('user_id');
-            }
-
+            $table->unsignedInteger('user_id');
             $table->string('title');
             $table->timestamp('start_at')->nullable();
             $table->timestamp('end_at')->nullable();

@@ -17,7 +17,6 @@ class AlterCalendarOperations extends Migration
             $table->string('staging_sys')->nullable();
             $table->integer('staging_sys_id')->nullable();
             $table->string('staging_info')->nullable();
-
         });
 
     }

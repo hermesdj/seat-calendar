@@ -9,7 +9,9 @@ class DiscordAction
 {
     protected string $actionType;
 
-    public function __construct() {}
+    public function __construct()
+    {
+    }
 
     public function setType(string $actionType): DiscordAction
     {
@@ -99,6 +101,8 @@ class DiscordAction
             logger()->debug('Updating guild event');
             $event = GuildEvent::fromOperation($operation);
             DiscordClient::modifyGuildEvent($operation->discord_guild_event_id, $event->toArray());
+        } else {
+            $this->createGuildEvent($operation);
         }
     }
 
@@ -107,7 +111,7 @@ class DiscordAction
      */
     public function createGuildEvent(Operation $operation): void
     {
-        logger()->debug('Creating guild event on discord');
+        logger()->info('Creating guild event on discord for operation', ['operation' => $operation]);
         $event = DiscordClient::createGuildEvent(GuildEvent::fromOperation($operation));
         $operation->discord_guild_event_id = $event->id;
         $operation->save();
@@ -134,12 +138,14 @@ class DiscordAction
                 (new self)
                     ->setType($actionType)
                     ->execute($operation);
-                logger()->debug("call discord action with type $actionType on operation $operation->title");
+                logger()->info("call discord action with type $actionType on operation $operation->title");
             } else {
                 logger()->debug('Discord integration is not activated');
             }
         } catch (DiscordActionException|SettingException $e) {
-            logger()->error('Error guild event on discord '.$e->getMessage());
+            logger()->error('Error guild event on discord ', [
+                'message' => $e->getMessage()
+            ]);
         }
     }
 }

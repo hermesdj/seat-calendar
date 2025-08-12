@@ -4,6 +4,7 @@ namespace Seat\Kassie\Calendar\Discord;
 
 use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Collection;
 use JsonException;
 use Seat\Services\Exceptions\SettingException;
 
@@ -42,7 +43,7 @@ class DiscordClient
      */
     public static function getInstance(): DiscordClient
     {
-        if (! isset(self::$instance)) {
+        if (!isset(self::$instance)) {
             $guildId = setting('kassie.calendar.discord_guild_id', true);
 
             if (is_null($guildId)) {
@@ -80,7 +81,7 @@ class DiscordClient
         $uri = ltrim($endpoint, '/');
 
         foreach ($arguments as $uri_parameter => $value) {
-            if (! str_contains($uri, sprintf('{%s}', $uri_parameter))) {
+            if (!str_contains($uri, sprintf('{%s}', $uri_parameter))) {
                 continue;
             }
 
@@ -127,6 +128,8 @@ class DiscordClient
     {
         try {
             $client = DiscordClient::getInstance();
+
+            logger()->debug('Creating guild event', $event->toArray());
 
             $json = $client->sendCall('POST', '/guilds/{guild.id}/scheduled-events', array_merge_recursive(
                 [
@@ -254,5 +257,34 @@ class DiscordClient
             logger()->error(sprintf('[calendar][discord] %s', $e->getMessage()));
             throw new DiscordActionException('Unable to retrieve guild events', 0, $e);
         }
+    }
+
+
+    public static function getGuildChannels(): Collection
+    {
+        try {
+            $client = DiscordClient::getInstance();
+
+            $channels = $client->sendCall('GET', '/guilds/{guild.id}/channels', [
+                'guild.id' => $client->getGuildId(),
+            ]);
+
+            return collect($channels)->map(function ($c) {
+                return (object)$c;
+            });
+        } catch (GuzzleException|JsonException|DiscordSettingsException|SettingException $e) {
+            logger()->error(sprintf('[calendar][discord] %s', $e->getMessage()));
+            throw new DiscordActionException('Unable to retrieve guild events', 0, $e);
+        }
+    }
+
+    /**
+     * @throws DiscordActionException
+     */
+    public static function getVoiceChannels(): Collection
+    {
+        return self::getGuildChannels()->filter(function ($channel) {
+            return $channel->type == 2;
+        });
     }
 }

@@ -60,4 +60,35 @@
             <button type="submit" class="btn btn-info float-right">{{ trans('calendar::seat.save') }}</button>
         </div>
     </form>
+    <form class="form-horizontal" method="POST" action="{{ route('setting.discord.configure') }}">
+        {{ csrf_field() }}
+        <div class="card-body">
+            <div class="form-group row">
+                <label for="discord_allowed_channels"
+                       class="col-sm-3 col-form-label">{{ trans('calendar::seat.discord_allowed_channels') }}</label>
+                <div class="col-sm-9">
+                    <div class="form-check">
+                        <select
+                                multiple="multiple"
+                                name="discord_allowed_channels[]"
+                                id="discord_allowed_channels"
+                                class="form-control"
+                        >
+                            @foreach($channels->sortBy('name') as $channel)
+                                <option
+                                        value="{{$channel->id}}"
+                                        @if($channel->selected) selected @endif
+                                >
+                                    {{ $channel->name }}
+                                </option>
+                            @endforeach
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="card-footer">
+                <button type="submit" class="btn btn-info float-right">{{ trans('calendar::seat.save') }}</button>
+            </div>
+        </div>
+    </form>
 </div>

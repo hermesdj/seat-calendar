@@ -164,6 +164,11 @@ Route::group([
                 'uses' => 'SettingController@handleDiscordCallback',
             ]);
 
+            Route::post('configure', [
+                'as' => 'setting.discord.configure',
+                'uses' => 'SettingController@configureDiscord',
+            ]);
+
         });
 
         Route::group([

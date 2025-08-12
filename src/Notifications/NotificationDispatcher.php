@@ -94,7 +94,6 @@ class NotificationDispatcher
 
         if ($integrations->isEmpty()) {
             logger()->debug('No integration found');
-
             return;
         }
 

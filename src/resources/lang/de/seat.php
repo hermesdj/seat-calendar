@@ -99,6 +99,7 @@ return [
     'fleet_commander' => 'Fleet Commander',
     'staging_system' => 'Staging System',
     'character' => 'Charakter',
+    'voice_channel' => 'Sprachkanal',
 
     'notification_operation_posted_label' => 'Kalender: Neues Event',
     'notification_operation_activated_label' => 'Kalender: Event begonnen',
@@ -134,6 +135,7 @@ return [
     'discord_client_id' => 'Discord Client Id',
     'discord_client_secret' => 'Discord Client Secret',
     'discord_bot_token' => 'Discord Bot Token',
+    'discord_allowed_channels' => 'Erlaubte Discord-Sprachkanäle',
 
     'warning_no_character' => 'Du kannst bei keinem Event zusagen ohne im SeAT einen Charakter registriert zu haben. Bitte registriere einen Charakter bevor du fortfährst.',
 

@@ -97,6 +97,7 @@ return [
     'staging_info' => 'Информация о сборе',
     'fleet_commander' => 'Флитком',
     'character' => 'Персонаж',
+    'voice_channel' => 'голосовой канал',
 
     'notification_new_operation' => '<!channel> :rocket: Создана новая операция !',
     'notification_edit_operation' => '<!channel> :pencil2: Операция обновлена !',

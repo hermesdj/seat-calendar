@@ -97,6 +97,7 @@ return [
     'staging_info' => '集结信息',
     'fleet_commander' => '舰队指挥',
     'character' => '角色',
+    'voice_channel' => '语音通道',
 
     'notification_new_operation' => '<!channel> :rocket: 一个新的行动被推送！',
     'notification_edit_operation' => '<!channel> :pencil2: 一个行动被编辑了！',

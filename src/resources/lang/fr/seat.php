@@ -100,6 +100,7 @@ return [
     'fleet_commander' => 'Commandant de Flotte',
     'staging_system' => 'Staging System',
     'character' => 'Personnage',
+    'voice_channel' => 'Canal Vocal',
 
     'notification_enable' => 'Notifier sur Slack',
     'integration_channel' => 'Salon d\'intégration',
@@ -140,6 +141,7 @@ return [
     'discord_client_id' => 'Discord Client Id',
     'discord_client_secret' => 'Discord Client Secret',
     'discord_bot_token' => 'Discord Bot Token',
+    'discord_allowed_channels' => 'Canaux Vocaux Autorisés',
 
     'warning_no_character' => 'Vous ne pouvez pas vous abonnez à une opération sans personnage enregistrer dans SeAT. Ajoutez une clé API et réessayer.',
 

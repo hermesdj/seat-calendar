@@ -11,6 +11,8 @@ use Illuminate\Validation\ValidationException;
 use Illuminate\View\View;
 use Seat\Eseye\Exceptions\InvalidContainerDataException;
 use Seat\Kassie\Calendar\Discord\DiscordAction;
+use Seat\Kassie\Calendar\Discord\DiscordActionException;
+use Seat\Kassie\Calendar\Discord\DiscordClient;
 use Seat\Kassie\Calendar\Exceptions\PapsException;
 use Seat\Kassie\Calendar\Helpers\Helper;
 use Seat\Kassie\Calendar\Helpers\SeatFittingPluginHelper;
@@ -39,6 +41,7 @@ class OperationController extends Controller
 
     /**
      * @throws SettingException
+     * @throws DiscordActionException
      */
     public function index(Request $request): Factory|View
     {
@@ -52,7 +55,7 @@ class OperationController extends Controller
 
         if ($main_character != null) {
             $main_character->main = true;
-            $user_characters = $user_characters->reject(fn ($character): bool => $character->character_id == $main_character->character_id);
+            $user_characters = $user_characters->reject(fn($character): bool => $character->character_id == $main_character->character_id);
             $user_characters->prepend($main_character);
         }
 
@@ -62,6 +65,15 @@ class OperationController extends Controller
             $doctrines = SeatFittingPluginHelper::listDoctrines();
         }
 
+        $channels = [];
+
+        if (setting('kassie.calendar.discord_integration', true)) {
+            $allowedChannels = collect(setting('kassie.calendar.discord_allowed_channels', true));
+            $channels = DiscordClient::getVoiceChannels()->filter(function ($channel) use ($allowedChannels) {
+                return $allowedChannels->contains($channel->id);
+            });
+        }
+
         return view('calendar::operation.index', [
             'roles' => $roles,
             'characters' => $user_characters,
@@ -69,6 +81,7 @@ class OperationController extends Controller
             'tags' => $tags,
             'notification_channels' => $notification_channels,
             'doctrines' => $doctrines,
+            'channels' => $channels
         ]);
     }
 
@@ -84,6 +97,7 @@ class OperationController extends Controller
             'time_start' => 'required_without_all:time_start_end|date|after_or_equal:today',
             'time_start_end' => 'required_without_all:time_start',
             'doctrine_id' => 'integer|nullable',
+            'discord_voice_channel_id' => 'string|nullable',
         ]);
 
         $operation = new Operation($request->all());
@@ -100,7 +114,7 @@ class OperationController extends Controller
         if ($request->known_duration == 'no') {
             $operation->start_at = Carbon::parse($request->time_start);
         } else {
-            $dates = explode(' - ', (string) $request->time_start_end);
+            $dates = explode(' - ', (string)$request->time_start_end);
             $operation->start_at = Carbon::parse($dates[0]);
             $operation->end_at = Carbon::parse($dates[1]);
         }
@@ -135,6 +149,8 @@ class OperationController extends Controller
             'known_duration' => 'required',
             'time_start' => 'required_without_all:time_start_end|date|after_or_equal:today',
             'time_start_end' => 'required_without_all:time_start',
+            'doctrine_id' => 'integer|nullable',
+            'discord_voice_channel_id' => 'string|nullable',
         ]);
 
         $operation = Operation::find($request->operation_id);
@@ -158,12 +174,14 @@ class OperationController extends Controller
             $operation->staging_sys_id = $request->staging_sys_id == null ? null : $request->staging_sys_id;
             $operation->fc = $request->fc;
             $operation->fc_character_id = $request->fc_character_id == null ? null : $request->fc_character_id;
+            $operation->doctrine_id = $request->doctrine_id;
+            $operation->discord_voice_channel_id = $request->discord_voice_channel_id;
 
             if ($request->known_duration == 'no') {
                 $operation->start_at = Carbon::parse($request->time_start);
                 $operation->end_at = null;
             } else {
-                $dates = explode(' - ', (string) $request->time_start_end);
+                $dates = explode(' - ', (string)$request->time_start_end);
                 $operation->start_at = Carbon::parse($dates[0]);
                 $operation->end_at = Carbon::parse($dates[1]);
             }
@@ -197,7 +215,7 @@ class OperationController extends Controller
         if (auth()->user()->can('calendar.view')) {
             $operation = Operation::find($operation_id)->load('tags');
 
-            if (! $operation->isUserGranted(auth()->user())) {
+            if (!$operation->isUserGranted(auth()->user())) {
                 return redirect()->back()->with('error', 'You are not granted to this operation !');
             }
 
@@ -214,7 +232,7 @@ class OperationController extends Controller
         $operation = Operation::find($request->operation_id);
 
         if ((auth()->user()->can('calendar.delete_all') || $operation->user->id == auth()->user()->id) && $operation != null) {
-            if (! $operation->isUserGranted(auth()->user())) {
+            if (!$operation->isUserGranted(auth()->user())) {
                 return redirect()->back()->with('error', 'You are not granted to this operation !');
             }
             Operation::destroy($operation->id);
@@ -292,7 +310,7 @@ class OperationController extends Controller
 
         if ($operation != null) {
 
-            if (! $operation->isUserGranted(auth()->user())) {
+            if (!$operation->isUserGranted(auth()->user())) {
                 return redirect()->back()->with('error', 'You are not granted to this operation !');
             }
 
@@ -330,7 +348,7 @@ class OperationController extends Controller
                 ->with('error', 'Unable to retrieve the requested operation.');
         }
 
-        if (! $operation->isUserGranted(auth()->user())) {
+        if (!$operation->isUserGranted(auth()->user())) {
             return redirect()->back()->with('error', 'You are not granted to this operation !');
         }
 
@@ -340,7 +358,7 @@ class OperationController extends Controller
                 ->with('error', 'No fleet commander has been set for this operation.');
         }
 
-        if (! in_array($operation->fc_character_id, auth()->user()->associatedCharacterIds())) {
+        if (!in_array($operation->fc_character_id, auth()->user()->associatedCharacterIds())) {
             return redirect()
                 ->back()
                 ->with('error', 'You are not the fleet commander or wrong character has been set.');

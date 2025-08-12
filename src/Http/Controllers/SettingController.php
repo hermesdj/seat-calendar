@@ -7,6 +7,8 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Log;
 use Illuminate\View\View;
 use Laravel\Socialite\Facades\Socialite;
+use Seat\Kassie\Calendar\Discord\DiscordActionException;
+use Seat\Kassie\Calendar\Discord\DiscordClient;
 use Seat\Kassie\Calendar\Helpers\Helper;
 use Seat\Kassie\Calendar\Http\Validation\SettingsValidation;
 use Seat\Kassie\Calendar\Models\Tag;
@@ -27,18 +29,36 @@ class SettingController extends Controller
     final public const DISCORD_BOT_PERMISSIONS = [
         'MANAGE_EVENTS' => 0x200000000,
         'CREATE_EVENTS' => 0x100000000000,
+        'CONNECT' => 0x0000000000100000,
+        'VIEW_CHANNEL' => 0x0000000000000400
     ];
 
+    /**
+     * @throws DiscordActionException
+     * @throws SettingException
+     */
     public function index(): Factory|View
     {
         $tags = Tag::all();
         $integrations = Integration::all();
         $languages = config('calendar.locale.languages');
 
+        $channels = [];
+
+        if (setting('kassie.calendar.discord_integration', true)) {
+            $channels = DiscordClient::getVoiceChannels();
+        }
+
+        $allowedChannels = collect(setting('kassie.calendar.discord_allowed_channels', true));
+
         return view('calendar::setting.index', [
             'tags' => $tags,
             'integrations' => $integrations,
             'languages' => $languages,
+            'channels' => $channels->map(function ($channel) use ($allowedChannels) {
+                $channel->selected = $allowedChannels->contains($channel->id);
+                return $channel;
+            })
         ]);
     }
 
@@ -62,10 +82,10 @@ class SettingController extends Controller
      */
     public function updateDiscord(SettingsValidation $request): RedirectResponse
     {
-        setting(['kassie.calendar.discord_integration', (bool) $request->input('discord_integration')], true);
-        setting(['kassie.calendar.discord_client_id', (string) $request->input('discord_client_id')], true);
-        setting(['kassie.calendar.discord_client_secret', (string) $request->input('discord_client_secret')], true);
-        setting(['kassie.calendar.discord_bot_token', (string) $request->input('discord_bot_token')], true);
+        setting(['kassie.calendar.discord_integration', (bool)$request->input('discord_integration')], true);
+        setting(['kassie.calendar.discord_client_id', (string)$request->input('discord_client_id')], true);
+        setting(['kassie.calendar.discord_client_secret', (string)$request->input('discord_client_secret')], true);
+        setting(['kassie.calendar.discord_bot_token', (string)$request->input('discord_bot_token')], true);
 
         if (setting('kassie.calendar.discord_integration', true)) {
             $redirect_uri = route('setting.discord.registration.callback');
@@ -79,6 +99,14 @@ class SettingController extends Controller
                 ->setScopes(self::DISCORD_SCOPES)
                 ->redirect();
         }
+
+        return redirect()->route('setting.index')
+            ->with('success', trans('calendar::notifications.discord_settings_updated'));
+    }
+
+    public function configureDiscord(SettingsValidation $request): RedirectResponse
+    {
+        setting(['kassie.calendar.discord_allowed_channels', $request['discord_allowed_channels']], true);
 
         return redirect()->route('setting.index')
             ->with('success', trans('calendar::notifications.discord_settings_updated'));

@@ -2,6 +2,7 @@
 
 namespace Seat\Kassie\Calendar\Discord;
 
+use Illuminate\Support\Str;
 use Seat\Kassie\Calendar\Models\Operation;
 
 class GuildEvent
@@ -24,35 +25,46 @@ class GuildEvent
     public static function fromOperation(Operation $operation): GuildEvent
     {
         $event = new GuildEvent;
+
+        if ($operation->discord_guild_event_id != null) {
+            $event->set([
+                'id' => $operation->discord_guild_event_id,
+            ]);
+        }
+
+        if ($operation->discord_voice_channel_id != null) {
+            $event->set([
+                'channel_id' => $operation->discord_voice_channel_id,
+                'entity_type' => 2,
+                'entity_metadata' => null,
+            ]);
+        } else {
+            $event->set([
+                'entity_type' => 3,
+                'entity_metadata' => [
+                    'location' => url('/calendar/operation', [$operation->id]),
+                ],
+            ]);
+        }
+
         $event->set([
-            'id' => $operation->discord_guild_event_id ?: null,
-            'entity_metadata' => [
-                'location' => url('/calendar/operation', [$operation->id]),
-            ],
-            'name' => $operation->title,
+            'name' => Str::limit($operation->title, 100, '(...)'),
             'privacy_level' => 2, // GUILD MEMBERS ONLY
             'scheduled_start_time' => $operation->start_at,
-            'scheduled_end_time' => $operation->end_at,
-            'description' => $operation->description,
-            'entity_type' => 3, // EXTERNAL
+            'description' => Str::limit($operation->description, 800, '(...)') . '\n' . url('/calendar/operation', [$operation->id]),
         ]);
+
+        if ($operation->end_at != null) {
+            $event->set([
+                'scheduled_end_time' => $operation->end_at,
+            ]);
+        }
 
         return $event;
     }
 
     public function toArray(): array
     {
-        return [
-            'id' => $this->id,
-            'entity_metadata' => [
-                'location' => $this->entity_metadata['location'],
-            ],
-            'name' => $this->name,
-            'privacy_level' => $this->privacy_level,
-            'scheduled_start_time' => $this->scheduled_start_time,
-            'scheduled_end_time' => $this->scheduled_end_time,
-            'description' => $this->description,
-            'entity_type' => $this->entity_type,
-        ];
+        return (array)$this;
     }
 }

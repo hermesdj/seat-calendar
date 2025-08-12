@@ -99,6 +99,7 @@ return [
     'fleet_commander' => 'Fleet Commander',
     'staging_system' => 'Staging System',
     'character' => 'Character',
+    'voice_channel' => 'Voice Channel',
 
     'notification_operation_posted_label' => 'Calendar: New Operation',
     'notification_operation_activated_label' => 'Calendar: Operation Activated',
@@ -134,6 +135,7 @@ return [
     'discord_client_id' => 'Discord Client Id',
     'discord_client_secret' => 'Discord Client Secret',
     'discord_bot_token' => 'Discord Bot Token',
+    'discord_allowed_channels' => 'Allowed Discord Voice Channels',
 
     'warning_no_character' => "You can't subscribe to an operation without any character registered in SeAT. Please add an API Key and retry.",
 

@@ -90,7 +90,8 @@
                     </div>
                     {{-- Operation starts --}}
                     <div class="form-group row datepicker d-none">
-                        <label for="time_start" class="col-sm-3 col-form-label">{{ trans('calendar::seat.starts_at') }} ({{ trans('calendar::seat.eve_time') }})
+                        <label for="time_start" class="col-sm-3 col-form-label">{{ trans('calendar::seat.starts_at') }}
+                            ({{ trans('calendar::seat.eve_time') }})
                             <span class="text-danger">*</span>
                         </label>
                         <div class="col-sm-9">
@@ -100,7 +101,8 @@
                     {{-- Operation duration --}}
                     <div class="form-group row datepicker">
                         <label for="time_start_end"
-                               class="col-sm-3 col-form-label">{{ trans('calendar::seat.duration') }} ({{ trans('calendar::seat.eve_time') }})
+                               class="col-sm-3 col-form-label">{{ trans('calendar::seat.duration') }}
+                            ({{ trans('calendar::seat.eve_time') }})
                             <span class="text-danger">*</span>
                         </label>
                         <div class="col-sm-9">
@@ -145,7 +147,29 @@
                                 <select name="doctrine_id" class="form-control" id="doctrine_id">
                                     @foreach($doctrines as $doctrine)
                                         <option value="">-</option>
-                                        <option value="{{$doctrine->id}}">{{$doctrine->name}}</option>
+                                        <option
+                                                value="{{$doctrine->id}}"
+                                        >
+                                            {{$doctrine->name}}
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+                    @endif
+                    @if($channels->isNotEmpty())
+                        <div class="form-group row">
+                            <label class="col-sm-3 col-form-label"
+                                   for="discord_voice_channel_id">{{ trans('calendar::seat.voice_channel') }}</label>
+                            <div class="col-sm-9">
+                                <select name="discord_voice_channel_id" class="form-control" id="discord_voice_channel_id">
+                                    <option value="" selected>-</option>
+                                    @foreach($channels->sortBy('name') as $channel)
+                                        <option
+                                                value="{{$channel->id}}"
+                                        >
+                                            {{$channel->name}}
+                                        </option>
                                     @endforeach
                                 </select>
                             </div>
