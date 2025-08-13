@@ -27,9 +27,9 @@ class ScheduleSeeder extends Seeder
             'ping_after' => null,
         ],
         [
-            // Sync discord participation every 2 hours 15 minutes
+            // Sync discord participation every 10 minutes
             'command' => 'calendar:discord:sync',
-            'expression' => '15 */2 * * *',
+            'expression' => '*/10 * * * *',
             'allow_overlap' => false,
             'allow_maintenance' => false,
             'ping_before' => null,
