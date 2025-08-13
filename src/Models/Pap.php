@@ -71,7 +71,7 @@ class Pap extends Model
             $this->setAttribute('year', $dt->year);
         }
 
-        return parent::save($options);
+        return parent::save();
     }
 
     public function character(): HasOne
