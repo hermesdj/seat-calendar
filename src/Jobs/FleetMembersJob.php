@@ -54,7 +54,7 @@ class FleetMembersJob extends AbstractAuthCharacterJob
             collect($members)->each(function ($member) use ($value) {
                 $dt = carbon($member->join_time);
 
-                Pap::firstOrCreate([
+                Pap::updateOrCreate([
                     'character_id' => $member->character_id,
                     'operation_id' => $this->operation_id,
                 ], [
