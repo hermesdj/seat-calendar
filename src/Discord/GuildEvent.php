@@ -37,7 +37,7 @@ class GuildEvent
                 'channel_id' => $operation->discord_voice_channel_id,
                 'entity_type' => 2,
                 'entity_metadata' => null,
-                'description' => Str::limit($operation->description, 800, '(...)') . ' ' . url('/calendar/operation', [$operation->id]),
+                'description' => Str::limit($operation->description, 800, '(...)').' '.url('/calendar/operation', [$operation->id]),
             ]);
         } else {
             $event->set([
@@ -52,7 +52,7 @@ class GuildEvent
         $event->set([
             'name' => Str::limit($operation->title, 100, '(...)'),
             'privacy_level' => 2, // GUILD MEMBERS ONLY
-            'scheduled_start_time' => $operation->start_at
+            'scheduled_start_time' => $operation->start_at,
         ]);
 
         if ($operation->end_at != null) {
@@ -66,6 +66,6 @@ class GuildEvent
 
     public function toArray(): array
     {
-        return (array)$this;
+        return (array) $this;
     }
 }
