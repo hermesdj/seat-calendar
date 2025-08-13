@@ -15,6 +15,11 @@ class OperationObserver
         DiscordAction::syncWithDiscord('created', $operation);
     }
 
+    public function updated(Operation $operation): void
+    {
+        DiscordAction::syncWithDiscord('updated', $operation);
+    }
+
     public function deleted(Operation $operation): void
     {
         DiscordAction::syncWithDiscord('deleted', $operation);

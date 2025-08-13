@@ -45,16 +45,16 @@ class RemindOperation extends Command
 
         $allOps = collect();
 
+        logger()->info("Search for operations to remind");
+
         foreach ($marks as $mark) {
-            logger()->debug("Remind operation on mark $mark");
             // This is ran every minutes so it will trigger only when the correct mark is reached for an operation
             $when = Carbon::now('UTC')->floorMinute()->addMinutes($mark);
             $ops = Operation::where('is_cancelled', false)
                 ->where('start_at', $when)
                 ->get();
 
-            if (! $ops->isEmpty()) {
-                logger()->info("Found $ops->count() operations to remind");
+            if (!$ops->isEmpty()) {
                 foreach ($ops as $op) {
                     if (! $allOps->has($op->id)) {
                         $allOps->put($op->id, $op);
@@ -63,9 +63,11 @@ class RemindOperation extends Command
             }
         }
 
-        if (! $allOps->isEmpty()) {
-            logger()->info("Reminding $allOps->count() operations");
+        if (!$allOps->isEmpty()) {
+            logger()->info("Found at least one operation to remind");
             NotificationDispatcher::dispatchOperationsPinged($allOps);
+        } else {
+            logger()->info("Found no operations to remind");
         }
     }
 }
