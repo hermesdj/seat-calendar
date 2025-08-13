@@ -53,7 +53,6 @@ class Pap extends Model
 
     public function save(array $options = []): bool
     {
-        logger()->debug('Saving Pap record with options', $options);
         $operation = Operation::find($this->getAttributeValue('operation_id'));
 
         if (is_null($this->getAttributeValue('value'))) {
@@ -71,7 +70,7 @@ class Pap extends Model
             $this->setAttribute('year', $dt->year);
         }
 
-        logger()->debug('Saving Pap record', $this->getAttributes());
+        logger()->info('Saving Pap record', $this->getAttributes());
 
         return parent::save($options);
     }
