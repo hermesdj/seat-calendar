@@ -51,30 +51,6 @@ class Pap extends Model
         'operation_id', 'character_id', 'ship_type_id', 'join_time', 'value',
     ];
 
-    public function save(array $options = []): bool
-    {
-        $operation = Operation::find($this->getAttributeValue('operation_id'));
-
-        if (is_null($this->getAttributeValue('value'))) {
-            $this->setAttribute('value', 0);
-        }
-
-        if (! is_null($operation) && $operation->tags->count() > 0) {
-            $this->setAttribute('value', $operation->tags->max('quantifier'));
-        }
-
-        if (array_key_exists('join_time', $this->attributes)) {
-            $dt = carbon($this->getAttributeValue('join_time'));
-            $this->setAttribute('week', $dt->weekOfMonth);
-            $this->setAttribute('month', $dt->month);
-            $this->setAttribute('year', $dt->year);
-        }
-
-        logger()->info('Saving Pap record', $this->getAttributes());
-
-        return parent::save($options);
-    }
-
     public function character(): HasOne
     {
         return $this->hasOne(CharacterInfo::class, 'character_id', 'character_id')
