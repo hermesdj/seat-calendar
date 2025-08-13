@@ -36,7 +36,7 @@ class FleetMembersJob extends AbstractAuthCharacterJob
             ->where('fleet_commander_id', $this->getCharacterId())
             ->first();
 
-        if (!is_null($fleet)) {
+        if (! is_null($fleet)) {
             $response = $this->retrieve([
                 'fleet_id' => $fleet->fleet_id,
             ]);
@@ -47,7 +47,7 @@ class FleetMembersJob extends AbstractAuthCharacterJob
 
             $value = 0;
 
-            if (!is_null($op) && $op->tags->count() > 0) {
+            if (! is_null($op) && $op->tags->count() > 0) {
                 $value = $op->tags->max('quantifier');
             }
 
