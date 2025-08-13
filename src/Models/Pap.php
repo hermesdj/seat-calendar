@@ -55,7 +55,7 @@ class Pap extends Model
         'value',
         'week',
         'month',
-        'year'
+        'year',
     ];
 
     public function character(): HasOne
