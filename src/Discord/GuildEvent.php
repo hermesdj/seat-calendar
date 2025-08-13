@@ -38,7 +38,7 @@ class GuildEvent
                 'channel_id' => $operation->discord_voice_channel_id,
                 'entity_type' => 2,
                 'entity_metadata' => null,
-                'description' => Str::limit($operation->description, 800, '(...)') . ' ' . url('/calendar/operation', [$operation->id]),
+                'description' => Str::limit($operation->description, 800, '(...)').' '.url('/calendar/operation', [$operation->id]),
             ]);
         } else {
             $event->set([
@@ -52,15 +52,15 @@ class GuildEvent
 
         $now = Carbon::now('UTC');
         $startAt = Carbon::parse($operation->start_at);
-        logger()->info("$startAt is before $now ? " . $startAt->isBefore($now));
+        logger()->info("$startAt is before $now ? ".$startAt->isBefore($now));
 
         if ($startAt->isBefore($now)) {
             $event->set([
-                'scheduled_start_time' => $now->addMinutes(1)->toDateTimeString()
+                'scheduled_start_time' => $now->addMinutes(1)->toDateTimeString(),
             ]);
         } else {
             $event->set([
-                'scheduled_start_time' => $startAt->toDateTimeString()
+                'scheduled_start_time' => $startAt->toDateTimeString(),
             ]);
         }
 
@@ -80,6 +80,6 @@ class GuildEvent
 
     public function toArray(): array
     {
-        return (array)$this;
+        return (array) $this;
     }
 }
