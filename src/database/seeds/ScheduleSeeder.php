@@ -18,9 +18,9 @@ class ScheduleSeeder extends Seeder
             'ping_after' => null,
         ],
         [
-            // Sync active operations participation every 15 minutes
+            // Sync active operations participation every 5 minutes
             'command' => 'calendar:paps:sync',
-            'expression' => '*/15 * * * *',
+            'expression' => '*/5 * * * *',
             'allow_overlap' => false,
             'allow_maintenance' => false,
             'ping_before' => null,

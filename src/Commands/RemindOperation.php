@@ -4,7 +4,6 @@ namespace Seat\Kassie\Calendar\Commands;
 
 use Carbon\Carbon;
 use Illuminate\Console\Command;
-use Illuminate\Support\Collection;
 use Seat\Kassie\Calendar\Models\Operation;
 use Seat\Kassie\Calendar\Notifications\NotificationDispatcher;
 use Seat\Notifications\Traits\NotificationDispatchTool;
@@ -44,25 +43,28 @@ class RemindOperation extends Command
         $marks = explode(',', $configured_marks);
         rsort($marks);
 
-        $allOps = new Collection;
+        $allOps = collect();
 
         foreach ($marks as $mark) {
+            logger()->debug("Remind operation on mark $mark");
             // This is ran every minutes so it will trigger only when the correct mark is reached for an operation
             $when = Carbon::now('UTC')->floorMinute()->addMinutes($mark);
             $ops = Operation::where('is_cancelled', false)
                 ->where('start_at', $when)
                 ->get();
 
-            if (! $ops->isEmpty()) {
+            if (!$ops->isEmpty()) {
+                logger()->info("Found $ops->count() operations to remind");
                 foreach ($ops as $op) {
-                    if (! $allOps->has($op->id)) {
+                    if (!$allOps->has($op->id)) {
                         $allOps->put($op->id, $op);
                     }
                 }
             }
         }
 
-        if (! $allOps->isEmpty()) {
+        if (!$allOps->isEmpty()) {
+            logger()->info("Reminding $allOps->count() operations");
             NotificationDispatcher::dispatchOperationsPinged($allOps);
         }
     }

@@ -18,7 +18,7 @@ class FleetBus extends Bus
 
     public function __construct(int $operation_id, RefreshToken $token)
     {
-        parent::__construct();
+        parent::__construct($token);
         $this->token = $token;
         $this->operation_id = $operation_id;
     }

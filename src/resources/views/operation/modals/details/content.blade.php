@@ -103,7 +103,11 @@
 <div class="row">
     <div class="col-12">
         @if($op->description)
-            <blockquote class="quote-secondary">{!! $op->parsed_description !!}</blockquote>
+            @if(class_exists(s9e\TextFormatter\Bundles\Forum::class))
+                <blockquote class="quote-secondary">{!! $op->getParsedDescriptionAttribute() !!}</blockquote>
+            @else
+                <blockquote class="quote-secondary">{{ $op->description ?: $op->description_new }}</blockquote>
+            @endif
         @else
             <blockquote class="quote-secondary">{{ trans('calendar::seat.unknown') }}</blockquote>
         @endif

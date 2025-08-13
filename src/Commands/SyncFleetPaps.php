@@ -38,13 +38,17 @@ class SyncFleetPaps extends Command
             try {
                 $token = RefreshToken::findOrFail($op->fc_character_id);
 
-                (new FleetBus($op->id, $token))->fire();
+                if (!$token) {
+                    logger()->warning('Refresh token not found.');
+                } else {
+                    (new FleetBus($op->id, $token))->fire();
 
-                logger()->info('Started process paps', [
-                    'operation_id' => $op->id,
-                    'flow' => 'character',
-                    'token' => $token->character_id,
-                ]);
+                    logger()->info('Started process paps', [
+                        'operation_id' => $op->id,
+                        'flow' => 'character',
+                        'token' => $token->character_id,
+                    ]);
+                }
             } catch (ModelNotFoundException $e) {
                 logger()->warning(
                     "Fleet commander $op->fc_character_id is not already linked to SeAT. Unable to PAP the op $op->id.",

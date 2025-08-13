@@ -42,7 +42,7 @@ class NotificationDispatcher
 
     public static function dispatchOperationsPinged(Collection $operations): void
     {
-        foreach ($operations as $operation) {
+        foreach ($operations->all() as $operation) {
             self::dispatch('seat_calendar_operation_pinged', $operation);
         }
     }
@@ -67,7 +67,7 @@ class NotificationDispatcher
 
         $integrations = self::mapGroups($groups);
 
-        $allowedIntegrationIds = new Collection;
+        $allowedIntegrationIds = collect();
 
         if ($operation->tags->isEmpty()) {
             logger()->debug('No tags found');
@@ -113,11 +113,11 @@ class NotificationDispatcher
     {
         return $groups->map(function ($group) {
             return $group->integrations->map(function ($channel) use ($group) {
-                $setting = (array) $channel->settings;
+                $setting = (array)$channel->settings;
                 $key = array_key_first($setting);
                 $route = $setting[$key];
 
-                return (object) [
+                return (object)[
                     'id' => $channel->id,
                     'channel' => $channel->type,
                     'route' => $route,

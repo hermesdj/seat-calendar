@@ -53,14 +53,14 @@ class Pap extends Model
 
     public function save(array $options = []): bool
     {
-
+        logger()->debug("Saving Pap record with options " . json_encode($options));
         $operation = Operation::find($this->getAttributeValue('operation_id'));
 
         if (is_null($this->getAttributeValue('value'))) {
             $this->setAttribute('value', 0);
         }
 
-        if (! is_null($operation) && $operation->tags->count() > 0) {
+        if (!is_null($operation) && $operation->tags->count() > 0) {
             $this->setAttribute('value', $operation->tags->max('quantifier'));
         }
 

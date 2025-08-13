@@ -14,9 +14,10 @@ Calendar plugin for EVE SeAT
 * SeAT Notifications integration (slack & discord)
 * Permissions
 * Sync with discord event and sync discord event participants to the calendar op (only work for main characters)
-* Auto sync paps from fleet members ingame every 15 minutes (only if the fleet commander is registered on SeAT and his
-  token is working)
-* Doctrine support if you install https://github.com/hermesdj/seat-fitting/releases. Since 1.0.6, the plugin also supports the official version https://github.com/eveseat-plugins/seat-fitting 5.0.8+
+* Auto sync paps from fleet members ingame every 5 minutes (only if the fleet boss is registered on SeAT and his
+  token is working). The Operation Fleet Commander **must be** fleet boss for this to work !
+* Can configure a discord voice channel to use in fleet, this will create an event on discord in this channel, and only people that can connect to the channel will see the event.
+* Doctrine support if you install https://github.com/eveseat-plugins/seat-fitting 5.0.8+
 
 # Known limitations
 
