@@ -9,9 +9,7 @@ class DiscordAction
 {
     protected string $actionType;
 
-    public function __construct()
-    {
-    }
+    public function __construct() {}
 
     public function setType(string $actionType): DiscordAction
     {
@@ -144,7 +142,7 @@ class DiscordAction
             }
         } catch (DiscordActionException|SettingException $e) {
             logger()->error('Error guild event on discord ', [
-                'message' => $e->getMessage()
+                'message' => $e->getMessage(),
             ]);
         }
     }

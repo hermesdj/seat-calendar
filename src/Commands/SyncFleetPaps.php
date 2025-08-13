@@ -38,7 +38,7 @@ class SyncFleetPaps extends Command
             try {
                 $token = RefreshToken::findOrFail($op->fc_character_id);
 
-                if (!$token) {
+                if (! $token) {
                     logger()->warning('Refresh token not found.');
                 } else {
                     (new FleetBus($op->id, $token))->fire();

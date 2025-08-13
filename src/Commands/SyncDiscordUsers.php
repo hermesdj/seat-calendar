@@ -42,10 +42,11 @@ class SyncDiscordUsers extends Command
                 $users = [];
 
                 if (count($guildEventUsers) === 0) {
-                    logger()->info('No users participating on discord for op ' . $op->id);
+                    logger()->info('No users participating on discord for op '.$op->id);
+
                     continue;
                 } else {
-                    logger()->info("Found " . count($guildEventUsers) . " users participating on discord for op $op->id");
+                    logger()->info('Found '.count($guildEventUsers)." users participating on discord for op $op->id");
                 }
 
                 foreach ($guildEventUsers as $user) {
@@ -58,10 +59,10 @@ class SyncDiscordUsers extends Command
                         ->where('connector_id', $userId)
                         ->first();
 
-                    if (!is_null($connectorUser)) {
+                    if (! is_null($connectorUser)) {
                         $seatUser = \Seat\Web\Models\User::find($connectorUser->user_id);
 
-                        if (!is_null($seatUser)) {
+                        if (! is_null($seatUser)) {
                             $users[] = [
                                 'guildUser' => $user,
                                 'seatUser' => $seatUser,
@@ -103,7 +104,7 @@ class SyncDiscordUsers extends Command
                     );
                 }
             } catch (DiscordActionException $e) {
-                logger()->warning('Discord action failed: ' . $e->getMessage());
+                logger()->warning('Discord action failed: '.$e->getMessage());
             }
         }
     }

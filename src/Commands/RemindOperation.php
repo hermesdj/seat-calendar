@@ -53,17 +53,17 @@ class RemindOperation extends Command
                 ->where('start_at', $when)
                 ->get();
 
-            if (!$ops->isEmpty()) {
+            if (! $ops->isEmpty()) {
                 logger()->info("Found $ops->count() operations to remind");
                 foreach ($ops as $op) {
-                    if (!$allOps->has($op->id)) {
+                    if (! $allOps->has($op->id)) {
                         $allOps->put($op->id, $op);
                     }
                 }
             }
         }
 
-        if (!$allOps->isEmpty()) {
+        if (! $allOps->isEmpty()) {
             logger()->info("Reminding $allOps->count() operations");
             NotificationDispatcher::dispatchOperationsPinged($allOps);
         }

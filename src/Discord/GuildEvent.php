@@ -51,7 +51,7 @@ class GuildEvent
             'name' => Str::limit($operation->title, 100, '(...)'),
             'privacy_level' => 2, // GUILD MEMBERS ONLY
             'scheduled_start_time' => $operation->start_at,
-            'description' => Str::limit($operation->description, 800, '(...)') . '\n' . url('/calendar/operation', [$operation->id]),
+            'description' => Str::limit($operation->description, 800, '(...)').'\n'.url('/calendar/operation', [$operation->id]),
         ]);
 
         if ($operation->end_at != null) {
@@ -65,6 +65,6 @@ class GuildEvent
 
     public function toArray(): array
     {
-        return (array)$this;
+        return (array) $this;
     }
 }

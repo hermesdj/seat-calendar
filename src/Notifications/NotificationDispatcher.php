@@ -94,6 +94,7 @@ class NotificationDispatcher
 
         if ($integrations->isEmpty()) {
             logger()->debug('No integration found');
+
             return;
         }
 
@@ -113,11 +114,11 @@ class NotificationDispatcher
     {
         return $groups->map(function ($group) {
             return $group->integrations->map(function ($channel) use ($group) {
-                $setting = (array)$channel->settings;
+                $setting = (array) $channel->settings;
                 $key = array_key_first($setting);
                 $route = $setting[$key];
 
-                return (object)[
+                return (object) [
                     'id' => $channel->id,
                     'channel' => $channel->type,
                     'route' => $route,
