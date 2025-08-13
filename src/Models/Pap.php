@@ -48,7 +48,14 @@ class Pap extends Model
      * @var array
      */
     protected $fillable = [
-        'operation_id', 'character_id', 'ship_type_id', 'join_time', 'value',
+        'operation_id',
+        'character_id',
+        'ship_type_id',
+        'join_time',
+        'value',
+        'week',
+        'month',
+        'year'
     ];
 
     public function character(): HasOne
