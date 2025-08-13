@@ -43,7 +43,7 @@ class FleetMembersJob extends AbstractAuthCharacterJob
             $members = $response->getBody();
 
             collect($members)->each(function ($member) {
-                logger()->debug('Collected member data', $member);
+                logger()->info("Collected member data", (array) $member);
                 $pap = Pap::firstOrCreate([
                     'character_id' => $member->character_id,
                     'operation_id' => $this->operation_id,
