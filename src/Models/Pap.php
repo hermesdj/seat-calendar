@@ -60,7 +60,7 @@ class Pap extends Model
             $this->setAttribute('value', 0);
         }
 
-        if (! is_null($operation) && $operation->tags->count() > 0) {
+        if (!is_null($operation) && $operation->tags->count() > 0) {
             $this->setAttribute('value', $operation->tags->max('quantifier'));
         }
 
@@ -73,7 +73,7 @@ class Pap extends Model
 
         logger()->debug('Saving Pap record', $this->getAttributes());
 
-        return parent::save();
+        return parent::save($options);
     }
 
     public function character(): HasOne
