@@ -129,6 +129,8 @@ class OperationController extends Controller
 
         $operation->doctrine_id = ($request->get('doctrine_id') == '') ? null : $request->get('doctrine_id');
 
+        $operation->discord_voice_channel_id = ($request->get('discord_voice_channel_id') == '') ? null : $request->get('discord_voice_channel_id');
+
         $operation->user()->associate(auth()->user());
 
         $operation->save();
