@@ -43,7 +43,7 @@ class DiscordClient
      */
     public static function getInstance(): DiscordClient
     {
-        if (!isset(self::$instance)) {
+        if (! isset(self::$instance)) {
             $guildId = setting('kassie.calendar.discord_guild_id', true);
 
             if (is_null($guildId)) {
@@ -81,7 +81,7 @@ class DiscordClient
         $uri = ltrim($endpoint, '/');
 
         foreach ($arguments as $uri_parameter => $value) {
-            if (!str_contains($uri, sprintf('{%s}', $uri_parameter))) {
+            if (! str_contains($uri, sprintf('{%s}', $uri_parameter))) {
                 continue;
             }
 
@@ -269,7 +269,7 @@ class DiscordClient
             ]);
 
             return collect($channels)->map(function ($c) {
-                return (object)$c;
+                return (object) $c;
             });
         } catch (GuzzleException|JsonException|DiscordSettingsException|SettingException $e) {
             logger()->error(sprintf('[calendar][discord] %s', $e->getMessage()));

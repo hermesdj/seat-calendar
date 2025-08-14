@@ -83,10 +83,10 @@ class SettingController extends Controller
      */
     public function updateDiscord(SettingsValidation $request): RedirectResponse
     {
-        setting(['kassie.calendar.discord_integration', (bool)$request->input('discord_integration')], true);
-        setting(['kassie.calendar.discord_client_id', (string)$request->input('discord_client_id')], true);
-        setting(['kassie.calendar.discord_client_secret', (string)$request->input('discord_client_secret')], true);
-        setting(['kassie.calendar.discord_bot_token', (string)$request->input('discord_bot_token')], true);
+        setting(['kassie.calendar.discord_integration', (bool) $request->input('discord_integration')], true);
+        setting(['kassie.calendar.discord_client_id', (string) $request->input('discord_client_id')], true);
+        setting(['kassie.calendar.discord_client_secret', (string) $request->input('discord_client_secret')], true);
+        setting(['kassie.calendar.discord_bot_token', (string) $request->input('discord_bot_token')], true);
 
         if (setting('kassie.calendar.discord_integration', true)) {
             $redirect_uri = route('setting.discord.registration.callback');
