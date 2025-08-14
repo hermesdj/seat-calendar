@@ -59,13 +59,13 @@ class OperationController extends Controller
             $user_characters->prepend($main_character);
         }
 
-        $doctrines = [];
+        $doctrines = collect();
 
         if (SeatFittingPluginHelper::pluginIsAvailable()) {
             $doctrines = SeatFittingPluginHelper::listDoctrines();
         }
 
-        $channels = [];
+        $channels = collect();
 
         if (setting('kassie.calendar.discord_integration', true)) {
             $allowedChannels = collect(setting('kassie.calendar.discord_allowed_channels', true));
