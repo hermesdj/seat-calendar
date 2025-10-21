@@ -28,7 +28,7 @@
                                    placeholder="{{ trans('calendar::seat.placeholder_title') }}">
                         </div>
                     </div>
-                    @if(auth()->user()->cannot('calendar.prevent_op_role_restriction'))
+                    @if(auth()->user()->can('calendar.allow_op_role_restriction'))
                         {{-- Operation role restriction --}}
                         <div class="form-group row">
                             <label for="update_operation_role"
@@ -43,7 +43,7 @@
                             </div>
                         </div>
                     @endif
-                    @if(auth()->user()->cannot('calendar.prevent_op_importance'))
+                    @if(auth()->user()->can('calendar.allow_op_importance'))
                         {{-- Operation importance --}}
                         <div class="form-group row">
                             <label for="importance"
