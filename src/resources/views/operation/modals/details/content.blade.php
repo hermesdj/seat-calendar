@@ -33,6 +33,11 @@
             </li>
 
             <li class="list-group-item">
+                <b>{{ trans('calendar::seat.op_creator') }}</b> :
+                @include('calendar::operation.partials.user', ['op' => $op])
+            </li>
+
+            <li class="list-group-item">
                 <b>{{ trans('calendar::seat.fleet_commander') }}</b> :
                 @if($op->fc)
                     @include('calendar::operation.partials.fleet_commander')

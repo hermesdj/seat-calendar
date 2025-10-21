@@ -186,4 +186,6 @@ return [
 
     'doctrines' => 'Doctrine',
     'track_fleet' => 'Suivre la flotte (ESI)',
+
+    'help_general_config' => 'Configurer les paramètres généraux'
 ];

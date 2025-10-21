@@ -76,7 +76,7 @@ class Helper
                 $startTranslation,
                 trans('calendar::seat.local_time', locale: setting('kassie.calendar.notify_locale')),
             ))
-            ->value('<t:'.$op->start_at->getTimestamp().':F>')
+            ->value('<t:' . $op->start_at->getTimestamp() . ':F>')
             ->long();
 
         $fields[] = (new DiscordEmbedField)
@@ -105,7 +105,7 @@ class Helper
 
                 $fields[] = (new DiscordEmbedField)
                     ->name(trans('calendar::seat.doctrines', locale: setting('kassie.calendar.notify_locale')))
-                    ->value('['.$doctrine->name.']('.$doctrineUrl.')')
+                    ->value('[' . $doctrine->name . '](' . $doctrineUrl . ')')
                     ->long();
             }
         }
@@ -142,9 +142,9 @@ class Helper
                 ->field(function (SlackAttachmentField $field) use ($calendarName, $calendarUrl) {
                     $field
                         ->title(trans('calendar::seat.add_to_calendar', locale: setting('kassie.calendar.notify_locale')))
-                        ->content('<'.$calendarUrl.'|'.$calendarName.'>');
+                        ->content('<' . $calendarUrl . '|' . $calendarName . '>');
                 })
-                ->footer(trans('calendar::seat.created_by').' '.$op->user->name)
+                ->footer(trans('calendar::seat.created_by') . ' ' . $op->user->name)
                 ->markdown(['fields']);
         };
     }
@@ -162,8 +162,12 @@ class Helper
                 ->field(function (DiscordEmbedField $field) use ($calendarName, $calendarUrl): void {
                     $field
                         ->name(trans('calendar::seat.add_to_calendar', locale: setting('kassie.calendar.notify_locale')))
-                        ->value('['.$calendarName.']('.$calendarUrl.')');
+                        ->value('[' . $calendarName . '](' . $calendarUrl . ')');
                 });
+
+            if ($op->user && $op->user->main_character) {
+                $embed->author($op->user->main_character->name);
+            }
 
             if (is_string($op->description) && strlen($op->description) > 0) {
                 $embed->description($op->description);
@@ -174,7 +178,7 @@ class Helper
     public static function ImportanceAsEmoji($importance, string $emoji_full, string $emoji_half, string $emoji_empty): string
     {
 
-        $tmp = explode('.', (string) $importance);
+        $tmp = explode('.', (string)$importance);
         $val = $tmp[0];
         $dec = 0;
 
@@ -202,14 +206,14 @@ class Helper
         $base_uri = config('calendar.discord.google.url');
         $date_format = 'Ymd\THis\Z';
         if ($op->end_at) {
-            $dates = $op->start_at->format($date_format).
-                '/'.
+            $dates = $op->start_at->format($date_format) .
+                '/' .
                 $op->end_at->format($date_format);
         } else {
             // No event end specified. Google requires one, so set it to the same
             // as the event start
-            $dates = $op->start_at->format($date_format).
-                '/'.
+            $dates = $op->start_at->format($date_format) .
+                '/' .
                 $op->start_at->format($date_format);
         }
 
@@ -221,7 +225,7 @@ class Helper
             'location' => $op->staging_sys,
         ];
 
-        return $base_uri.'?'.http_build_query($query);
+        return $base_uri . '?' . http_build_query($query);
     }
 
     public static function arrayBitwiseOr(array $masks): int

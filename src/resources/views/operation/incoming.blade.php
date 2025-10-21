@@ -10,6 +10,7 @@
             <thead class="bg-info">
             <tr>
                 <th>{{ trans('calendar::seat.title') }}</th>
+                <th>{{ trans('calendar::seat.op_creator') }}</th>
                 <th class="hidden-xs">{{ trans('calendar::seat.tags') }}</th>
                 <th>{{ trans('calendar::seat.importance') }}</th>
                 <th>{{ trans('calendar::seat.starts_in') }}</th>

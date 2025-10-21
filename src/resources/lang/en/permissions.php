@@ -24,4 +24,8 @@ return [
     'calendar_update_all_description' => 'Grant the user to modify any operation (even those which he does not own)',
     'calendar_close_all_label' => 'Close All Operations',
     'calendar_close_all_description' => 'Grant the user to close any operation (even those which he does not own)',
+    'prevent_op_role_restriction_label' => 'Forbid Operation Role Restriction',
+    'prevent_op_role_restriction_description' => 'Prevent the user from restricting operations to specific roles',
+    'prevent_op_importance_label' => 'Forbid Operation Importance',
+    'prevent_op_importance_description' => 'Prevent the user from configuring a level of importance to an operation'
 ];

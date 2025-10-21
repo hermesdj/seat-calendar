@@ -22,31 +22,36 @@
                                    placeholder="{{ trans('calendar::seat.placeholder_title') }}">
                         </div>
                     </div>
-                    {{-- Operation role restriction --}}
-                    <div class="form-group row">
-                        <label for="create_operation_role"
-                               class="col-sm-3 col-form-label">{{ trans_choice('web::seat.role', 1) }}</label>
-                        <div class="col-sm-9">
-                            <select name="role_name" id="create_operation_role" style="width: 100%;">
-                                <option value=""></option>
-                                @foreach($roles as $role)
-                                    <option value="{{ $role->title }}">{{ $role->title }}</option>
-                                @endforeach
-                            </select>
+                    @if(auth()->user()->cannot('calendar.prevent_op_role_restriction'))
+                        {{-- Operation role restriction --}}
+                        <div class="form-group row">
+                            <label for="create_operation_role"
+                                   class="col-sm-3 col-form-label">{{ trans_choice('web::seat.role', 1) }}</label>
+                            <div class="col-sm-9">
+                                <select name="role_name" id="create_operation_role" style="width: 100%;">
+                                    <option value=""></option>
+                                    @foreach($roles as $role)
+                                        <option value="{{ $role->title }}">{{ $role->title }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
                         </div>
-                    </div>
-                    {{-- Operation importance --}}
-                    <div class="form-group row">
-                        <label for="importance" class="col-sm-3 col-form-label">{{ trans('calendar::seat.importance') }}
-                            <span class="text-danger">*</span>
-                        </label>
-                        <div class="col-sm-9">
-                            <input type="text" class="slider form-control" value="2" data-slider-min="0"
-                                   data-slider-max="5"
-                                   data-slider-step="0.5" data-slider-value="2" data-slider-id="sliderImportance"
-                                   data-slider-tooltip="show" data-slider-handle="round" name="importance"/>
+                    @endif
+                    @if(auth()->user()->cannot('calendar.prevent_op_importance'))
+                        {{-- Operation importance --}}
+                        <div class="form-group row">
+                            <label for="importance"
+                                   class="col-sm-3 col-form-label">{{ trans('calendar::seat.importance') }}
+                                <span class="text-danger">*</span>
+                            </label>
+                            <div class="col-sm-9">
+                                <input type="text" class="slider form-control" value="2" data-slider-min="0"
+                                       data-slider-max="5"
+                                       data-slider-step="0.5" data-slider-value="2" data-slider-id="sliderImportance"
+                                       data-slider-tooltip="show" data-slider-handle="round" name="importance"/>
+                            </div>
                         </div>
-                    </div>
+                    @endif
                     {{-- Operation tags --}}
                     <div class="form-group row">
                         <label class="col-sm-3 col-form-label">{{ trans('calendar::seat.tags') }}</label>
@@ -55,10 +60,24 @@
                                 <div class="row">
                                     @foreach($tags as $tag)
                                         <div class="col-sm-3">
-                                            <div class="checkbox">
+                                            <div
+                                                    @if(setting('kassie.calendar.forbid_multiple_tags', true) == 0)
+                                                        class="checkbox"
+                                                    @else
+                                                        class="radio-inline"
+                                                    @endif
+                                            >
                                                 <label>
-                                                    <input type="checkbox" name="checkbox-{{$tag->id}}"
-                                                           value="{{$tag->id}}">
+                                                    <input
+                                                            @if(setting('kassie.calendar.forbid_multiple_tags', true) == 0)
+                                                                type="checkbox"
+                                                            name="checkbox-{{$tag->id}}"
+                                                            @else
+                                                                type="radio"
+                                                            name="operation_tag"
+                                                            @endif
+                                                            value="{{$tag->id}}"
+                                                    >
                                                     @include('calendar::common.includes.tag', ['tag' => $tag])
                                                 </label>
                                             </div>
@@ -74,16 +93,25 @@
                                class="col-sm-3 col-form-label">{{ trans('calendar::seat.known_duration') }}</label>
                         <div class="col-sm-9">
                             <label class="radio-inline">
-                                <input type="radio" name="known_duration" value="yes"> {{ trans('calendar::seat.yes') }}
+                                <input
+                                        type="radio"
+                                        name="known_duration"
+                                        value="yes"
+                                        @if(setting('kassie.calendar.default_known_duration', true) == 1) checked @endif
+                                /> {{ trans('calendar::seat.yes') }}
                             </label>
                             <label class="radio-inline">
-                                <input type="radio" name="known_duration" value="no"
-                                       checked> {{ trans('calendar::seat.no') }}
+                                <input
+                                        type="radio"
+                                        name="known_duration"
+                                        value="no"
+                                        @if(setting('kassie.calendar.default_known_duration', true) == 0) checked @endif
+                                /> {{ trans('calendar::seat.no') }}
                             </label>
                         </div>
                     </div>
                     {{-- Operation starts --}}
-                    <div class="form-group row datepicker">
+                    <div class="form-group row datepicker @if(setting('kassie.calendar.default_known_duration', true) == 1) d-none @endif">
                         <label for="time_start" class="col-sm-3 col-form-label">{{ trans('calendar::seat.starts_at') }}
                             ({{ trans('calendar::seat.eve_time') }})
                             <span class="text-danger">*</span>
@@ -93,7 +121,7 @@
                         </div>
                     </div>
                     {{-- Operation end --}}
-                    <div class="form-group row datepicker d-none">
+                    <div class="form-group row datepicker @if(setting('kassie.calendar.default_known_duration', true) == 0) d-none @endif">
                         <label for="time_start_end"
                                class="col-sm-3 col-form-label">{{ trans('calendar::seat.duration') }}
                             ({{ trans('calendar::seat.eve_time') }})

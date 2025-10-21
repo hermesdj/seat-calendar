@@ -55,7 +55,7 @@ class OperationController extends Controller
 
         if ($main_character != null) {
             $main_character->main = true;
-            $user_characters = $user_characters->reject(fn ($character): bool => $character->character_id == $main_character->character_id);
+            $user_characters = $user_characters->reject(fn($character): bool => $character->character_id == $main_character->character_id);
             $user_characters->prepend($main_character);
         }
 
@@ -87,6 +87,7 @@ class OperationController extends Controller
 
     /**
      * @throws ValidationException
+     * @throws SettingException
      */
     public function store(Request $request): void
     {
@@ -108,17 +109,21 @@ class OperationController extends Controller
                 $operation->{$name} = null;
             } elseif (str_contains($name, 'checkbox-')) {
                 $tags[] = $value;
+            } elseif (str_contains($name, 'operation_tag')) {
+                $tags[] = $value;
             }
         }
 
         if ($request->known_duration == 'no') {
             $operation->start_at = Carbon::parse($request->time_start);
+            if (setting('kassie.calendar.default_op_duration', true) > 0) {
+                $operation->end_at = $operation->start_at->addMinutes(setting('kassie.calendar.default_op_duration', true));
+            }
         } else {
-            $dates = explode(' - ', (string) $request->time_start_end);
+            $dates = explode(' - ', (string)$request->time_start_end);
             $operation->start_at = Carbon::parse($dates[0]);
             $operation->end_at = Carbon::parse($dates[1]);
         }
-        $operation->start_at = Carbon::parse($operation->start_at);
 
         if ($request->importance == 0) {
             $operation->importance = 0;
@@ -142,6 +147,7 @@ class OperationController extends Controller
 
     /**
      * @throws ValidationException
+     * @throws SettingException
      */
     public function update(Request $request): RedirectResponse
     {
@@ -164,6 +170,8 @@ class OperationController extends Controller
                     $operation->{$name} = null;
                 } elseif (str_contains($name, 'checkbox-')) {
                     $tags[] = $value;
+                } elseif (str_contains($name, 'operation_tag')) {
+                    $tags[] = $value;
                 }
             }
 
@@ -181,9 +189,13 @@ class OperationController extends Controller
 
             if ($request->known_duration == 'no') {
                 $operation->start_at = Carbon::parse($request->time_start);
-                $operation->end_at = null;
+                if (setting('kassie.calendar.default_op_duration', true) > 0) {
+                    $operation->end_at = $operation->start_at->addMinutes(setting('kassie.calendar.default_op_duration', true));
+                } else {
+                    $operation->end_at = null;
+                }
             } else {
-                $dates = explode(' - ', (string) $request->time_start_end);
+                $dates = explode(' - ', (string)$request->time_start_end);
                 $operation->start_at = Carbon::parse($dates[0]);
                 $operation->end_at = Carbon::parse($dates[1]);
             }
@@ -217,7 +229,7 @@ class OperationController extends Controller
         if (auth()->user()->can('calendar.view')) {
             $operation = Operation::find($operation_id)->load('tags');
 
-            if (! $operation->isUserGranted(auth()->user())) {
+            if (!$operation->isUserGranted(auth()->user())) {
                 return redirect()->back()->with('error', 'You are not granted to this operation !');
             }
 
@@ -234,7 +246,7 @@ class OperationController extends Controller
         $operation = Operation::find($request->operation_id);
 
         if ((auth()->user()->can('calendar.delete_all') || $operation->user->id == auth()->user()->id) && $operation != null) {
-            if (! $operation->isUserGranted(auth()->user())) {
+            if (!$operation->isUserGranted(auth()->user())) {
                 return redirect()->back()->with('error', 'You are not granted to this operation !');
             }
             Operation::destroy($operation->id);
@@ -312,7 +324,7 @@ class OperationController extends Controller
 
         if ($operation != null) {
 
-            if (! $operation->isUserGranted(auth()->user())) {
+            if (!$operation->isUserGranted(auth()->user())) {
                 return redirect()->back()->with('error', 'You are not granted to this operation !');
             }
 
@@ -350,7 +362,7 @@ class OperationController extends Controller
                 ->with('error', 'Unable to retrieve the requested operation.');
         }
 
-        if (! $operation->isUserGranted(auth()->user())) {
+        if (!$operation->isUserGranted(auth()->user())) {
             return redirect()->back()->with('error', 'You are not granted to this operation !');
         }
 
@@ -360,7 +372,7 @@ class OperationController extends Controller
                 ->with('error', 'No fleet commander has been set for this operation.');
         }
 
-        if (! in_array($operation->fc_character_id, auth()->user()->associatedCharacterIds())) {
+        if (!in_array($operation->fc_character_id, auth()->user()->associatedCharacterIds())) {
             return redirect()
                 ->back()
                 ->with('error', 'You are not the fleet commander or wrong character has been set.');

@@ -28,31 +28,37 @@
                                    placeholder="{{ trans('calendar::seat.placeholder_title') }}">
                         </div>
                     </div>
-                    {{-- Operation role restriction --}}
-                    <div class="form-group row">
-                        <label for="update_operation_role"
-                               class="col-sm-3 col-form-label">{{ trans_choice('web::seat.role', 1) }}</label>
-                        <div class="col-sm-9">
-                            <select name="role_name" id="update_operation_role" style="width: 100%">
-                                <option value=""></option>
-                                @foreach($roles as $role)
-                                    <option value="{{ $role->title }}">{{ $role->title }}</option>
-                                @endforeach
-                            </select>
+                    @if(auth()->user()->cannot('calendar.prevent_op_role_restriction'))
+                        {{-- Operation role restriction --}}
+                        <div class="form-group row">
+                            <label for="update_operation_role"
+                                   class="col-sm-3 col-form-label">{{ trans_choice('web::seat.role', 1) }}</label>
+                            <div class="col-sm-9">
+                                <select name="role_name" id="update_operation_role" style="width: 100%">
+                                    <option value=""></option>
+                                    @foreach($roles as $role)
+                                        <option value="{{ $role->title }}">{{ $role->title }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
                         </div>
-                    </div>
-                    {{-- Operation importance --}}
-                    <div class="form-group row">
-                        <label for="importance" class="col-sm-3 col-form-label">{{ trans('calendar::seat.importance') }}
-                            <span class="text-danger">*</span>
-                        </label>
-                        <div class="col-sm-9">
-                            <input type="text" class="slider form-control" value="2" data-slider-min="0"
-                                   data-slider-max="5"
-                                   data-slider-step="0.5" data-slider-value="2" data-slider-id="updateSliderImportance"
-                                   data-slider-tooltip="show" data-slider-handle="round" name="importance"/>
+                    @endif
+                    @if(auth()->user()->cannot('calendar.prevent_op_importance'))
+                        {{-- Operation importance --}}
+                        <div class="form-group row">
+                            <label for="importance"
+                                   class="col-sm-3 col-form-label">{{ trans('calendar::seat.importance') }}
+                                <span class="text-danger">*</span>
+                            </label>
+                            <div class="col-sm-9">
+                                <input type="text" class="slider form-control" value="2" data-slider-min="0"
+                                       data-slider-max="5"
+                                       data-slider-step="0.5" data-slider-value="2"
+                                       data-slider-id="updateSliderImportance"
+                                       data-slider-tooltip="show" data-slider-handle="round" name="importance"/>
+                            </div>
                         </div>
-                    </div>
+                    @endif
                     {{-- Operation tags --}}
                     <div class="form-group row">
                         <label class="col-sm-3 col-form-label">{{ trans('calendar::seat.tags') }}</label>
@@ -61,10 +67,25 @@
                                 <div class="row">
                                     @foreach($tags as $tag)
                                         <div class="col-sm-3">
-                                            <div class="checkbox">
+                                            <div
+                                                    @if(setting('kassie.calendar.forbid_multiple_tags', true) == 0)
+                                                        class="checkbox"
+                                                    @else
+                                                        class="radio-inline"
+                                                    @endif
+                                            >
                                                 <label>
-                                                    <input type="checkbox" name="checkbox-{{$tag->id}}"
-                                                           id="checkbox-update-{{$tag->id}}" value="{{$tag->id}}">
+                                                    <input
+                                                            @if(setting('kassie.calendar.forbid_multiple_tags', true) == 0)
+                                                                type="checkbox"
+                                                            name="checkbox-{{$tag->id}}"
+                                                            @else
+                                                                type="radio"
+                                                            name="operation_tag"
+                                                            @endif
+                                                            id="checkbox-update-{{$tag->id}}"
+                                                            value="{{$tag->id}}"
+                                                    >
                                                     @include('calendar::common.includes.tag', ['tag' => $tag])
                                                 </label>
                                             </div>
@@ -162,7 +183,8 @@
                             <label class="col-sm-3 col-form-label"
                                    for="discord_voice_channel_id">{{ trans('calendar::seat.voice_channel') }}</label>
                             <div class="col-sm-9">
-                                <select name="discord_voice_channel_id" class="form-control" id="discord_voice_channel_id">
+                                <select name="discord_voice_channel_id" class="form-control"
+                                        id="discord_voice_channel_id">
                                     <option value="" selected>-</option>
                                     @foreach($channels->sortBy('name') as $channel)
                                         <option

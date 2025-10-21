@@ -80,6 +80,7 @@
             dom: 'rt<"col-sm-5"i><"col-sm-7"p>',
             columns: [
                 {data: 'title', name: 'title'},
+                {data: 'username', name: 'username', orderable: false},
                 {data: 'tags', name: 'tags', orderable: false},
                 {data: 'importance', name: 'importance'},
                 {data: 'start_at', name: 'start_at'},
@@ -113,6 +114,7 @@
             dom: 'rt<"col-sm-5"i><"col-sm-7"p>',
             columns: [
                 {data: 'title', name: 'title'},
+                {data: 'username', name: 'username', orderable: false},
                 {data: 'tags', name: 'tags', orderable: false},
                 {data: 'importance', name: 'importance'},
                 {data: 'start_at', name: 'start_at'},
@@ -146,6 +148,7 @@
             dom: 'rt<"col-sm-5"i><"col-sm-7"p>',
             columns: [
                 {data: 'title', name: 'title'},
+                {data: 'username', name: 'username', orderable: false},
                 {data: 'tags', name: 'tags', orderable: false},
                 {data: 'importance', name: 'importance'},
                 {data: 'start_at', name: 'start_at'},

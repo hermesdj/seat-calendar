@@ -29,4 +29,12 @@ return [
         'label' => 'calendar::permissions.calendar_close_all_label',
         'description' => 'calendar::permissions.calendar_close_all_description',
     ],
+    'prevent_op_role_restriction' => [
+        'label' => 'calendar::permissions.prevent_op_role_restriction_label',
+        'description' => 'calendar::permissions.prevent_op_role_restriction_description',
+    ],
+    'prevent_op_importance' => [
+        'label' => 'calendar::permissions.prevent_op_importance_label',
+        'description' => 'calendar::permissions.prevent_op_importance_description',
+    ]
 ];

@@ -8,6 +8,51 @@
         {{ csrf_field() }}
         <div class="card-body">
             <p class="callout callout-info text-justify">
+                {{ trans('calendar::seat.help_general_config') }}
+            </p>
+
+            <div class="form-group row">
+                <label for="default_known_duration"
+                       class="col-sm-8 col-form-label">{{ trans('calendar::seat.default_known_duration') }}</label>
+                <div class="col-sm-4">
+                    <div class="form-check">
+                        @if(setting('kassie.calendar.default_known_duration', true) == 1)
+                            <input type="checkbox" name="default_known_duration" class="form-check-input"
+                                   id="default_known_duration" value="1" checked/>
+                        @else
+                            <input type="checkbox" name="default_known_duration" class="form-check-input"
+                                   id="default_known_duration" value="1"/>
+                        @endif
+                    </div>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="default_op_duration"
+                       class="col-sm-8 col-form-label">{{ trans('calendar::seat.default_op_duration') }}</label>
+                <div class="col-sm-4">
+                    <div class="form-check">
+                        <input type="number" step="1" class="form-control" name="default_op_duration"
+                               value="{{ setting('kassie.calendar.default_op_duration', true) }}">
+                    </div>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="forbid_multiple_tags"
+                       class="col-sm-8 col-form-label">{{ trans('calendar::seat.forbid_multiple_tags') }}</label>
+                <div class="col-sm-4">
+                    <div class="form-check">
+                        @if(setting('kassie.calendar.forbid_multiple_tags', true) == 1)
+                            <input type="checkbox" name="forbid_multiple_tags" class="form-check-input"
+                                   id="forbid_multiple_tags" value="1" checked/>
+                        @else
+                            <input type="checkbox" name="forbid_multiple_tags" class="form-check-input"
+                                   id="forbid_multiple_tags" value="1"/>
+                        @endif
+                    </div>
+                </div>
+            </div>
+
+            <p class="callout callout-info text-justify">
                 {!! trans('calendar::seat.help_notify_locale') !!}
             </p>
 
@@ -15,13 +60,20 @@
                 <label for="notify_locale"
                        class="col-sm-3 col-form-label">{{ trans('calendar::seat.notify_locale') }}</label>
                 <div class="col-sm-9">
-                    <select id="notify_locale" name="notify_locale" class="form-control w-100">
+                    <select
+                            id="notify_locale"
+                            name="notify_locale"
+                            class="form-control w-100"
+                    >
                         @foreach($languages as $language)
-                            <option value="{{ $language['short'] }}"
-                                    @if(setting('notify_locale') == $language['short'])
+                            <option
+                                    value="{{ $language['short'] }}"
+                                    @if(setting('kassie.calendar.notify_locale', true) == $language['short'])
                                         selected
-                                    @endif>
-                                {{ $language['full'] }}</option>
+                                    @endif
+                            >
+                                {{ $language['full'] }}
+                            </option>
                         @endforeach
                     </select>
                 </div>

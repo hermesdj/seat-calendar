@@ -70,6 +70,9 @@ class SettingController extends Controller
     {
         setting(['kassie.calendar.notify_operation_interval', $request['notify_operation_interval']], true);
         setting(['kassie.calendar.notify_locale', $request['notify_locale']], true);
+        setting(['kassie.calendar.default_known_duration', $request['default_known_duration']], true);
+        setting(['kassie.calendar.forbid_multiple_tags', $request['forbid_multiple_tags']], true);
+        setting(['kassie.calendar.default_op_duration', $request['default_op_duration']], true);
         setting(['kassie.calendar.slack_emoji_importance_full', $request['slack_emoji_importance_full']], true);
         setting(['kassie.calendar.slack_emoji_importance_half', $request['slack_emoji_importance_half']], true);
         setting(['kassie.calendar.slack_emoji_importance_empty', $request['slack_emoji_importance_empty']], true);

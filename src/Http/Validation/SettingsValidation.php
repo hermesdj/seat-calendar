@@ -59,6 +59,9 @@ class SettingsValidation extends FormRequest
             'discord_client_secret' => ['nullable', 'string'],
             'discord_bot_token' => ['nullable', 'string'],
             'discord_allowed_channels' => ['nullable', 'array'],
+            'default_known_duration' => ['boolean'],
+            'default_op_duration' => ['integer'],
+            'forbid_multiple_tags' => ['boolean'],
         ];
     }
 }

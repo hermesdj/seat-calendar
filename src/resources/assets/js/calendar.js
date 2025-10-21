@@ -36,7 +36,7 @@ op_modals.create.on('show.bs.modal', function (e) {
 
 op_modals.create.find('input[name="known_duration"]')
     .on('change', function () {
-        console.debug('trigger');
+        console.info('trigger', this);
         op_modals.create.find('.datepicker').toggleClass("d-none");
     });
 
