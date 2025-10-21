@@ -186,5 +186,5 @@ return [
     'help_general_config' => 'Set the general calendar configurations.',
     'default_known_duration' => 'Operations have an end time by default.',
     'default_op_duration' => 'Operations have a default maximum duration in minutes (set 0 to disable).',
-    'forbid_multiple_tags' => 'Operations cannot have multiple tags on them.'
+    'forbid_multiple_tags' => 'Operations cannot have multiple tags on them.',
 ];

@@ -27,5 +27,5 @@ return [
     'prevent_op_role_restriction_label' => 'Forbid Operation Role Restriction',
     'prevent_op_role_restriction_description' => 'Prevent the user from restricting operations to specific roles',
     'prevent_op_importance_label' => 'Forbid Operation Importance',
-    'prevent_op_importance_description' => 'Prevent the user from configuring a level of importance to an operation'
+    'prevent_op_importance_description' => 'Prevent the user from configuring a level of importance to an operation',
 ];

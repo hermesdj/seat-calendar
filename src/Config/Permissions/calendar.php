@@ -36,5 +36,5 @@ return [
     'prevent_op_importance' => [
         'label' => 'calendar::permissions.prevent_op_importance_label',
         'description' => 'calendar::permissions.prevent_op_importance_description',
-    ]
+    ],
 ];
