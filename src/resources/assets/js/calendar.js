@@ -4,42 +4,6 @@ const op_modals = {
     subscribe: $('#modalSubscribe')
 };
 
-op_modals.create.on('show.bs.modal', function (e) {
-    const ROUNDING = 5 * 60 * 1000;
-    let nowRounded = moment.utc();
-    nowRounded = moment.utc(Math.ceil((+nowRounded) / ROUNDING) * ROUNDING);
-
-    const options = {
-        timePicker: true,
-        timePickerIncrement: 5,
-        timePicker24Hour: true,
-        startDate: nowRounded,
-        locale: {
-            "format": "MM/DD/YYYY HH:mm"
-        },
-        parentEl: '#modalCreateOperation'
-    };
-
-    options.singleDatePicker = true;
-    op_modals.create.find('input[name="time_start"]').daterangepicker(options);
-    options.singleDatePicker = false;
-    options.endDate = nowRounded.clone().add('3', 'h');
-    op_modals.create.find('input[name="time_start_end"]').daterangepicker(options);
-
-    if ($('#sliderImportance').length <= 0)
-        $('#modalCreateOperation').find('input[name="importance"]').slider({
-            formatter: function (value) {
-                return value;
-            }
-        });
-});
-
-op_modals.create.find('input[name="known_duration"]')
-    .on('change', function () {
-        console.info('trigger', this);
-        op_modals.create.find('.datepicker').toggleClass("d-none");
-    });
-
 $('#create_operation_submit').click(function () {
     $('#formCreateOperation').submit();
 });

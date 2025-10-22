@@ -68,11 +68,11 @@
     </div>
     <div class="col-6 p-0">
         <ul class="list-group list-group-flush">
-            <li class="list-group-item"><b>{{ trans('calendar::seat.starts_at') }}</b> : {{ $op->start_at }}</li>
+            <li class="list-group-item"><b>{{ trans('calendar::seat.starts_at') }}</b> : {{ $op->start_at }} EVE</li>
             <li class="list-group-item">
                 <b>{{ trans('calendar::seat.ends_at') }}</b> :
                 @if($op->end_at)
-                    {{ $op->end_at }}
+                    {{ $op->end_at }} EVE
                 @else
                     <i>{{ trans('calendar::seat.unknown') }}</i>
                 @endif
@@ -87,7 +87,7 @@
             </li>
             <li class="list-group-item no-border">
                 <b>{{ trans('calendar::seat.direct_link') }}</b> :
-                <a href="{{ url('/calendar/operation', [$op->id]) }}">{{ url('/calendar/operation', [$op->id]) }}</a>
+                <a href="{{ url('/calendar/operation', [$op->id]) }}">{{ $op->title }}</a>
             </li>
             @if(\Seat\Kassie\Calendar\Helpers\SeatFittingPluginHelper::pluginIsAvailable() && $op->doctrine != null)
                 <li class="list-group-item no-border">

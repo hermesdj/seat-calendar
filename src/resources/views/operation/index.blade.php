@@ -1,4 +1,5 @@
 @extends('web::layouts.grids.12')
+@php use Seat\Services\Settings\Profile; @endphp
 
 @section('title', trans('calendar::seat.plugin_name') . ' | ' . trans('calendar::seat.operations'))
 @section('page_header', trans('calendar::seat.all_operations'))
@@ -27,6 +28,16 @@
     @include('calendar::operation.modals.confirm_activate')
     @include('calendar::operation.modals.subscribe')
     @include('calendar::operation.modals.details')
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-body">
+                    <div id="calendar"></div>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <div class="row">
         <div class="col-md-12">
@@ -67,10 +78,124 @@
     <script src="{{ asset('web/js/daterangepicker.js') }}"></script>
     <script src="{{ asset('web/js/bootstrap-slider.min.js') }}"></script>
     <script src="{{ asset('web/js/jquery.autocomplete.min.js') }}"></script>
+    <script src="{{ asset('web/js/fullCalendar.global.min.js') }}"></script>
     <script src="{{ asset('web/js/natural.js') }}"></script>
     <script src="{{ asset('web/js/calendar.js') }}"></script>
     @include('web::includes.javascript.id-to-name')
     <script type="text/javascript">
+        function getDateWithoutTime(dt) {
+            dt.setHours(0, 0, 0, 0);
+            return dt;
+        }
+
+        const calendarEl = document.getElementById('calendar');
+        const calendar = new FullCalendar.Calendar(calendarEl, {
+            initialView: 'dayGridMonth',
+            themeSystem: 'bootstrap',
+            locale: '{{ Profile::get('language') }}',
+            events: '{{ route('operation.data') }}',
+            height: 750,
+            selectable: true,
+            headerToolbar: {
+                left: 'prev,next today',
+                center: 'title',
+                right: 'dayGridMonth,timeGridWeek,listMonth'
+            },
+            eventTimeFormat: {
+                hour12: false,
+                hour: '2-digit',
+                minute: '2-digit'
+            },
+            eventClick: function (info) {
+                info.jsEvent.preventDefault();
+                $(info.el).attr('data-op-id', info.event.id);
+                $('#modalDetails').modal('show', info.el);
+            },
+            @if(auth()->user()->can('calendar.create'))
+            select: function (info) {
+                console.log('select', info);
+                const createDiv = $('#modalCreateOperation');
+                createDiv.attr('data-start', info.start.toISOString());
+                createDiv.attr('data-end', info.end.toISOString());
+                createDiv.attr('data-all-day', info.allDay);
+                createDiv.modal('show');
+
+            },
+            selectAllow: function (info) {
+                return getDateWithoutTime(info.start) >= getDateWithoutTime(new Date());
+            },
+            @endif
+            eventDisplay: 'block',
+            eventClassNames: 'calendar-event'
+        });
+
+        calendar.render();
+
+        const createModal = $('#modalCreateOperation');
+
+        createModal.on('show.bs.modal', function (e) {
+            const now = moment.utc();
+            let initialDate = moment.utc().seconds(0).add('5', 'minutes');
+            let initialEndDate = null;
+            if (e.relatedTarget && e.relatedTarget.dataset && e.relatedTarget.dataset.date) {
+                initialDate = moment.utc(e.relatedTarget.dataset.date, 'YYYY-MM-DD');
+                initialDate.hours(now.hours());
+                initialDate.minutes(now.minutes());
+                initialDate.seconds(0);
+            } else if (e.target && e.target.dataset && e.target.dataset.start) {
+                const {allDay, start, end} = e.target.dataset;
+                initialDate = moment.utc(start);
+                if (allDay === "true") {
+                    initialDate.hours(now.hours());
+                    initialDate.minutes(now.minutes());
+                    initialDate.seconds(0);
+                }
+
+                initialEndDate = moment.utc(end);
+                if (initialEndDate.isValid()) {
+                    if (allDay === "true") {
+                        initialEndDate.hours(now.hours());
+                        initialEndDate.minutes(now.minutes());
+                        initialEndDate.seconds(0);
+                    }
+                } else {
+                    initialEndDate = null;
+                }
+            }
+
+            let roundedStartDate = initialDate;
+            let endDate = initialEndDate || roundedStartDate.clone().add('3', 'h');
+
+            const options = {
+                timePicker: true,
+                timePickerIncrement: 5,
+                timePicker24Hour: true,
+                startDate: roundedStartDate,
+                locale: {
+                    "format": "MM/DD/YYYY HH:mm"
+                },
+                parentEl: '#modalCreateOperation'
+            };
+
+            options.singleDatePicker = true;
+            op_modals.create.find('input[name="time_start"]').daterangepicker(options);
+            options.singleDatePicker = false;
+            options.endDate = endDate;
+            op_modals.create.find('input[name="time_start_end"]').daterangepicker(options);
+
+            if ($('#sliderImportance').length <= 0)
+                $('#modalCreateOperation').find('input[name="importance"]').slider({
+                    formatter: function (value) {
+                        return value;
+                    }
+                });
+        });
+
+        createModal.find('input[name="known_duration"]')
+            .on('change', function () {
+                op_modals.create.find('.datepicker').toggleClass("d-none");
+            });
+
         $('#calendar-ongoing').DataTable({
             processing: true,
             serverSide: true,
@@ -86,10 +211,14 @@
                 {data: 'start_at', name: 'start_at'},
                 {data: 'end_at', name: 'end_at'},
                 {data: 'fleet_commander', name: 'fleet_commander', orderable: false},
-                @if(\Seat\Kassie\Calendar\Helpers\SeatFittingPluginHelper::pluginIsAvailable())
-                    {data: 'doctrine', name: 'doctrine', orderable: false},
-                @endif
-                {data: 'staging_sys', name: 'staging_sys'},
+                    @if(\Seat\Kassie\Calendar\Helpers\SeatFittingPluginHelper::pluginIsAvailable())
+                {
+                    data: 'doctrine', name: 'doctrine', orderable: false
+                },
+                    @endif
+                {
+                    data: 'staging_sys', name: 'staging_sys'
+                },
                 {data: 'subscription', name: 'subscription', orderable: false},
                 {data: 'actions', name: 'actions', orderable: false, searchable: false}
             ],
@@ -120,10 +249,14 @@
                 {data: 'start_at', name: 'start_at'},
                 {data: 'duration', name: 'duration', orderable: false},
                 {data: 'fleet_commander', name: 'fleet_commander', orderable: false},
-                @if(\Seat\Kassie\Calendar\Helpers\SeatFittingPluginHelper::pluginIsAvailable())
-                    {data: 'doctrine', name: 'doctrine', orderable: false},
-                @endif
-                {data: 'staging_sys', name: 'staging_sys'},
+                    @if(\Seat\Kassie\Calendar\Helpers\SeatFittingPluginHelper::pluginIsAvailable())
+                {
+                    data: 'doctrine', name: 'doctrine', orderable: false
+                },
+                    @endif
+                {
+                    data: 'staging_sys', name: 'staging_sys'
+                },
                 {data: 'subscription', name: 'subscription', orderable: false},
                 {data: 'actions', name: 'actions', orderable: false, searchable: false}
             ],
@@ -154,10 +287,14 @@
                 {data: 'start_at', name: 'start_at'},
                 {data: 'end_at', name: 'end_at'},
                 {data: 'fleet_commander', name: 'fleet_commander', orderable: false},
-                @if(\Seat\Kassie\Calendar\Helpers\SeatFittingPluginHelper::pluginIsAvailable())
-                    {data: 'doctrine', name: 'doctrine', orderable: false},
-                @endif
-                {data: 'staging_sys', name: 'staging_sys'},
+                    @if(\Seat\Kassie\Calendar\Helpers\SeatFittingPluginHelper::pluginIsAvailable())
+                {
+                    data: 'doctrine', name: 'doctrine', orderable: false
+                },
+                    @endif
+                {
+                    data: 'staging_sys', name: 'staging_sys'
+                },
                 {data: 'subscription', name: 'subscription', orderable: false},
                 {data: 'actions', name: 'actions', orderable: false, searchable: false}
             ],

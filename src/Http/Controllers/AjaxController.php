@@ -10,7 +10,9 @@ namespace Seat\Kassie\Calendar\Http\Controllers;
 
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Illuminate\View\View;
 use Seat\Kassie\Calendar\Models\Operation;
 
@@ -19,6 +21,30 @@ use Seat\Kassie\Calendar\Models\Operation;
  */
 class AjaxController
 {
+
+    private function buildOperationDataTable(Builder $operations): mixed
+    {
+        return app('datatables')::of($operations)
+            ->editColumn('title', fn($row) => view('calendar::operation.partials.title', ['row' => $row]))
+            ->editColumn('tags', fn($row) => view('calendar::operation.partials.tags', ['op' => $row]))
+            ->editColumn('importance', fn($row) => view('calendar::operation.partials.importance', ['op' => $row]))
+            ->editColumn('start_at', fn($row) => view('calendar::operation.partials.time', ['timestamp' => $row->start_at->timestamp, 'id' => uniqid()]))
+            ->editColumn('end_at', fn($row) => view('calendar::operation.partials.time', ['timestamp' => $row->end_at?->timestamp, 'id' => uniqid()]))
+            ->editColumn('username', fn($row) => view('calendar::operation.partials.user', ['op' => $row]))
+            ->editColumn('fleet_commander', fn($row) => view('calendar::operation.partials.fleet_commander', ['op' => $row]))
+            ->editColumn('doctrine', fn($row) => view('calendar::operation.partials.doctrine', ['op' => $row]))
+            ->addColumn('duration', fn($row): string => sprintf('<span data-toggle="tooltip" title="%s">%s</span>',
+                $row->end_at, $row->duration))
+            ->editColumn('staging_sys', fn($row) => view('calendar::operation.partials.staging', ['op' => $row]))
+            ->addColumn('subscription', fn($row) => view('calendar::operation.partials.registration', ['op' => $row]))
+            ->addColumn('actions', fn($row) => view('calendar::operation.partials.actions.actions', ['op' => $row]))
+            ->setRowClass(fn($row): string => $row->is_cancelled == 0 ? 'text-muted' : 'danger text-muted')
+            ->addRowAttr('data-attr-op', fn($row) => $row->id)
+            ->rawColumns(['title', 'tags', 'importance', 'start_at', 'end_at', 'duration',
+                'fleet_commander', 'doctrine', 'staging_sys', 'subscription', 'actions', 'user'])
+            ->toJson();
+    }
+
     public function getOngoing(): mixed
     {
         $operations = Operation::with('tags', 'fleet_commander', 'attendees', 'staging', 'user')
@@ -28,7 +54,7 @@ class AjaxController
                 $query->orWhereNull('end_at');
             })
             ->where(function ($query): void {
-                if (! auth()->user()->isAdmin()) {
+                if (!auth()->user()->isAdmin()) {
                     $query->whereIn('role_name', auth()->user()->roles->pluck('title')->toArray());
                     $query->orWhereNull('role_name');
                 }
@@ -38,39 +64,16 @@ class AjaxController
         return $this->buildOperationDataTable($operations);
     }
 
-    private function buildOperationDataTable(Builder $operations): mixed
-    {
-        return app('datatables')::of($operations)
-            ->editColumn('title', fn ($row) => view('calendar::operation.partials.title', ['row' => $row]))
-            ->editColumn('tags', fn ($row) => view('calendar::operation.partials.tags', ['op' => $row]))
-            ->editColumn('importance', fn ($row) => view('calendar::operation.partials.importance', ['op' => $row]))
-            ->editColumn('start_at', fn ($row) => view('calendar::operation.partials.time', ['timestamp' => $row->start_at->timestamp, 'id' => uniqid()]))
-            ->editColumn('end_at', fn ($row) => view('calendar::operation.partials.time', ['timestamp' => $row->end_at?->timestamp, 'id' => uniqid()]))
-            ->editColumn('username', fn ($row) => view('calendar::operation.partials.user', ['op' => $row]))
-            ->editColumn('fleet_commander', fn ($row) => view('calendar::operation.partials.fleet_commander', ['op' => $row]))
-            ->editColumn('doctrine', fn ($row) => view('calendar::operation.partials.doctrine', ['op' => $row]))
-            ->addColumn('duration', fn ($row): string => sprintf('<span data-toggle="tooltip" title="%s">%s</span>',
-                $row->end_at, $row->duration))
-            ->editColumn('staging_sys', fn ($row) => view('calendar::operation.partials.staging', ['op' => $row]))
-            ->addColumn('subscription', fn ($row) => view('calendar::operation.partials.registration', ['op' => $row]))
-            ->addColumn('actions', fn ($row) => view('calendar::operation.partials.actions.actions', ['op' => $row]))
-            ->setRowClass(fn ($row): string => $row->is_cancelled == 0 ? 'text-muted' : 'danger text-muted')
-            ->addRowAttr('data-attr-op', fn ($row) => $row->id)
-            ->rawColumns(['title', 'tags', 'importance', 'start_at', 'end_at', 'duration',
-                'fleet_commander', 'doctrine', 'staging_sys', 'subscription', 'actions', 'user'])
-            ->toJson();
-    }
-
     public function getIncoming(): mixed
     {
         $operations = Operation::with('tags', 'fleet_commander', 'attendees', 'staging', 'user')
             ->where(function ($query) {
-                if (! auth()->user()->isAdmin()) {
+                if (!auth()->user()->isAdmin()) {
                     $query->whereIn('role_name', auth()->user()->roles->pluck('title')->toArray());
                     $query->orWhereNull('role_name');
                 }
             })
-            ->where('start_at', '>', carbon()->now())
+            ->where('start_at', '>=', carbon()->now())
             ->where('is_cancelled', false);
 
         return $this->buildOperationDataTable($operations);
@@ -84,7 +87,7 @@ class AjaxController
                     ->where('end_at', '<', carbon()->now());
             })
             ->where(function ($query): void {
-                if (! auth()->user()->isAdmin()) {
+                if (!auth()->user()->isAdmin()) {
                     $query->whereIn('role_name', auth()->user()->roles->pluck('title')->toArray());
                     $query->orWhereNull('role_name');
                 }
@@ -105,5 +108,35 @@ class AjaxController
         return redirect()
             ->back()
             ->with('error', 'An error occurred while processing the request.');
+    }
+
+    public function getData(Request $request): JsonResponse
+    {
+        $operations = Operation::with('tags', 'fleet_commander', 'attendees', 'staging', 'user')
+            ->where('start_at', '>=', $request->start)
+            ->where('end_at', '<=', $request->end)
+            ->where(function ($query): void {
+                if (!auth()->user()->isAdmin()) {
+                    $query->whereIn('role_name', auth()->user()->roles->pluck('title')->toArray());
+                    $query->orWhereNull('role_name');
+                }
+            })->get();
+
+        return response()->json($operations->map(function ($operation) {
+            $firstTag = $operation->tags->first();
+            $bgColor = $firstTag ? $firstTag->bg_color : null;
+            $textColor = $firstTag ? $firstTag->text_color : null;
+
+            return [
+                'id' => $operation->id,
+                'title' => $operation->title,
+                'start' => $operation->start_at,
+                'end' => $operation->end_at,
+                'description' => $operation->description,
+                'backgroundColor' => $bgColor,
+                'borderColor' => $bgColor,
+                'textColor' => $textColor
+            ];
+        }));
     }
 }

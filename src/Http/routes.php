@@ -71,6 +71,11 @@ Route::group([
             'as' => 'operation.faded',
             'uses' => 'AjaxController@getFaded',
         ]);
+
+        Route::get('/operation/data', [
+            'as' => 'operation.data',
+            'uses' => 'AjaxController@getData',
+        ]);
     });
 
     Route::group([

@@ -1,17 +1,15 @@
 @php use Seat\Services\Settings\Profile; @endphp
 
 @if($timestamp)
-<span id="{{ $id }}" data-toggle="tooltip" title=""></span>
+    <span id="{{ $id }}" data-toggle="tooltip" title=""></span>
 
-<script type="text/javascript">
-    const time = moment.unix({{ $timestamp }});
-    const duration = moment.duration(time.diff(moment.utc()))
+    <script type="text/javascript">
+        const time = moment.unix({{ $timestamp }});
+        const span = document.getElementById('{{ $id }}');
 
-    const span = document.getElementById('{{ $id }}');
-
-    span.innerHTML = duration.locale('{{ Profile::get('language') }}').humanize(true);
-    span.title = time.locale('{{ Profile::get('language') }}').local().format('LLL');
-</script>
+        span.innerHTML = time.locale('{{ Profile::get('language') }}').local().format('LLL');
+        span.title = time.locale('{{ Profile::get('language') }}').utc().format('LLL') + ' EVE';
+    </script>
 @else
     <span>-</span>
 @endif
