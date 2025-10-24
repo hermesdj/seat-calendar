@@ -96,6 +96,13 @@
             events: '{{ route('operation.data') }}',
             height: 750,
             selectable: true,
+            bootstrapFontAwesome: {
+                close: 'fa-times',
+                prev: 'fa-chevron-left',
+                next: 'fa-chevron-right',
+                prevYear: 'fa-angle-double-left',
+                nextYear: 'fa-angle-double-right'
+            },
             headerToolbar: {
                 left: 'prev,next today',
                 center: 'title',
@@ -113,16 +120,14 @@
             },
             @if(auth()->user()->can('calendar.create'))
             select: function (info) {
-                console.log('select', info);
                 const createDiv = $('#modalCreateOperation');
                 createDiv.attr('data-start', info.start.toISOString());
                 createDiv.attr('data-end', info.end.toISOString());
                 createDiv.attr('data-all-day', info.allDay);
                 createDiv.modal('show');
-
             },
             selectAllow: function (info) {
-                return getDateWithoutTime(info.start) >= getDateWithoutTime(new Date());
+                return info.allDay ? getDateWithoutTime(info.start) >= getDateWithoutTime(new Date()) : info.start >= new Date();
             },
             @endif
             eventDisplay: 'block',
@@ -138,25 +143,27 @@
             let initialDate = moment.utc().seconds(0).add('5', 'minutes');
             let initialEndDate = null;
             if (e.relatedTarget && e.relatedTarget.dataset && e.relatedTarget.dataset.date) {
-                initialDate = moment.utc(e.relatedTarget.dataset.date, 'YYYY-MM-DD');
+                initialDate = moment(e.relatedTarget.dataset.date, 'YYYY-MM-DD');
                 initialDate.hours(now.hours());
                 initialDate.minutes(now.minutes());
                 initialDate.seconds(0);
             } else if (e.target && e.target.dataset && e.target.dataset.start) {
                 const {allDay, start, end} = e.target.dataset;
-                initialDate = moment.utc(start);
+                initialDate = moment(start);
                 if (allDay === "true") {
                     initialDate.hours(now.hours());
                     initialDate.minutes(now.minutes());
                     initialDate.seconds(0);
+                } else {
+                    initialDate = moment.utc(start);
                 }
 
-                initialEndDate = moment.utc(end);
+                initialEndDate = moment(end);
                 if (initialEndDate.isValid()) {
                     if (allDay === "true") {
-                        initialEndDate.hours(now.hours());
-                        initialEndDate.minutes(now.minutes());
-                        initialEndDate.seconds(0);
+                        initialEndDate = initialDate.clone().add(3, 'hours');
+                    } else {
+                        initialEndDate = moment.utc(end);
                     }
                 } else {
                     initialEndDate = null;

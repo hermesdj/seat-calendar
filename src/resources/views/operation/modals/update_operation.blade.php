@@ -28,37 +28,33 @@
                                    placeholder="{{ trans('calendar::seat.placeholder_title') }}">
                         </div>
                     </div>
-                    @if(auth()->user()->can('calendar.allow_op_role_restriction'))
-                        {{-- Operation role restriction --}}
-                        <div class="form-group row">
-                            <label for="update_operation_role"
-                                   class="col-sm-3 col-form-label">{{ trans_choice('web::seat.role', 1) }}</label>
-                            <div class="col-sm-9">
-                                <select name="role_name" id="update_operation_role" style="width: 100%">
-                                    <option value=""></option>
-                                    @foreach($roles as $role)
-                                        <option value="{{ $role->title }}">{{ $role->title }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
+                    {{-- Operation role restriction --}}
+                    <div class="form-group row @if(auth()->user()->can('calendar.allow_op_role_restriction')) d-none @endif">
+                        <label for="update_operation_role"
+                               class="col-sm-3 col-form-label">{{ trans_choice('web::seat.role', 1) }}</label>
+                        <div class="col-sm-9">
+                            <select name="role_name" id="update_operation_role" style="width: 100%">
+                                <option value=""></option>
+                                @foreach($roles as $role)
+                                    <option value="{{ $role->title }}">{{ $role->title }}</option>
+                                @endforeach
+                            </select>
                         </div>
-                    @endif
-                    @if(auth()->user()->can('calendar.allow_op_importance'))
-                        {{-- Operation importance --}}
-                        <div class="form-group row">
-                            <label for="importance"
-                                   class="col-sm-3 col-form-label">{{ trans('calendar::seat.importance') }}
-                                <span class="text-danger">*</span>
-                            </label>
-                            <div class="col-sm-9">
-                                <input type="text" class="slider form-control" value="2" data-slider-min="0"
-                                       data-slider-max="5"
-                                       data-slider-step="0.5" data-slider-value="2"
-                                       data-slider-id="updateSliderImportance"
-                                       data-slider-tooltip="show" data-slider-handle="round" name="importance"/>
-                            </div>
+                    </div>
+                    {{-- Operation importance --}}
+                    <div class="form-group row @if(auth()->user()->can('calendar.allow_op_role_restriction')) d-none @endif">
+                        <label for="importance"
+                               class="col-sm-3 col-form-label">{{ trans('calendar::seat.importance') }}
+                            <span class="text-danger">*</span>
+                        </label>
+                        <div class="col-sm-9">
+                            <input type="text" class="slider form-control" value="2" data-slider-min="0"
+                                   data-slider-max="5"
+                                   data-slider-step="0.5" data-slider-value="2"
+                                   data-slider-id="updateSliderImportance"
+                                   data-slider-tooltip="show" data-slider-handle="round" name="importance"/>
                         </div>
-                    @endif
+                    </div>
                     {{-- Operation tags --}}
                     <div class="form-group row">
                         <label class="col-sm-3 col-form-label">{{ trans('calendar::seat.tags') }}</label>

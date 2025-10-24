@@ -186,7 +186,6 @@
     <script type="text/javascript" src="{{ asset('web/js/rainbowvis.js') }}"></script>
     <script type="text/javascript">
         function exportToCsv(type, paps) {
-            console.log(type, paps);
             const filename = `Pap export - ${type}`;
             const csv = `Character; Pap\n` + paps.map(pap => [pap.character.name, pap.qty].join('; ')).join('\n');
             const blob = new Blob([csv], {type: 'text/csv'});
