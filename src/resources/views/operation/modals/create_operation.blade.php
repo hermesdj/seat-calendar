@@ -23,7 +23,7 @@
                         </div>
                     </div>
                     {{-- Operation role restriction --}}
-                    <div class="form-group row @if(auth()->user()->can('calendar.allow_op_role_restriction')) d-none @endif">
+                    <div class="form-group row @if(auth()->user()->cannot('calendar.allow_op_role_restriction')) d-none @endif">
                         <label for="create_operation_role"
                                class="col-sm-3 col-form-label">{{ trans_choice('web::seat.role', 1) }}</label>
                         <div class="col-sm-9">
@@ -36,7 +36,7 @@
                         </div>
                     </div>
                     {{-- Operation importance --}}
-                    <div class="form-group row @if(auth()->user()->can('calendar.allow_op_role_restriction')) d-none @endif">
+                    <div class="form-group row @if(auth()->user()->cannot('calendar.allow_op_role_restriction')) d-none @endif">
                         <label for="importance"
                                class="col-sm-3 col-form-label">{{ trans('calendar::seat.importance') }}
                             <span class="text-danger">*</span>
