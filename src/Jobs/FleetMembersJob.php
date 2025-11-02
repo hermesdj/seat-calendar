@@ -53,6 +53,7 @@ class FleetMembersJob extends AbstractAuthCharacterJob
 
             collect($members)->each(function ($member) use ($value) {
                 $dt = carbon($member->join_time);
+                if ($member->ship_type_id != 670) {  // Do not track if its a capsule
 
                 Pap::updateOrCreate([
                     'character_id' => $member->character_id,
@@ -65,6 +66,7 @@ class FleetMembersJob extends AbstractAuthCharacterJob
                     'month' => $dt->month,
                     'year' => $dt->year,
                 ]);
+                }
             });
         } else {
             logger()->warning("No fleet found for operation $this->operation_id and fleet commander {$this->getCharacterId()}");
