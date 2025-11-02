@@ -53,18 +53,20 @@ class FleetMembersJob extends AbstractAuthCharacterJob
 
             collect($members)->each(function ($member) use ($value) {
                 $dt = carbon($member->join_time);
-
-                Pap::updateOrCreate([
-                    'character_id' => $member->character_id,
-                    'operation_id' => $this->operation_id,
-                ], [
-                    'ship_type_id' => $member->ship_type_id,
-                    'join_time' => $dt->toDateTimeString(),
-                    'value' => $value,
-                    'week' => $dt->weekOfMonth,
-                    'month' => $dt->month,
-                    'year' => $dt->year,
-                ]);
+                Pap::upsert(
+                    [[
+                        'operation_id'   => $this->operation_id,
+                        'character_id'   => $member->character_id,
+                        'ship_type_id'   => $member->ship_type_id,
+                        'join_time'      => $dt->toDateTimeString(),
+                        'value'          => $value,
+                        'week'           => $dt->weekOfMonth,
+                        'month'          => $dt->month,
+                        'year'           => $dt->year,
+                    ]], 
+                    ['operation_id', 'character_id'],
+                    ['ship_type_id', 'join_time', 'value', 'week', 'month', 'year']
+                );
             });
         } else {
             logger()->warning("No fleet found for operation $this->operation_id and fleet commander {$this->getCharacterId()}");
