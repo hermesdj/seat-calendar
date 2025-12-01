@@ -55,15 +55,15 @@ class FleetMembersJob extends AbstractAuthCharacterJob
                 $dt = carbon($member->join_time);
                 Pap::upsert(
                     [[
-                        'operation_id'   => $this->operation_id,
-                        'character_id'   => $member->character_id,
-                        'ship_type_id'   => $member->ship_type_id,
-                        'join_time'      => $dt->toDateTimeString(),
-                        'value'          => $value,
-                        'week'           => $dt->weekOfMonth,
-                        'month'          => $dt->month,
-                        'year'           => $dt->year,
-                    ]], 
+                        'operation_id' => $this->operation_id,
+                        'character_id' => $member->character_id,
+                        'ship_type_id' => $member->ship_type_id,
+                        'join_time' => $dt->toDateTimeString(),
+                        'value' => $value,
+                        'week' => $dt->weekOfMonth,
+                        'month' => $dt->month,
+                        'year' => $dt->year,
+                    ]],
                     ['operation_id', 'character_id'],
                     ['ship_type_id', 'join_time', 'value', 'week', 'month', 'year']
                 );
